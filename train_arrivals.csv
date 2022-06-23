@@ -1,0 +1,4 @@
+Station_ID,Stop_ID,Station_Name,Destination,Route,Run_Number,Prediction_Time,Arrival_Time,Is_Approaching,Is_Scheduled,Is_Delayed,Is_Fault
+41020,30198,Logan Square,Forest Park,Blue,129,2022-06-23T16:20:14,2022-06-23T16:21:14,1,0,0,0
+41020,30197,Logan Square,O'Hare,Blue,218,2022-06-23T16:23:33,2022-06-23T16:24:33,1,0,0,0
+41020,30197,Logan Square,O'Hare,Blue,218,2022-06-23T16:23:55,2022-06-23T16:24:55,1,0,0,0

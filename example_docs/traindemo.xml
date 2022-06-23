@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ctatt>
+    <tmst>20220416 22:11:41</tmst>
+    <errCd>0</errCd>
+    <errNm />
+    <eta>
+        <staId>41020</staId>
+        <stpId>30197</stpId>
+        <staNm>Logan Square</staNm>
+        <stpDe>Service toward O'Hare</stpDe>
+        <rn>232</rn>
+        <rt>Blue</rt>
+        <destSt>0</destSt>
+        <destNm>O'Hare</destNm>
+        <trDr>1</trDr>
+        <prdt>20220416 22:11:22</prdt>
+        <arrT>20220416 22:19:22</arrT>
+        <isApp>1</isApp>
+        <isSch>1</isSch>
+        <isDly>1</isDly>
+        <isFlt>1</isFlt>
+        <flags />
+        <lat />
+        <lon />
+        <heading />
+    </eta>
+    <eta>
+        <staId>41020</staId>
+        <stpId>30198</stpId>
+        <staNm>Logan Square</staNm>
+        <stpDe>Service toward Forest Park</stpDe>
+        <rn>128</rn>
+        <rt>Blue</rt>
+        <destSt>30077</destSt>
+        <destNm>Forest Park</destNm>
+        <trDr>5</trDr>
+        <prdt>20220416 22:11:16</prdt>
+        <arrT>20220416 22:20:16</arrT>
+        <isApp>0</isApp>
+        <isSch>0</isSch>
+        <isDly>0</isDly>
+        <isFlt>0</isFlt>
+        <flags />
+        <lat>41.96722</lat>
+        <lon>-87.75467</lon>
+        <heading>119</heading>
+    </eta>
+    <eta>
+        <staId>41020</staId>
+        <stpId>30197</stpId>
+        <staNm>Logan Square</staNm>
+        <stpDe>Service toward O'Hare</stpDe>
+        <rn>130</rn>
+        <rt>Blue</rt>
+        <destSt>0</destSt>
+        <destNm>O'Hare</destNm>
+        <trDr>1</trDr>
+        <prdt>20220416 22:11:22</prdt>
+        <arrT>20220416 22:34:22</arrT>
+        <isApp>0</isApp>
+        <isSch>1</isSch>
+        <isDly>0</isDly>
+        <isFlt>0</isFlt>
+        <flags />
+        <lat />
+        <lon />
+        <heading />
+    </eta>
+    <eta>
+        <staId>41020</staId>
+        <stpId>30198</stpId>
+        <staNm>Logan Square</staNm>
+        <stpDe>Service toward Forest Park</stpDe>
+        <rn>224</rn>
+        <rt>Blue</rt>
+        <destSt>0</destSt>
+        <destNm>Forest Park</destNm>
+        <trDr>5</trDr>
+        <prdt>20220416 22:11:21</prdt>
+        <arrT>20220416 22:40:21</arrT>
+        <isApp>0</isApp>
+        <isSch>1</isSch>
+        <isDly>0</isDly>
+        <isFlt>0</isFlt>
+        <flags />
+        <lat />
+        <lon />
+        <heading />
+    </eta>
+</ctatt>
