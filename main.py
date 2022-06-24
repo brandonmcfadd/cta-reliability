@@ -77,13 +77,12 @@ def add_train_to_file(eta, station_name, stop_id):
     if eta["isSch"] == "0" and eta["isApp"] == "1" and estimated_time <= 1:
         arrival_information["trains"][station_name][stop_id][
             "estimated_times"].append(str(estimated_time) + "min")
-        with open('train_arrivals.csv', 'a', newline='') as csvfile:
+        with open('/home/pi/cta-reliability/train_arrivals.csv', 'a', newline='') as csvfile:
             csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
                            'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
             writer_object = DictWriter(csvfile, fieldnames=csv_headers)
             writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"], 'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"], 'Run_Number': eta["rn"],
                                     'Prediction_Time': eta["prdt"], 'Arrival_Time': eta["arrT"], 'Is_Approaching': eta["isApp"], 'Is_Scheduled': eta["isSch"], 'Is_Delayed': eta["isDly"], 'Is_Fault': eta["isFlt"]})
-            # writer_object.close()
 
 
 def create_string_of_items(items):
@@ -156,10 +155,10 @@ def information_to_display(status):
 
 def check_file_exists():
     """Used to check if file exists"""
-    csv_file = os.path.exists("train_arrivals.csv")
+    csv_file = os.path.exists("/home/pi/cta-reliability/train_arrivals.csv")
     if csv_file is False:
         print("File Doesn't Exist...Creating File and Adding Headers...")
-        with open('train_arrivals.csv', 'w', newline='') as csvfile:
+        with open('/home/pi/cta-reliability/train_arrivals.csv', 'w', newline='') as csvfile:
             csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
                            'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
             writer_object = DictWriter(csvfile, fieldnames=csv_headers)
@@ -173,7 +172,7 @@ print("Welcome to TrainTracker, Python/RasPi Edition!")
 check_file_exists()
 while True:  # Where the magic happens
     # Settings
-    file = open(file='settings.json',
+    file = open(file='/home/pi/cta-reliability/settings.json',
                 mode='r',
                 encoding='utf-8')
     settings = json.load(file)

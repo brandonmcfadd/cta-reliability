@@ -166,3 +166,4 @@ images/.DS_Store
 .DS_Store
 env
 .vscode/settings.json
+send_email.py
