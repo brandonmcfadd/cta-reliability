@@ -1,7 +1,7 @@
 {
     "train-tracker": {
         "enabled": "True",
-        "//first-comment": "Station/Stop Information for Trains/Buses - Bus Stop Items must contain equal number of items",
+        "//first-comment": "Station/Stop Information for Trains",
         "//second-comment": "Enter the train station #'s to lookup",
         "station-ids": ["30197","30198","30064","30065","30265","30266","30278","30164","30297","30298","30199","30215"],
         "do-not-persist-stations": ["UIC-Halsted","Rosemont","Jefferson Park", "Howard", "See train"],

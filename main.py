@@ -1,4 +1,4 @@
-"""ctapi by Brandon McFadden - Github: https://github.com/brandonmcfadd/ctapi"""
+"""cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
 import os
 import json
 import time  # Used to Get Current Time
@@ -77,7 +77,9 @@ def add_train_to_file(eta, station_name, stop_id):
     if eta["isSch"] == "0" and eta["isApp"] == "1" and estimated_time <= 1:
         arrival_information["trains"][station_name][stop_id][
             "estimated_times"].append(str(estimated_time) + "min")
-        with open('/home/pi/cta-reliability/train_arrivals.csv', 'a', newline='') as csvfile:
+        current_month = datetime.strftime(datetime.now(), "%b%Y")
+        file_path = "/home/pi/cta-reliability/train_arrivals/train_arrivals-" + str(current_month) + ".csv"
+        with open(file_path, 'a', newline='') as csvfile:
             csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
                            'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
             writer_object = DictWriter(csvfile, fieldnames=csv_headers)
@@ -155,10 +157,12 @@ def information_to_display(status):
 
 def check_file_exists():
     """Used to check if file exists"""
-    csv_file = os.path.exists("/home/pi/cta-reliability/train_arrivals.csv")
-    if csv_file is False:
+    current_month = datetime.strftime(datetime.now(), "%b%Y")
+    file_path = "/home/pi/cta-reliability/train_arrivals/train_arrivals-" + str(current_month) + ".csv"
+    train_csv_file = os.path.exists(file_path)
+    if train_csv_file is False:
         print("File Doesn't Exist...Creating File and Adding Headers...")
-        with open('/home/pi/cta-reliability/train_arrivals.csv', 'w', newline='') as csvfile:
+        with open(file_path, 'w+', newline='') as csvfile:
             csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
                            'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
             writer_object = DictWriter(csvfile, fieldnames=csv_headers)
@@ -183,9 +187,9 @@ while True:  # Where the magic happens
     # Variables for Settings information - Only make settings changes in the settings.json file
     enable_train_tracker = settings["train-tracker"]["enabled"]
     train_station_stop_ids = settings["train-tracker"]["station-ids"]
-
+    
     # Setting Up Variable for Storing Station Information
-    arrival_information = json.loads('{"trains":{}}')
+    arrival_information = json.loads('{"trains":{},"buses":{}}')
 
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
