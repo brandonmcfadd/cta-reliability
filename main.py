@@ -13,14 +13,29 @@ load_dotenv()
 
 # ENV Variables
 train_api_key = os.getenv('TRAIN_API_KEY')
+main_file_path = os.getenv('FILE_PATH')
 
 
-def train_api_call_to_cta(stop_id):
+def train_api_call_to_cta_api(stop_id):
     """Gotta talk to the CTA and get Train Times"""
     print("Making CTA Train API Call...")
-    api_response = requests.get(
-        train_tracker_url.format(train_api_key, stop_id))
-    train_arrival_times(api_response.json())
+    try:
+        api_response = requests.get(
+            train_tracker_url_api.format(train_api_key, stop_id))
+        train_arrival_times(api_response.json())
+    except:
+        print("Error in API Call to Train Tracker")
+    return api_response
+
+
+def train_api_call_to_cta_map():
+    """Gotta talk to the CTA and get Train Times part 2!"""
+    print("Making CTA Train Map API Call...")
+    try:
+        api_response = requests.get(train_tracker_url_map)
+        train_arrival_times_map(api_response.json())
+    except:
+        print("Error in API Call to Train Tracker Map")
     return api_response
 
 
@@ -63,13 +78,13 @@ def train_arrival_times(train_api_response):
             add_train_station_to_json(train_station_name)
 
         if train_stop_id in arrival_information["trains"][train_station_name]:
-            add_train_to_file(eta, train_station_name, train_stop_id)
+            add_train_to_file_api(eta, train_station_name, train_stop_id)
         else:
             add_train_stop_to_json(eta, train_stop_id)
-            add_train_to_file(eta, train_station_name, train_stop_id)
+            add_train_to_file_api(eta, train_station_name, train_stop_id)
 
 
-def add_train_to_file(eta, station_name, stop_id):
+def add_train_to_file_api(eta, station_name, stop_id):
     """Parses API Result from Train Tracker API and adds ETA's to a list"""
     prediction = eta["prdt"]
     arrival = eta["arrT"]
@@ -78,7 +93,8 @@ def add_train_to_file(eta, station_name, stop_id):
         arrival_information["trains"][station_name][stop_id][
             "estimated_times"].append(str(estimated_time) + "min")
         current_month = datetime.strftime(datetime.now(), "%b%Y")
-        file_path = "/home/pi/cta-reliability/train_arrivals/train_arrivals-" + str(current_month) + ".csv"
+        file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals-" + \
+            str(current_month) + ".csv"
         with open(file_path, 'a', newline='') as csvfile:
             csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
                            'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
@@ -87,78 +103,36 @@ def add_train_to_file(eta, station_name, stop_id):
                                     'Prediction_Time': eta["prdt"], 'Arrival_Time': eta["arrT"], 'Is_Approaching': eta["isApp"], 'Is_Scheduled': eta["isSch"], 'Is_Delayed': eta["isDly"], 'Is_Fault': eta["isFlt"]})
 
 
-def create_string_of_items(items):
-    """Takes each item from list and builds a useable string"""
-    string_count = 0
-    string = ""
-    for item in items:
-        if string_count == 0:
-            string = item
-            string_count += 1
-        elif string_count > 0 and string_count < 3:
-            string = string + ", " + item
-            string_count += 1
-    return string
+def add_train_to_file_map(destination, route, run_number, is_scheduled, prediction):
+    """Parses API Result from Train Tracker API and adds ETA's to a list"""
+    current_month = datetime.strftime(datetime.now(), "%b%Y")
+    current_long_time = datetime.strftime(
+        datetime.now(), "%Y-%m-%dT%H:%M:%S")
+    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals_backup-" + \
+        str(current_month) + ".csv"
+    with open(file_path, 'a', newline='') as csvfile:
+        csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
+                       'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
+        writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+        writer_object.writerow({'Station_ID': int(prediction[0]), 'Stop_ID': "NULL", 'Station_Name': prediction[1], 'Destination': destination, 'Route': route, 'Run_Number': run_number,
+                                'Prediction_Time': current_long_time, 'Arrival_Time': current_long_time, 'Is_Approaching': "NULL", 'Is_Scheduled': is_scheduled, 'Is_Delayed': "NULL", 'Is_Fault': "NULL"})
 
 
-def information_output_to_display(arrival_information_input):
-    """Used to create structure for use when outputting data to e-ink epd"""
-    display_information_output = []
-    for station in arrival_information_input['trains'].copy():
-        for train in arrival_information_input['trains'][station].copy():
-            if arrival_information['trains'][station][train][
-                    "estimated_times"] != []:
-                display_information_output.append({
-                    'line_1':
-                    station,
-                    'line_2':
-                    (arrival_information['trains'][station][train]['route'] +
-                     " Line to " + arrival_information['trains'][station]
-                     [train]['destination_name']),
-                    'line_3':
-                    create_string_of_items(
-                        arrival_information['trains'][station][train]
-                        ["estimated_times"]),
-                    'item_type':
-                    "train",
-                })
-            else:
-                display_information_output.append({
-                    'line_1':
-                    station,
-                    'line_2':
-                    (arrival_information['trains'][station][train]['route'] +
-                     " Line to " + arrival_information['trains'][station]
-                     [train]['destination_name']),
-                    'line_3':
-                    "No arrivals found :(",
-                    'item_type':
-                    "train",
-                })
-
-            arrival_information['trains'][station][train][
-                "estimated_times"] = []
-    return display_information_output
+def train_arrival_times_map(response):
+    """Used to Train Tracker Map API Response"""
+    for train in response['dataObject']:
+        for marker in train["Markers"]:
+            for prediction in marker["Predictions"]:
+                if str(prediction[0]) in train_station_map_ids and marker["DestName"] in train_station_tracked_destinations and str(prediction[2]) == "<b>Due</b>":
+                    add_train_to_file_map(
+                        marker["DestName"], marker["LineName"], marker["RunNumber"], marker["IsSched"], prediction)
 
 
-def information_to_display(status):
-    """Used to create structure for use when outputting data to e-ink epd"""
-    loop_count = 0
-    while loop_count < len(status):
-        try:
-            print(status[loop_count]['line_1'])
-            print(status[loop_count]['line_2'])
-            print(status[loop_count]['line_3'])
-            print("------------------------")
-            loop_count += 1
-        except: # pylint: disable=bare-except
-            print("Unable to print for some reason")
-
-
-def check_file_exists():
+def check_main_train_file_exists():
     """Used to check if file exists"""
     current_month = datetime.strftime(datetime.now(), "%b%Y")
-    file_path = "/home/pi/cta-reliability/train_arrivals/train_arrivals-" + str(current_month) + ".csv"
+    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals-" + \
+        str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
         print("File Doesn't Exist...Creating File and Adding Headers...")
@@ -171,39 +145,89 @@ def check_file_exists():
         print("File Exists...Continuing...")
 
 
+def check_backup_train_file_exists():
+    """Used to check if file exists"""
+    current_month = datetime.strftime(datetime.now(), "%b%Y")
+    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals_backup-" + \
+        str(current_month) + ".csv"
+    train_csv_file = os.path.exists(file_path)
+    if train_csv_file is False:
+        print("File Doesn't Exist...Creating File and Adding Headers...")
+        with open(file_path, 'w+', newline='') as csvfile:
+            csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
+                           'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
+            writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+            writer_object.writeheader()
+    else:
+        print("File Exists...Continuing...")
+
+
+def check_integrity_file_exists():
+    """Used to check if file exists"""
+    current_month = datetime.strftime(datetime.now(), "%b%Y")
+    file_path = main_file_path + "/cta-reliability/train_arrivals/integrity-check-" + \
+        str(current_month) + ".csv"
+    integrity_csv_file = os.path.exists(file_path)
+    if integrity_csv_file is False:
+        print("File Doesn't Exist...Creating File and Adding Headers...")
+        with open(file_path, 'w+', newline='') as csvfile:
+            csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
+            writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+            writer_object.writeheader()
+    else:
+        print("File Exists...Continuing...")
+
+
+def add_integrity_file_line(status):
+    """Used to check if file exists"""
+    current_month = datetime.strftime(datetime.now(), "%b%Y")
+    current_simple_time = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M")
+    current_long_time = datetime.strftime(
+        datetime.now(), "%Y-%m-%dT%H:%M:%S.%f%z")
+    file_path = main_file_path + "/cta-reliability/train_arrivals/integrity-check-" + \
+        str(current_month) + ".csv"
+    with open(file_path, 'a', newline='') as csvfile:
+        csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
+        writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+        writer_object.writerow({'Full_Date_Time': current_long_time,
+                               'Simple_Date_Time': current_simple_time, 'Status': status})
+
+
 print("Welcome to TrainTracker, Python/RasPi Edition!")
 # Check to make sure output file exists and write headers
-check_file_exists()
 while True:  # Where the magic happens
+    check_main_train_file_exists()
+    check_backup_train_file_exists()
+    check_integrity_file_exists()
     # Settings
-    file = open(file='/home/pi/cta-reliability/settings.json',
+    file = open(file= main_file_path + '/cta-reliability/settings.json',
                 mode='r',
                 encoding='utf-8')
     settings = json.load(file)
 
     # API URL's
-    train_tracker_url = settings["train-tracker"]["api-url"]
+    train_tracker_url_api = settings["train-tracker"]["api-url"]
+    train_tracker_url_map = settings["train-tracker"]["map-url"]
 
     # Variables for Settings information - Only make settings changes in the settings.json file
     enable_train_tracker = settings["train-tracker"]["enabled"]
     train_station_stop_ids = settings["train-tracker"]["station-ids"]
-    
+    train_station_map_ids = settings["train-tracker"]["map-station-ids"]
+    train_station_tracked_destinations = settings["train-tracker"]["tracked-destinations"]
+
     # Setting Up Variable for Storing Station Information
     arrival_information = json.loads('{"trains":{},"buses":{}}')
 
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
     print("\n" + current_time_console)
-
+    add_integrity_file_line("Success")
     if train_station_stop_ids != "" and enable_train_tracker == "True":
         for train_stop_id_to_check in train_station_stop_ids:
-            try:
-                response = train_api_call_to_cta(train_stop_id_to_check)
-            except:  # pylint: disable=bare-except
-                print("Error in API Call to Train Tracker")
+            response1 = train_api_call_to_cta_api(train_stop_id_to_check)
+    if train_station_map_ids != "" and train_station_tracked_destinations != "" and enable_train_tracker == "True":
+        response2 = train_api_call_to_cta_map()
 
-    information_to_display(
-        information_output_to_display(arrival_information))
     SLEEP_AMOUNT = 30
     print("Sleeping " + str(SLEEP_AMOUNT) + " Seconds")
     time.sleep(SLEEP_AMOUNT)
