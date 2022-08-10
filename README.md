@@ -57,7 +57,7 @@ The station selected along each line is one where all trains, regardless of dest
 ---
 
 ## Running the program
-* Once you have everything [Installed](Installation) and [Configured](Configuration) Run the main program `python3 main.py`
+* Once you have everything [Installed](#Installation) and [Configured](#Configuration) Run the main program `python3 main.py`
 
 ---
 
