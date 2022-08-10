@@ -210,7 +210,8 @@ while True:  # Where the magic happens
     train_tracker_url_map = settings["train-tracker"]["map-url"]
 
     # Variables for Settings information - Only make settings changes in the settings.json file
-    enable_train_tracker = settings["train-tracker"]["enabled"]
+    enable_train_tracker_api = settings["train-tracker"]["api-enabled"]
+    enable_train_tracker_map = settings["train-tracker"]["map-enabled"]
     train_station_stop_ids = settings["train-tracker"]["station-ids"]
     train_station_map_ids = settings["train-tracker"]["map-station-ids"]
     train_station_tracked_destinations = settings["train-tracker"]["tracked-destinations"]
@@ -222,10 +223,10 @@ while True:  # Where the magic happens
         datetime.strftime(datetime.now(), "%H:%M:%S")
     print("\n" + current_time_console)
     add_integrity_file_line("Success")
-    if train_station_stop_ids != "" and enable_train_tracker == "True":
+    if train_station_stop_ids != "" and enable_train_tracker_api == "True":
         for train_stop_id_to_check in train_station_stop_ids:
             response1 = train_api_call_to_cta_api(train_stop_id_to_check)
-    if train_station_map_ids != "" and train_station_tracked_destinations != "" and enable_train_tracker == "True":
+    if train_station_map_ids != "" and train_station_tracked_destinations != "" and enable_train_tracker_map == "True":
         response2 = train_api_call_to_cta_map()
 
     SLEEP_AMOUNT = 30
