@@ -1,6 +1,6 @@
 """cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
-import os
-import json
+import os # Used to retrieve secrets in .env file
+import json # Used for JSON Handling
 import time  # Used to Get Current Time
 # Used for converting Prediction from Current Time
 from datetime import datetime, timedelta
@@ -130,7 +130,7 @@ def add_train_to_file_map(destination, route, run_number, is_scheduled, predicti
 
 
 def train_arrival_times_map(response):
-    """Used to Train Tracker Map API Response"""
+    """Used to parse the Train Tracker Map API Response"""
     for train in response['dataObject']:
         for marker in train["Markers"]:
             for prediction in marker["Predictions"]:

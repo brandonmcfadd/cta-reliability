@@ -6,10 +6,9 @@
         "//second-comment": "Enter the train station #'s to lookup",
         "station-ids": ["30197","30198","30064","30065","30265","30266","30278","30164","30297","30298","30199","30215"],
         "map-station-ids": ["41020.0","40330.0","41440.0","41360.0", "41130.0", "41030.0", "40840.0", "41680.0"],
-        "do-not-persist-stations": ["UIC-Halsted","Rosemont","Jefferson Park", "Howard", "See train"],
         "tracked-destinations": ["O'Hare ", "Forest Park", "UIC-Halsted", "Rosemont", "Jefferson Park", "Howard", "95th/Dan Ryan", "Skokie", "Harlem/Lake", "Ashland/63rd", "Cottage Grove", "Loop"],
         "api-url": "http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key={}&stpid={}&outputType=JSON",
-        "map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=16",
+        "map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=2",
         "little-map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=B&MaxPredictions=16"
     }
 }

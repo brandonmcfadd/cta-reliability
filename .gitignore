@@ -168,3 +168,4 @@ env
 .vscode/settings.json
 send_email.py
 *.csv
+settings-temp.json
