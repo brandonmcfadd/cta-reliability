@@ -169,3 +169,4 @@ env
 send_email.py
 *.csv
 settings-temp.json
+train_arrivals/alerts-api-Aug2022.json

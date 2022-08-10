@@ -10,5 +10,9 @@
         "api-url": "http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key={}&stpid={}&outputType=JSON",
         "map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=2",
         "little-map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=B&MaxPredictions=16"
+    },
+    "alerts-api": {
+        "api-enabled": "True",
+        "api-url": "http://lapi.transitchicago.com/api/1.0/alerts.aspx?routeid=P,Y,Blue,Pink,G,Org,Brn,BLS-1,GLS-2&outputType=JSON"
     }
 }

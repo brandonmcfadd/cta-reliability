@@ -250,6 +250,6 @@ while True:  # Where the magic happens
         response2 = train_api_call_to_cta_map()
 
     # Wait and do it again
-    SLEEP_AMOUNT = 60
+    SLEEP_AMOUNT = 30
     print("Sleeping " + str(SLEEP_AMOUNT) + " Seconds")
     time.sleep(SLEEP_AMOUNT)
