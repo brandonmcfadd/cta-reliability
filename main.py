@@ -200,7 +200,7 @@ while True:  # Where the magic happens
     check_backup_train_file_exists()
     check_integrity_file_exists()
     # Settings
-    file = open(file= main_file_path + '/cta-reliability/settings.json',
+    file = open(file=main_file_path + '/cta-reliability/settings.json',
                 mode='r',
                 encoding='utf-8')
     settings = json.load(file)
