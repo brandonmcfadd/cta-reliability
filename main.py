@@ -15,6 +15,12 @@ load_dotenv()
 train_api_key = os.getenv('TRAIN_API_KEY')
 main_file_path = os.getenv('FILE_PATH')
 
+# Constants
+integrity_file_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
+train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', \
+                                'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Is_Approaching', \
+                                'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
+
 
 def train_api_call_to_cta_api(stop_id):
     """Gotta talk to the CTA and get Train Times"""
@@ -23,7 +29,7 @@ def train_api_call_to_cta_api(stop_id):
         api_response = requests.get(
             train_tracker_url_api.format(train_api_key, stop_id))
         train_arrival_times(api_response.json())
-    except:
+    except:  # pylint: disable=bare-except
         print("Error in API Call to Train Tracker")
     return api_response
 
@@ -34,7 +40,7 @@ def train_api_call_to_cta_map():
     try:
         api_response = requests.get(train_tracker_url_map)
         train_arrival_times_map(api_response.json())
-    except:
+    except:  # pylint: disable=bare-except
         print("Error in API Call to Train Tracker Map")
     return api_response
 
@@ -95,12 +101,15 @@ def add_train_to_file_api(eta, station_name, stop_id):
         current_month = datetime.strftime(datetime.now(), "%b%Y")
         file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals-" + \
             str(current_month) + ".csv"
-        with open(file_path, 'a', newline='') as csvfile:
-            csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
-                           'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
-            writer_object = DictWriter(csvfile, fieldnames=csv_headers)
-            writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"], 'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"], 'Run_Number': eta["rn"],
-                                    'Prediction_Time': eta["prdt"], 'Arrival_Time': eta["arrT"], 'Is_Approaching': eta["isApp"], 'Is_Scheduled': eta["isSch"], 'Is_Delayed': eta["isDly"], 'Is_Fault': eta["isFlt"]})
+        with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
+            writer_object = DictWriter(
+                csvfile, fieldnames=train_arrivals_csv_headers)
+            writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"], \
+                'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"], \
+                'Run_Number': eta["rn"], 'Prediction_Time': eta["prdt"], \
+                'Arrival_Time': eta["arrT"], 'Is_Approaching': eta["isApp"], \
+                'Is_Scheduled': eta["isSch"], 'Is_Delayed': eta["isDly"], \
+                'Is_Fault': eta["isFlt"]})
 
 
 def add_train_to_file_map(destination, route, run_number, is_scheduled, prediction):
@@ -110,12 +119,14 @@ def add_train_to_file_map(destination, route, run_number, is_scheduled, predicti
         datetime.now(), "%Y-%m-%dT%H:%M:%S")
     file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals_backup-" + \
         str(current_month) + ".csv"
-    with open(file_path, 'a', newline='') as csvfile:
-        csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
-                       'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
-        writer_object = DictWriter(csvfile, fieldnames=csv_headers)
-        writer_object.writerow({'Station_ID': int(prediction[0]), 'Stop_ID': "NULL", 'Station_Name': prediction[1], 'Destination': destination, 'Route': route, 'Run_Number': run_number,
-                                'Prediction_Time': current_long_time, 'Arrival_Time': current_long_time, 'Is_Approaching': "NULL", 'Is_Scheduled': is_scheduled, 'Is_Delayed': "NULL", 'Is_Fault': "NULL"})
+    with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
+        writer_object = DictWriter(
+            csvfile, fieldnames=train_arrivals_csv_headers)
+        writer_object.writerow({'Station_ID': int(prediction[0]), 'Stop_ID': "NULL", \
+            'Station_Name': prediction[1], 'Destination': destination, 'Route': route, \
+            'Run_Number': run_number, 'Prediction_Time': current_long_time, \
+            'Arrival_Time': current_long_time, 'Is_Approaching': "NULL", \
+            'Is_Scheduled': is_scheduled, 'Is_Delayed': "NULL", 'Is_Fault': "NULL"})
 
 
 def train_arrival_times_map(response):
@@ -123,9 +134,12 @@ def train_arrival_times_map(response):
     for train in response['dataObject']:
         for marker in train["Markers"]:
             for prediction in marker["Predictions"]:
-                if str(prediction[0]) in train_station_map_ids and marker["DestName"] in train_station_tracked_destinations and str(prediction[2]) == "<b>Due</b>":
+                if str(prediction[0]) in train_station_map_ids and marker["DestName"] \
+                        in train_station_tracked_destinations \
+                        and str(prediction[2]) == "<b>Due</b>":
                     add_train_to_file_map(
-                        marker["DestName"], marker["LineName"], marker["RunNumber"], marker["IsSched"], prediction)
+                        marker["DestName"], marker["LineName"], \
+                        marker["RunNumber"], marker["IsSched"], prediction)
 
 
 def check_main_train_file_exists():
@@ -136,10 +150,9 @@ def check_main_train_file_exists():
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
         print("File Doesn't Exist...Creating File and Adding Headers...")
-        with open(file_path, 'w+', newline='') as csvfile:
-            csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
-                           'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
-            writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+        with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
+            writer_object = DictWriter(
+                csvfile, fieldnames=train_arrivals_csv_headers)
             writer_object.writeheader()
     else:
         print("File Exists...Continuing...")
@@ -153,10 +166,9 @@ def check_backup_train_file_exists():
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
         print("File Doesn't Exist...Creating File and Adding Headers...")
-        with open(file_path, 'w+', newline='') as csvfile:
-            csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', 'Run_Number',
-                           'Prediction_Time', 'Arrival_Time', 'Is_Approaching', 'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
-            writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+        with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
+            writer_object = DictWriter(
+                csvfile, fieldnames=train_arrivals_csv_headers)
             writer_object.writeheader()
     else:
         print("File Exists...Continuing...")
@@ -170,9 +182,9 @@ def check_integrity_file_exists():
     integrity_csv_file = os.path.exists(file_path)
     if integrity_csv_file is False:
         print("File Doesn't Exist...Creating File and Adding Headers...")
-        with open(file_path, 'w+', newline='') as csvfile:
-            csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
-            writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+        with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
+            writer_object = DictWriter(
+                csvfile, fieldnames=integrity_file_csv_headers)
             writer_object.writeheader()
     else:
         print("File Exists...Continuing...")
@@ -186,14 +198,14 @@ def add_integrity_file_line(status):
         datetime.now(), "%Y-%m-%dT%H:%M:%S.%f%z")
     file_path = main_file_path + "/cta-reliability/train_arrivals/integrity-check-" + \
         str(current_month) + ".csv"
-    with open(file_path, 'a', newline='') as csvfile:
-        csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
-        writer_object = DictWriter(csvfile, fieldnames=csv_headers)
+    with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
+        writer_object = DictWriter(
+            csvfile, fieldnames=integrity_file_csv_headers)
         writer_object.writerow({'Full_Date_Time': current_long_time,
                                'Simple_Date_Time': current_simple_time, 'Status': status})
 
 
-print("Welcome to TrainTracker, Python/RasPi Edition!")
+print("Welcome to TrainTracker, Python Edition!")
 # Check to make sure output file exists and write headers
 while True:  # Where the magic happens
     check_main_train_file_exists()
@@ -222,13 +234,22 @@ while True:  # Where the magic happens
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
     print("\n" + current_time_console)
+
+    # If we get to this point, log a successful attempt to reach the API's
     add_integrity_file_line("Success")
+
+    # API Portion runs if enabled and station id's exist
     if train_station_stop_ids != "" and enable_train_tracker_api == "True":
         for train_stop_id_to_check in train_station_stop_ids:
             response1 = train_api_call_to_cta_api(train_stop_id_to_check)
-    if train_station_map_ids != "" and train_station_tracked_destinations != "" and enable_train_tracker_map == "True":
+
+    # Map Portion runs if enabled and station id's exist
+    if train_station_map_ids != "" \
+            and train_station_tracked_destinations != "" \
+            and enable_train_tracker_map == "True":
         response2 = train_api_call_to_cta_map()
 
-    SLEEP_AMOUNT = 30
+    # Wait and do it again
+    SLEEP_AMOUNT = 60
     print("Sleeping " + str(SLEEP_AMOUNT) + " Seconds")
     time.sleep(SLEEP_AMOUNT)
