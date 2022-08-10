@@ -3,8 +3,6 @@
 ## Overview
 This project (and associated PowerBi Report) was created to help provide insight and transparency into the current service levels of the Chicago Transit Authority ("CTA") rail network. Utilizing the CTA API and Train Tracker Map, it can be determined when a train arrives at a specific station along the line. Using this data, the number of arrivals can be determined and compared to the number scheduled via the GTFS feed of published schedules.
 
----
-
 ## Station Selection 
 The station selected along each line is one where all trains, regardless of destination, will arrive. For example, Logan Square can capture Forest Park, UIC-Halsted and even runs that terminate at the Rosemont yard. Trains that operate around the loop and then return to their originating stations (Brown, Orange, Pink and Purple) have only one direction tracked. For trains that do not return to origin (Blue, Red, Green, and Yellow) tracking is done in both directions because these are considered separate trips. 
 
@@ -30,12 +28,8 @@ The station selected along each line is one where all trains, regardless of dest
     * Dempster-Skokie bound
     * Howard bound
 
----
-
 ## Equipment
 * I use a Google Cloud Compute E2 Micro to run the program 24/7, however the program can be run on theoretically anything capable of running Python scripts.
-
----
 
 ## Installation
 * Create API access token on the [CTA Transit Tracker developer site](https://www.transitchicago.com/developers/traintracker/) 
@@ -46,20 +40,14 @@ The station selected along each line is one where all trains, regardless of dest
 * Install the required dependencies `pip install -r requirements.txt`
 * Edit the file named `.env_example` to include your API Key and Default File Path. Then rename this file to `.env`
 
----
-
 ## Configuration
 * Enable the portions you want to use by changing False to True in the `settings.json` file
 * To change the station being monitored modify the Station/Stop Information (`station-ids` and `map-station-ids`) in the `settings.json` file with the station code(s) you want to use. 
     * The Train Tracker API uses Station ID's in integer form, while the Train Tracker Map uses them in float form (I wish I understood why it is this way)
 * 'L' Station codes can be found on the following [site](https://data.cityofchicago.org/Transportation/CTA-System-Information-List-of-L-Stops/8pix-ypme) from the City of Chicago's Data Portal.
 
----
-
 ## Running the program
 * Once you have everything [Installed](#Installation) and [Configured](#Configuration) Run the main program `python3 main.py`
-
----
 
 ## Power Bi Report
 * You can view the PowerBi Report displaying the data I have collected at:<br>[brandonmcfadden.com/cta-reliability](https://brandonmcfadden.com/cta-reliability)
