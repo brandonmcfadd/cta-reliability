@@ -1,6 +1,6 @@
 """cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
-import os # Used to retrieve secrets in .env file
-import json # Used for JSON Handling
+import os  # Used to retrieve secrets in .env file
+import json  # Used for JSON Handling
 import time  # Used to Get Current Time
 # Used for converting Prediction from Current Time
 from datetime import datetime, timedelta
@@ -17,9 +17,9 @@ main_file_path = os.getenv('FILE_PATH')
 
 # Constants
 integrity_file_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
-train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', \
-                                'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Is_Approaching', \
-                                'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
+train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route',
+                              'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Is_Approaching',
+                              'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
 
 
 def train_api_call_to_cta_api(stop_id):
@@ -104,12 +104,12 @@ def add_train_to_file_api(eta, station_name, stop_id):
         with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=train_arrivals_csv_headers)
-            writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"], \
-                'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"], \
-                'Run_Number': eta["rn"], 'Prediction_Time': eta["prdt"], \
-                'Arrival_Time': eta["arrT"], 'Is_Approaching': eta["isApp"], \
-                'Is_Scheduled': eta["isSch"], 'Is_Delayed': eta["isDly"], \
-                'Is_Fault': eta["isFlt"]})
+            writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"],
+                                    'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"],
+                                    'Run_Number': eta["rn"], 'Prediction_Time': eta["prdt"],
+                                    'Arrival_Time': eta["arrT"], 'Is_Approaching': eta["isApp"],
+                                    'Is_Scheduled': eta["isSch"], 'Is_Delayed': eta["isDly"],
+                                    'Is_Fault': eta["isFlt"]})
 
 
 def add_train_to_file_map(destination, route, run_number, is_scheduled, prediction):
@@ -122,11 +122,11 @@ def add_train_to_file_map(destination, route, run_number, is_scheduled, predicti
     with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
             csvfile, fieldnames=train_arrivals_csv_headers)
-        writer_object.writerow({'Station_ID': int(prediction[0]), 'Stop_ID': "NULL", \
-            'Station_Name': prediction[1], 'Destination': destination, 'Route': route, \
-            'Run_Number': run_number, 'Prediction_Time': current_long_time, \
-            'Arrival_Time': current_long_time, 'Is_Approaching': "NULL", \
-            'Is_Scheduled': is_scheduled, 'Is_Delayed': "NULL", 'Is_Fault': "NULL"})
+        writer_object.writerow({'Station_ID': int(prediction[0]), 'Stop_ID': "NULL",
+                                'Station_Name': prediction[1], 'Destination': destination, 'Route': route,
+                                'Run_Number': run_number, 'Prediction_Time': current_long_time,
+                                'Arrival_Time': current_long_time, 'Is_Approaching': "NULL",
+                                'Is_Scheduled': is_scheduled, 'Is_Delayed': "NULL", 'Is_Fault': "NULL"})
 
 
 def train_arrival_times_map(response):
@@ -138,7 +138,7 @@ def train_arrival_times_map(response):
                         in train_station_tracked_destinations \
                         and str(prediction[2]) == "<b>Due</b>":
                     add_train_to_file_map(
-                        marker["DestName"], marker["LineName"], \
+                        marker["DestName"], marker["LineName"],
                         marker["RunNumber"], marker["IsSched"], prediction)
 
 
