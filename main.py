@@ -14,12 +14,22 @@ load_dotenv()
 # ENV Variables
 train_api_key = os.getenv('TRAIN_API_KEY')
 main_file_path = os.getenv('FILE_PATH')
+main_file_path_json = os.getenv('FILE_PATH_JSON')
 
 # Constants
 integrity_file_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
 train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route',
                               'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Is_Approaching',
                               'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
+
+
+def get_date(date_type):
+    """formatted date shortcut"""
+    if date_type == "short":
+        date = datetime.strftime(datetime.now(), "%Y%m%d")
+    elif date_type == "hour":
+        date = datetime.strftime(datetime.now(), "%H")
+    return date
 
 
 def train_api_call_to_cta_api(stop_id):
@@ -30,7 +40,8 @@ def train_api_call_to_cta_api(stop_id):
             train_tracker_url_api.format(train_api_key, stop_id))
         train_arrival_times(api_response.json())
     except:  # pylint: disable=bare-except
-        print("Error in API Call to Train Tracker")
+        print("Error in API Call to Train Tracker...Stop ID:",
+              stop_id, api_response.text)
     return api_response
 
 
@@ -166,7 +177,7 @@ def check_backup_train_file_exists():
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
         print("File Doesn't Exist...Creating File and Adding Headers...")
-        with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
+        with open(file_path, 'r+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=train_arrivals_csv_headers)
             writer_object.writeheader()
