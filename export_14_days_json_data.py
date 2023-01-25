@@ -13,6 +13,8 @@ microsoft_password = os.getenv('MICROSOFT_PASSWORD')
 microsoft_client_id = os.getenv('MICROSOFT_CLIENT_ID')
 microsoft_client_secret = os.getenv('MICROSOFT_CLIENT_SECRET')
 main_file_path_json = os.getenv('FILE_PATH_JSON')
+cta_dataset_id = os.getenv('CTA_DATASET_ID')
+metra_dataset_id = os.getenv('METRA_DATASET_ID')
 
 
 def get_date(date_type):
@@ -40,8 +42,9 @@ def get_token():
     return(response.get('access_token'))
 
 
-def get_report_data(days_old):
-    url = "https://api.powerbi.com/v1.0/myorg/datasets/7dc58187-b134-4a77-b797-10d3167dcf89/executeQueries"
+def get_report_data(dataset, days_old):
+    url = "https://api.powerbi.com/v1.0/myorg/datasets/{}/executeQueries".format(
+        dataset)
 
     payload = json.dumps({
         "queries": [
@@ -61,14 +64,20 @@ def get_report_data(days_old):
 
     response = requests.request("POST", url, headers=headers, data=payload)
     response_json = json.loads(response.text)
-    return(response_json['results'][0].get('tables')[0].get('rows'))
-    
+    try:
+        return(response_json['results'][0].get('tables')[0].get('rows'))
+    except:
+        print("error in:", response_json)
 
-def parse_response(data):
+
+def parse_response_cta(data):
     for item in data:
         shortened_date = item["date_range[Dates]"][:10]
-        json_file = main_file_path_json + shortened_date + ".json"
+        json_file = main_file_path_json + "cta/" + shortened_date + ".json"
         file_data = {
+            "Data Provided By": "Brandon McFadden - rtareliability.brandonmcfadden.com",
+            "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
+            "Entity": "cta",
             "Date": shortened_date,
             "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
             "IntegrityPercentage": item["date_range[Integrity - Percentage]"],
@@ -120,13 +129,84 @@ def parse_response(data):
             json.dump(file_data, f, indent=2)
 
 
+def parse_response_metra(data):
+    for item in data:
+        shortened_date = item["date_range[Dates]"][:10]
+        json_file = main_file_path_json + "metra/" + shortened_date + ".json"
+        file_data = {
+            "Data Provided By": "Brandon McFadden - rtareliability.brandonmcfadden.com",
+            "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
+            "Entity": "metra",
+            "Date": shortened_date,
+            "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
+            "IntegrityPercentage": item["date_range[Integrity - Percentage]"],
+            "routes": {
+                "BNSF": {
+                    "ActualRuns": item["date_range[BNSF Line - Actual]"],
+                    "ScheduledRuns": item["date_range[BNSF Line - Scheduled]"],
+                    "PercentRun": item["date_range[BNSF Line - Percentage]"]
+                },
+                "HC": {
+                    "ActualRuns": item["date_range[HC Line - Actual]"],
+                    "ScheduledRuns": item["date_range[HC Line - Scheduled]"],
+                    "PercentRun": item["date_range[HC Line - Percentage]"]
+                },
+                "MN-N": {
+                    "ActualRuns": item["date_range[MD-N Line - Actual]"],
+                    "ScheduledRuns": item["date_range[MD-N Line - Scheduled]"],
+                    "PercentRun": item["date_range[MD-N Line - Percentage]"]
+                },
+                "MN-W": {
+                    "ActualRuns": item["date_range[MD-W Line - Actual]"],
+                    "ScheduledRuns": item["date_range[MD-W Line - Scheduled]"],
+                    "PercentRun": item["date_range[MD-W Line - Percentage]"]
+                },
+                "ME": {
+                    "ActualRuns": item["date_range[ME Line - Actual]"],
+                    "ScheduledRuns": item["date_range[ME Line - Scheduled]"],
+                    "PercentRun": item["date_range[ME Line - Percentage]"]
+                },
+                "NCS": {
+                    "ActualRuns": item["date_range[NCS Line - Actual]"],
+                    "ScheduledRuns": item["date_range[NCS Line - Scheduled]"],
+                    "PercentRun": item["date_range[NCS Line - Percentage]"]
+                },
+                "RI": {
+                    "ActualRuns": item["date_range[RI Line - Actual]"],
+                    "ScheduledRuns": item["date_range[RI Line - Scheduled]"],
+                    "PercentRun": item["date_range[RI Line - Percentage]"]
+                },
+                "UP-N": {
+                    "ActualRuns": item["date_range[UP-N Line - Actual]"],
+                    "ScheduledRuns": item["date_range[UP-N Line - Scheduled]"],
+                    "PercentRun": item["date_range[UP-N Line - Percentage]"]
+                },
+                "UP-NW": {
+                    "ActualRuns": item["date_range[UP-NW Line - Actual]"],
+                    "ScheduledRuns": item["date_range[UP-NW Line - Scheduled]"],
+                    "PercentRun": item["date_range[UP-NW Line - Percentage]"]
+                },
+                "UP-W": {
+                    "ActualRuns": item["date_range[UP-W Line - Actual]"],
+                    "ScheduledRuns": item["date_range[UP-W Line - Scheduled]"],
+                    "PercentRun": item["date_range[UP-W Line - Percentage]"]
+                },
+            }
+        }
+
+        with open(json_file, 'w') as f:
+            json.dump(file_data, f, indent=2)
+
+
 bearer_token = get_token()
 
-remaining=14
+remaining = 14
 
-while remaining>=0:
-    parse_response(get_report_data(remaining))
-    print("sleeping 1 seconds - total remaining:", remaining)
-    remaining-=1
+while remaining >= 0:
+    parse_response_cta(get_report_data(cta_dataset_id, remaining))
+    print("sleeping 1 seconds - total cta remaining:", remaining)
     sleep(1)
-
+    parse_response_metra(get_report_data(metra_dataset_id, remaining))
+    print("sleeping 1 seconds - total metra remaining:", remaining)
+    sleep(1)
+    remaining -= 1

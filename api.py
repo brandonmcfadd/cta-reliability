@@ -1,4 +1,5 @@
 """cta-reliability API by Brandon McFadden"""
+from datetime import datetime, timedelta
 import os  # Used to retrieve secrets in .env file
 import json
 from dotenv import load_dotenv  # Used to Load Env Var
@@ -6,6 +7,7 @@ from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import HTMLResponse
 from fastapi import Response
+import apihtml
 
 app = FastAPI()
 security = HTTPBasic()
@@ -16,6 +18,17 @@ load_dotenv()
 main_file_path = os.getenv('FILE_PATH')
 main_file_path_json = os.getenv('FILE_PATH_JSON')
 
+def get_date(date_type):
+    """formatted date shortcut"""
+    if date_type == "short":
+        date = datetime.strftime(datetime.now(), "%Y%m%d")
+    elif date_type == "hour":
+        date = datetime.strftime(datetime.now(), "%H")
+    elif date_type == "api-today":
+        date = datetime.strftime(datetime.now(), "%Y-%m-%d")
+    elif date_type == "api-yesterday":
+        date = datetime.strftime(datetime.now()-timedelta(days=1), "%Y-%m-%d")
+    return date
 
 def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
     """Used to verify Creds"""
@@ -64,19 +77,7 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 
 def generate_html_response_intro():
     """Used for Root Page"""
-    html_content = """
-    <html>
-        <head>
-            <title>CTA Reliability API</title>
-        </head>
-        <body>
-            <h1>Welcome to the CTA Reliability API</h1>
-            <p>To Retrieve the data use http://ctareliability.brandonmcfadden.com/api/v1/get_daily_results/{date}</p>
-            <p>Example: http://ctareliability.brandonmcfadden.com/api/v1/get_daily_results/2023-01-20</p>
-	    <p>Authentication is required to use this endpoint. Please fill out the contact form at https://brandonmcfadden.com/contact to request one.</p>
-        </body>
-    </html>
-    """
+    html_content = apihtml.main_page
     return HTMLResponse(content=html_content, status_code=200)
 
 
@@ -99,8 +100,8 @@ def generate_html_response_error(date):
 
 @app.get("/")
 async def read_root():
-    "Tells API to Direct User"
-    return("Please go to http://ctareliability.brandonmcfadden.com/api for information about the API.")
+    """Tells API to Display Root"""
+    return generate_html_response_intro()
 
 @app.get("/api/", response_class=HTMLResponse)
 async def documentation():
@@ -112,7 +113,35 @@ async def documentation():
 async def return_results_for_date(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
-        json_file = main_file_path_json + date + ".json"
+        json_file = main_file_path_json + "cta/" + date + ".json"
+        results = open(json_file, 'r', encoding="utf-8")
+        return Response(content=results.read(), media_type="application/json")
+    except:  # pylint: disable=bare-except
+        return generate_html_response_error(date)
+
+@app.get("/api/v2/cta/get_daily_results/{date}")
+async def return_results_for_date(date: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    if date == "today":
+        date = get_date("api-today")
+    elif date == "yesterday":
+        date = get_date("api-yesterday")
+    try:
+        json_file = main_file_path_json + "cta/" + date + ".json"
+        results = open(json_file, 'r', encoding="utf-8")
+        return Response(content=results.read(), media_type="application/json")
+    except:  # pylint: disable=bare-except
+        return generate_html_response_error(date)
+
+@app.get("/api/v2/metra/get_daily_results/{date}")
+async def return_results_for_date(date: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    if date == "today":
+        date = get_date("api-today")
+    elif date == "yesterday":
+        date = get_date("api-yesterday")
+    try:
+        json_file = main_file_path_json + "metra/" + date + ".json"
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
