@@ -75,8 +75,9 @@ def parse_response_cta(data):
         shortened_date = item["date_range[Dates]"][:10]
         json_file = main_file_path_json + "cta/" + shortened_date + ".json"
         file_data = {
-            "Data Provided By": "Brandon McFadden - rtareliability.brandonmcfadden.com",
+            "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
             "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
+            "V2 API Information At": "http://rta-api.brandonmcfadden.com",
             "Entity": "cta",
             "Date": shortened_date,
             "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
@@ -134,8 +135,9 @@ def parse_response_metra(data):
         shortened_date = item["date_range[Dates]"][:10]
         json_file = main_file_path_json + "metra/" + shortened_date + ".json"
         file_data = {
-            "Data Provided By": "Brandon McFadden - rtareliability.brandonmcfadden.com",
+            "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
             "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
+            "V2 API Information At": "http://rta-api.brandonmcfadden.com",
             "Entity": "metra",
             "Date": shortened_date,
             "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
@@ -200,13 +202,11 @@ def parse_response_metra(data):
 
 bearer_token = get_token()
 
-remaining = 14
+remaining = 7
 
 while remaining >= 0:
     parse_response_cta(get_report_data(cta_dataset_id, remaining))
-    print("sleeping 1 seconds - total cta remaining:", remaining)
-    sleep(1)
+    print("total cta remaining:", remaining)
     parse_response_metra(get_report_data(metra_dataset_id, remaining))
-    print("sleeping 1 seconds - total metra remaining:", remaining)
-    sleep(1)
+    print("total metra remaining:", remaining)
     remaining -= 1

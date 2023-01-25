@@ -92,7 +92,7 @@ def generate_html_response_error(date):
             <h1>Welcome to the CTA Reliability API</h1>
             <p>Unable to retrieve results for the date {date}</p>
             <p></p>
-            <p>To Retrieve the data use http://ctareliability.brandonmcfadden.com/api/v1/get_daily_results/{{date}}</p>
+            <p>To Retrieve the data use http://rta-api.brandonmcfadden.com/api/v1/get_daily_results/{{date}}</p>
         </body>
     </html>
     """
