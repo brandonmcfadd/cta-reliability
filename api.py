@@ -5,11 +5,15 @@ import json
 from dotenv import load_dotenv  # Used to Load Env Var
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi import Response
+import redis.asyncio as redis
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter
+from dateutil.relativedelta import relativedelta
 import apihtml
 
-app = FastAPI()
+app = FastAPI(docs_url=None)
 security = HTTPBasic()
 
 # Load .env variables
@@ -17,6 +21,9 @@ load_dotenv()
 
 main_file_path = os.getenv('FILE_PATH')
 main_file_path_json = os.getenv('FILE_PATH_JSON')
+main_file_path_csv = os.getenv('FILE_PATH_CSV')
+main_file_path_csv_month = os.getenv('FILE_PATH_CSV_MONTH')
+
 
 def get_date(date_type):
     """formatted date shortcut"""
@@ -28,11 +35,16 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%Y-%m-%d")
     elif date_type == "api-yesterday":
         date = datetime.strftime(datetime.now()-timedelta(days=1), "%Y-%m-%d")
+    elif date_type == "api-last-month":
+        date = datetime.strftime(datetime.now()-relativedelta(months=1), "%Y-%m")
+    elif date_type == "current":
+        date = datetime.strftime(datetime.now(), "%d %b %Y %H:%M:%S")
     return date
+
 
 def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
     """Used to verify Creds"""
-    file = open(file=main_file_path + '/cta-reliability/.tokens',
+    file = open(file=main_file_path + 'cta-reliability/.tokens',
                 mode='r',
                 encoding='utf-8')
     tokens = json.load(file)
@@ -77,39 +89,52 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 
 def generate_html_response_intro():
     """Used for Root Page"""
-    html_content = apihtml.main_page
+    html_content = apihtml.MAIN_PAGE
     return HTMLResponse(content=html_content, status_code=200)
 
 
-def generate_html_response_error(date):
+def generate_html_response_error(date, endpoint, current_time):
     """Used for Error Page"""
     html_content = f"""
     <html>
         <head>
-            <title>CTA Reliability API</title>
+            <title>CTA Reliability API Error</title>
         </head>
         <body>
-            <h1>Welcome to the CTA Reliability API</h1>
-            <p>Unable to retrieve results for the date {date}</p>
+            <h1>Error In CTA Reliability API Request</h1>
+            <p>Current System Time: {current_time}</p>
+            <p>Endpoint: {endpoint}{date}<br>
+            Unable to retrieve results for the date {date}<br><br>
+            If you are using the 'get_train_arrivals_by_day' endpoint, please note that data for the previous day is not loaded until ~01:00 CST.</p>
             <p></p>
-            <p>To Retrieve the data use http://rta-api.brandonmcfadden.com/api/v1/get_daily_results/{{date}}</p>
+            <p>Please refer to the documentation for assistance: <a href="http://rta-api.brandonmcfadden.com">RTA API Documentation</a></p>
         </body>
     </html>
     """
     return HTMLResponse(content=html_content, status_code=200)
 
-@app.get("/")
+
+@app.on_event("startup")
+async def startup():
+    """Tells API to Prep redis for Rate Limit"""
+    redis_value = redis.from_url(
+        "redis://localhost", encoding="utf-8", decode_responses=True)
+    await FastAPILimiter.init(redis_value)
+
+
+@app.get("/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def read_root():
     """Tells API to Display Root"""
     return generate_html_response_intro()
 
-@app.get("/api/", response_class=HTMLResponse)
+
+@app.get("/api/", response_class=HTMLResponse, dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def documentation():
     """Tells API to Display Root"""
     return generate_html_response_intro()
 
 
-@app.get("/api/v1/get_daily_results/{date}")
+@app.get("/api/v1/get_daily_results/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_results_for_date(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
@@ -117,32 +142,92 @@ async def return_results_for_date(date: str, token: str = Depends(get_current_us
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
-        return generate_html_response_error(date)
+        endpoint = "http://rta-api.brandonmcfadden.com/api/v1/get_daily_results/"
+        return generate_html_response_error(date, endpoint, get_date("current"))
 
-@app.get("/api/v2/cta/get_daily_results/{date}")
-async def return_results_for_date(date: str, token: str = Depends(get_current_username)):
+
+@app.get("/api/v2/cta/get_daily_results/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_results_for_date_cta_v2(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     if date == "today":
         date = get_date("api-today")
     elif date == "yesterday":
         date = get_date("api-yesterday")
-    try:
-        json_file = main_file_path_json + "cta/" + date + ".json"
-        results = open(json_file, 'r', encoding="utf-8")
-        return Response(content=results.read(), media_type="application/json")
-    except:  # pylint: disable=bare-except
-        return generate_html_response_error(date)
+    if date == "availability":
+        files_available = sorted((f for f in os.listdir(main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
+        return files_available
+    else:
+        try:
+            json_file = main_file_path_json + "cta/" + date + ".json"
+            results = open(json_file, 'r', encoding="utf-8")
+            return Response(content=results.read(), media_type="application/json")
+        except:  # pylint: disable=bare-except
+            endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/"
+            return generate_html_response_error(date, endpoint, get_date("current"))
 
-@app.get("/api/v2/metra/get_daily_results/{date}")
-async def return_results_for_date(date: str, token: str = Depends(get_current_username)):
+
+@app.get("/api/v2/metra/get_daily_results/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_results_for_date_metra_v2(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     if date == "today":
         date = get_date("api-today")
     elif date == "yesterday":
         date = get_date("api-yesterday")
-    try:
-        json_file = main_file_path_json + "metra/" + date + ".json"
-        results = open(json_file, 'r', encoding="utf-8")
-        return Response(content=results.read(), media_type="application/json")
-    except:  # pylint: disable=bare-except
-        return generate_html_response_error(date)
+    if date == "availability":
+        files_available = sorted((f for f in os.listdir(main_file_path_json + "metra/") if not f.startswith(".")), key=str.lower)
+        return files_available
+    else:
+        try:
+            json_file = main_file_path_json + "metra/" + date + ".json"
+            results = open(json_file, 'r', encoding="utf-8")
+            return Response(content=results.read(), media_type="application/json")
+        except:  # pylint: disable=bare-except
+            endpoint = "http://rta-api.brandonmcfadden.com/api/v2/metra/get_daily_results/"
+            return generate_html_response_error(date, endpoint, get_date("current"))
+
+
+@app.get("/api/v2/cta/get_train_arrivals_by_day/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    if date == "last-month":
+        date = get_date("api-yesterday")
+    if date == "availability":
+        files_available = sorted((f for f in os.listdir(main_file_path_csv_month + "cta/") if not f.startswith(".")), key=str.lower)
+        return files_available
+    else:
+        try:
+            csv_file = main_file_path_csv_month + "cta/" + date + ".csv"
+            print(csv_file)
+            results = open(csv_file, 'r', encoding="utf-8")
+            return StreamingResponse(
+                results,
+                media_type="text/csv",
+                headers={
+                    "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
+            )
+        except:  # pylint: disable=bare-except
+            endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
+            return generate_html_response_error(date, endpoint, get_date("current"))
+
+@app.get("/api/v2/cta/get_train_arrivals_by_month/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    if date == "yesterday":
+        date = get_date("api-last-month")
+    if date == "availability":
+        files_available = sorted((f for f in os.listdir(main_file_path_csv_month + "cta/") if not f.startswith(".")), key=str.lower)
+        return files_available
+    else:
+        try:
+            csv_file = main_file_path_csv_month + "cta/" + date + ".csv"
+            print(csv_file)
+            results = open(csv_file, 'r', encoding="utf-8")
+            return StreamingResponse(
+                results,
+                media_type="text/csv",
+                headers={
+                    "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
+            )
+        except:  # pylint: disable=bare-except
+            endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
+            return generate_html_response_error(date, endpoint, get_date("current"))

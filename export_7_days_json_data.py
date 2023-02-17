@@ -82,6 +82,11 @@ def parse_response_cta(data):
             "Date": shortened_date,
             "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
             "IntegrityPercentage": item["date_range[Integrity - Percentage]"],
+            "system": {
+                "ActualRuns": item["date_range[System - Actual]"],
+                "ScheduledRuns": item["date_range[System - Scheduled]"],
+                "PercentRun": item["date_range[System - Percentage]"]
+            },
             "routes": {
                 "Blue": {
                     "ActualRuns": item["date_range[Blue Line - Actual]"],
@@ -122,7 +127,7 @@ def parse_response_cta(data):
                     "ActualRuns": item["date_range[Yellow Line - Actual]"],
                     "ScheduledRuns": item["date_range[Yellow Line - Scheduled]"],
                     "PercentRun": item["date_range[Yellow Line - Percentage]"]
-                },
+                }
             }
         }
 
@@ -142,6 +147,11 @@ def parse_response_metra(data):
             "Date": shortened_date,
             "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
             "IntegrityPercentage": item["date_range[Integrity - Percentage]"],
+            "system": {
+                "ActualRuns": item["date_range[System - Actual]"],
+                "ScheduledRuns": item["date_range[System - Scheduled]"],
+                "PercentRun": item["date_range[System - Percentage]"]
+            },
             "routes": {
                 "BNSF": {
                     "ActualRuns": item["date_range[BNSF Line - Actual]"],
@@ -192,7 +202,7 @@ def parse_response_metra(data):
                     "ActualRuns": item["date_range[UP-W Line - Actual]"],
                     "ScheduledRuns": item["date_range[UP-W Line - Scheduled]"],
                     "PercentRun": item["date_range[UP-W Line - Percentage]"]
-                },
+                }
             }
         }
 
