@@ -3,6 +3,7 @@ import os
 import json
 from csv import DictWriter
 from datetime import datetime, timedelta
+from time import sleep
 import pandas as pd
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
@@ -122,6 +123,10 @@ bearer_token = get_token()
 remaining = 7
 
 while remaining > 0:
-    parse_response_cta(get_report_data(cta_dataset_id, remaining),remaining)
-    print("total cta remaining:", remaining)
+    try:
+        parse_response_cta(get_report_data(cta_dataset_id, remaining),remaining)
+    except: # pylint: disable=bare-except
+        print("Failed to grab #", remaining)
     remaining -= 1
+    print("total cta remaining:", remaining)
+    sleep(1)

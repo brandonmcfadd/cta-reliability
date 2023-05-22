@@ -189,14 +189,14 @@ async def return_results_for_date_metra_v2(date: str, token: str = Depends(get_c
 @app.get("/api/v2/cta/get_train_arrivals_by_day/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
-    if date == "last-month":
+    if date == "yesterday":
         date = get_date("api-yesterday")
     if date == "availability":
-        files_available = sorted((f for f in os.listdir(main_file_path_csv_month + "cta/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
-            csv_file = main_file_path_csv_month + "cta/" + date + ".csv"
+            csv_file = main_file_path_csv + "cta/" + date + ".csv"
             print(csv_file)
             results = open(csv_file, 'r', encoding="utf-8")
             return StreamingResponse(

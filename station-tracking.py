@@ -7,14 +7,6 @@ from datetime import datetime, timedelta
 from csv import DictWriter
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
-import urllib3
-requests.packages.urllib3.disable_warnings()
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-try:
-    requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-except AttributeError:
-    # no pyopenssl support used / needed / available
-    pass
 
 # Load .env variables
 load_dotenv()
@@ -72,17 +64,10 @@ def train_api_call_to_cta_map():
     """Gotta talk to the CTA and get Train Times part 2!"""
     print("Making CTA Train Map API Call...")
     try:
-        api_response = requests.get(train_tracker_url_map, timeout=10)
+        api_response = requests.get(train_tracker_url_map)
         train_arrival_times_map(api_response.json())
-        api_response.raise_for_status()
-    except requests.exceptions.HTTPError as errh:
-        print ("Map - Http Error:",errh)
-    except requests.exceptions.ConnectionError as errc:
-        print ("Map - Error Connecting:",errc)
-    except requests.exceptions.Timeout as errt:
-        print ("Map - Timeout Error:",errt)
-    except requests.exceptions.RequestException as err:
-        print ("Map - Error in API Call to Train Tracker",err)
+    except:  # pylint: disable=bare-except
+        print("Error in API Call to Train Tracker Map")
     return api_response
 
 
@@ -140,7 +125,7 @@ def add_train_to_file_api(eta, station_name, stop_id):
         arrival_information["trains"][station_name][stop_id][
             "estimated_times"].append(str(estimated_time) + "min")
         current_month = datetime.strftime(datetime.now(), "%b%Y")
-        file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals-" + \
+        file_path = main_file_path + "/cta-reliability/train_arrivals/special/train_arrivals-" + \
             str(current_month) + ".csv"
         with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
@@ -158,7 +143,7 @@ def add_train_to_file_map(destination, route, run_number, is_scheduled, predicti
     current_month = datetime.strftime(datetime.now(), "%b%Y")
     current_long_time = datetime.strftime(
         datetime.now(), "%Y-%m-%dT%H:%M:%S")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals_backup-" + \
+    file_path = main_file_path + "/cta-reliability/train_arrivals/special/train_arrivals_backup-" + \
         str(current_month) + ".csv"
     with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
@@ -175,9 +160,7 @@ def train_arrival_times_map(response):
     for train in response['dataObject']:
         for marker in train["Markers"]:
             for prediction in marker["Predictions"]:
-                if str(prediction[0]) in train_station_map_ids and marker["DestName"] \
-                        in train_station_tracked_destinations \
-                        and str(prediction[2]) == "<b>Due</b>":
+                if str(prediction[0]) in train_station_map_ids and str(prediction[2]) == "<b>Due</b>":
                     add_train_to_file_map(
                         marker["DestName"], marker["LineName"], \
                         marker["RunNumber"], marker["IsSched"], prediction)
@@ -186,7 +169,7 @@ def train_arrival_times_map(response):
 def check_main_train_file_exists():
     """Used to check if file exists"""
     current_month = datetime.strftime(datetime.now(), "%b%Y")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals-" + \
+    file_path = main_file_path + "/cta-reliability/train_arrivals/special/train_arrivals-" + \
         str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
@@ -202,7 +185,7 @@ def check_main_train_file_exists():
 def check_backup_train_file_exists():
     """Used to check if file exists"""
     current_month = datetime.strftime(datetime.now(), "%b%Y")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals_backup-" + \
+    file_path = main_file_path + "/cta-reliability/train_arrivals/special/train_arrivals_backup-" + \
         str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
@@ -218,7 +201,7 @@ def check_backup_train_file_exists():
 def check_integrity_file_exists():
     """Used to check if file exists"""
     current_month = datetime.strftime(datetime.now(), "%b%Y")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/integrity-check-" + \
+    file_path = main_file_path + "/cta-reliability/train_arrivals/special/integrity-check-" + \
         str(current_month) + ".csv"
     integrity_csv_file = os.path.exists(file_path)
     if integrity_csv_file is False:
@@ -237,7 +220,7 @@ def add_integrity_file_line(status):
     current_simple_time = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M")
     current_long_time = datetime.strftime(
         datetime.now(), "%Y-%m-%dT%H:%M:%S.%f%z")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/integrity-check-" + \
+    file_path = main_file_path + "/cta-reliability/train_arrivals/special/integrity-check-" + \
         str(current_month) + ".csv"
     with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
@@ -259,15 +242,14 @@ while True:  # Where the magic happens
     settings = json.load(file)
 
     # API URL's
-    train_tracker_url_api = settings["train-tracker"]["api-url"]
-    train_tracker_url_api_backup = settings["train-tracker"]["api-url-backup"]
+    train_tracker_url_api = settings["train-tracker"]["station-api-url"]
+    train_tracker_url_api = settings["train-tracker"]["station-api-url-backup"]
     train_tracker_url_map = settings["train-tracker"]["map-url"]
-    train_tracker_url_map_backup = settings["train-tracker"]["map-url-backup"]
 
     # Variables for Settings information - Only make settings changes in the settings.json file
     enable_train_tracker_api = settings["train-tracker"]["api-enabled"]
     enable_train_tracker_map = settings["train-tracker"]["map-enabled"]
-    train_station_stop_ids = settings["train-tracker"]["station-ids"]
+    train_station_stop_ids = settings["train-tracker"]["special-station-ids"]
     train_station_map_ids = settings["train-tracker"]["map-station-ids"]
     train_station_tracked_destinations = settings["train-tracker"]["tracked-destinations"]
 
@@ -284,10 +266,7 @@ while True:  # Where the magic happens
     # API Portion runs if enabled and station id's exist
     if train_station_stop_ids != "" and enable_train_tracker_api == "True":
         for train_stop_id_to_check in train_station_stop_ids:
-            try:
-                response1 = train_api_call_to_cta_api(train_stop_id_to_check)
-            except: # pylint: disable=bare-except
-                response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
+            response1 = train_api_call_to_cta_api(train_stop_id_to_check)
 
     # Map Portion runs if enabled and station id's exist
     if train_station_map_ids != "" \

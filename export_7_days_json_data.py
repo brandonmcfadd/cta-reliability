@@ -215,8 +215,15 @@ bearer_token = get_token()
 remaining = 7
 
 while remaining >= 0:
-    parse_response_cta(get_report_data(cta_dataset_id, remaining))
+    try: 
+        parse_response_cta(get_report_data(cta_dataset_id, remaining))
+    except: # pylint: disable=bare-except
+        print("Failed to grab CTA #", remaining)
     print("total cta remaining:", remaining)
-    parse_response_metra(get_report_data(metra_dataset_id, remaining))
+    try:
+        parse_response_metra(get_report_data(metra_dataset_id, remaining))
+    except: # pylint: disable=bare-except
+        print("Failed to grab Metra #", remaining)
     print("total metra remaining:", remaining)
     remaining -= 1
+    sleep(1)
