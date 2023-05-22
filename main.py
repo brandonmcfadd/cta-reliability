@@ -278,22 +278,24 @@ while True:  # Where the magic happens
         datetime.strftime(datetime.now(), "%H:%M:%S")
     print("\n" + current_time_console)
 
-    # If we get to this point, log a successful attempt to reach the API's
-    add_integrity_file_line("Success")
-
     # API Portion runs if enabled and station id's exist
     if train_station_stop_ids != "" and enable_train_tracker_api == "True":
         for train_stop_id_to_check in train_station_stop_ids:
             try:
-                response1 = train_api_call_to_cta_api(train_stop_id_to_check)
+                try:
+                    response1 = train_api_call_to_cta_api(train_stop_id_to_check)
+                except: # pylint: disable=bare-except
+                    response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
             except: # pylint: disable=bare-except
-                response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
+                print("Ultimate Failure :()")
 
     # Map Portion runs if enabled and station id's exist
     if train_station_map_ids != "" \
             and train_station_tracked_destinations != "" \
             and enable_train_tracker_map == "True":
         response2 = train_api_call_to_cta_map()
+
+    add_integrity_file_line("Success")
 
     # Wait and do it again
     SLEEP_AMOUNT = 30
