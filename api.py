@@ -7,6 +7,7 @@ from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi import Response
+from fastapi.responses import PlainTextResponse
 import redis.asyncio as redis
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
@@ -231,3 +232,15 @@ async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_cu
         except:  # pylint: disable=bare-except
             endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
             return generate_html_response_error(date, endpoint, get_date("current"))
+
+@app.get("/api/v2/cta/headways", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_special_station_json(token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        json_file = main_file_path + "cta-reliability/train_arrivals/json/special-station.json"
+        print(json_file)
+        results = open(json_file, 'r', encoding="utf-8")
+        return Response(content=results.read(), media_type="application/json")
+    except:  # pylint: disable=bare-except
+        endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/headways"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))

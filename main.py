@@ -32,7 +32,7 @@ train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destinat
 
 def train_api_call_to_cta_api(stop_id):
     """Gotta talk to the CTA and get Train Times"""
-    print("Making Main Secure URL CTA Train API Call...")
+    print(f"Making Main Secure URL CTA Train API Call for stop: {stop_id}")
     try:
         api_response = requests.get(
             train_tracker_url_api.format(train_api_key, stop_id), timeout=10)
@@ -51,7 +51,7 @@ def train_api_call_to_cta_api(stop_id):
 
 def train_api_call_to_cta_api_backup(stop_id):
     """Gotta talk to the CTA and get Train Times"""
-    print("Making Backup Insecure URL CTA Train API Call...")
+    print(f"Making Backup Insecure URL CTA Train API Call for stop: {stop_id}")
     try:
         api_response = requests.get(
             train_tracker_url_api_backup.format(train_api_key, stop_id), timeout=10)
@@ -190,13 +190,13 @@ def check_main_train_file_exists():
         str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
-        print("File Doesn't Exist...Creating File and Adding Headers...")
+        print("Main Train File Doesn't Exist...Creating File and Adding Headers...")
         with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=train_arrivals_csv_headers)
             writer_object.writeheader()
     else:
-        print("File Exists...Continuing...")
+        print("Main Train File Exists...Continuing...")
 
 
 def check_backup_train_file_exists():
@@ -206,13 +206,13 @@ def check_backup_train_file_exists():
         str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
-        print("File Doesn't Exist...Creating File and Adding Headers...")
+        print("Backup Train File Doesn't Exist...Creating File and Adding Headers...")
         with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=train_arrivals_csv_headers)
             writer_object.writeheader()
     else:
-        print("File Exists...Continuing...")
+        print("Backup Train File Exists...Continuing...")
 
 
 def check_integrity_file_exists():
@@ -222,13 +222,13 @@ def check_integrity_file_exists():
         str(current_month) + ".csv"
     integrity_csv_file = os.path.exists(file_path)
     if integrity_csv_file is False:
-        print("File Doesn't Exist...Creating File and Adding Headers...")
+        print("Integrity File Doesn't Exist...Creating File and Adding Headers...")
         with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=integrity_file_csv_headers)
             writer_object.writeheader()
     else:
-        print("File Exists...Continuing...")
+        print("Integrity File Exists...Continuing...")
 
 
 def add_integrity_file_line(status):
@@ -250,7 +250,7 @@ print("Welcome to TrainTracker, Python Edition!")
 # Check to make sure output file exists and write headers
 while True:  # Where the magic happens
     check_main_train_file_exists()
-    check_backup_train_file_exists()
+    # check_backup_train_file_exists()
     check_integrity_file_exists()
     # Settings
     file = open(file=main_file_path + '/cta-reliability/settings.json',
@@ -299,5 +299,5 @@ while True:  # Where the magic happens
 
     # Wait and do it again
     SLEEP_AMOUNT = 30
-    print("Sleeping " + str(SLEEP_AMOUNT) + " Seconds")
+    print("Sleeping " + str(SLEEP_AMOUNT) + " Seconds\n")
     time.sleep(SLEEP_AMOUNT)

@@ -176,3 +176,5 @@ upload_files.py
 train_arrivals/*
 *.rdb
 gtfs_clean/*
+station_tweeting.py
+send_tweet.py
