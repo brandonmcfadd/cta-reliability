@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from dateutil import tz
 import os
 from time import sleep  # Used to retrieve secrets in .env file
 from dotenv import load_dotenv  # Used to Load Env Var
@@ -23,6 +24,8 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%Y%m%d")
     elif date_type == "hour":
         date = datetime.strftime(datetime.now(), "%H")
+    elif date_type == "long":
+        date = datetime.strftime(datetime.now(), "%Y-%m-%dT%k:%M:%SZ")
     return date
 
 
@@ -70,7 +73,32 @@ def get_report_data(dataset, days_old):
         print("error in:", response_json)
 
 
-def parse_response_cta(data):
+def get_last_refresh_time(dataset):
+    url = f"https://api.powerbi.com/v1.0/myorg/datasets/{dataset}/refreshes?$top=1"
+
+    payload = json.dumps({
+        "impersonatedUserName": "brandonmcfadden@brandonmcfadden.onmicrosoft.com"
+    })
+    headers = {
+        'Authorization': 'Bearer {}'.format(bearer_token),
+    }
+    
+    response = requests.request("GET", url, headers=headers, data=payload)
+    response_json = json.loads(response.text)
+    try:
+        end_time = response_json['value'][0].get('endTime')
+        from_zone = tz.gettz('UTC')
+        to_zone = tz.gettz('America/Chicago')
+        utc = datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+        utc = utc.replace(tzinfo=from_zone)
+        cst = utc.astimezone(to_zone)
+        cst_string = datetime.strftime(cst, "%Y-%m-%dT%H:%M:%S%z")
+        return(cst_string)
+    except:
+        print("error in:", response_json)
+
+
+def parse_response_cta(data,last_refresh):
     for item in data:
         shortened_date = item["date_range[Dates]"][:10]
         json_file = main_file_path_json + "cta/" + shortened_date + ".json"
@@ -80,6 +108,7 @@ def parse_response_cta(data):
             "V2 API Information At": "http://rta-api.brandonmcfadden.com",
             "Entity": "cta",
             "Date": shortened_date,
+            "LastUpdated": last_refresh,
             "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
             "IntegrityPercentage": item["date_range[Integrity - Percentage]"],
             "system": {
@@ -216,9 +245,11 @@ bearer_token = get_token()
 
 remaining = 7
 
+last_refresh_time = get_last_refresh_time(cta_dataset_id)
+
 while remaining >= 0:
     try: 
-        parse_response_cta(get_report_data(cta_dataset_id, remaining))
+        parse_response_cta(get_report_data(cta_dataset_id, remaining),last_refresh_time)
     except: # pylint: disable=bare-except
         print("Failed to grab CTA #", remaining)
     print("total cta remaining:", remaining)
