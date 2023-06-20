@@ -126,7 +126,7 @@ def prepare_output():
 
 def output_data_to_file():
     """puts the data in a json file for the api"""
-    date = datetime.strftime(datetime.utcnow(), "%Y-%m-%dT%k:%M:%SZ")
+    date = datetime.strftime(datetime.utcnow(), "%Y-%m-%dT%H:%M:%SZ")
     arrival_information["last_update"] = date
     file_path = main_file_path + "cta-reliability/train_arrivals/json/"
     with open(file_path + "special-station.json", 'w', encoding='utf-8') as file1:
