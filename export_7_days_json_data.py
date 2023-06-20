@@ -90,6 +90,8 @@ def parse_response_cta(data):
             "routes": {
                 "Blue": {
                     "ActualRuns": item["date_range[Blue Line - Actual]"],
+                    "ActualRunsOHareBranch": item["date_range[Branch - Blue Line - O'Hare Branch]"],
+                    "ActualRunsFPBranch": item["date_range[Branch - Blue Line - Forest Park Branch]"],
                     "ScheduledRuns": item["date_range[Blue Line - Scheduled]"],
                     "PercentRun": item["date_range[Blue Line - Percentage]"]
                 },
