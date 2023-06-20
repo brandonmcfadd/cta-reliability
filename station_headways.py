@@ -52,7 +52,7 @@ def add_train_to_json(line, direction, headway):
 
 def train_arrival_times_map(response, line):
     """Used to parse the Train Tracker Map API Response"""
-    northbound_destinations = ["Jefferson Park", "Rosemont", "Harlem/Lake", "Howard", "O'Hare&nbsp;<img alt='' height='13' src='/images/icon_ttairport.png' width='13' style='padding-top:2px;' />", "Kimball", "Dempster", "Linden", "Howard"]
+    northbound_destinations = ["Jefferson Park", "Rosemont", "Harlem/Lake", "Howard", "O'Hare&nbsp;<img alt='' height='13' src='/cms/images/icon_ttairport.png' width='13' style='padding-top:2px;' />", "Kimball", "Dempster", "Linden", "Howard"]
     southbound_destinations = ["Forest Park", "UIC-Halsted", "54th/Cermak", "95th/Dan Ryan", "Midway&nbsp;<img alt='' height='13' src='/images/icon_ttairport.png' width='13' style='padding-top:2px;'/>", "Cottage Grove", "Ashland/63rd"]
     for train in response['dataObject']:
         for marker in train["Markers"]:
