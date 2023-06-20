@@ -79,6 +79,7 @@ def train_arrival_times_map(response, line):
                                 add_train_to_json(line, "north", 0)
                             elif marker["DestName"] in southbound_destinations and marker["DestName"] == "UIC-Halsted":
                                 add_train_to_json(line, "south-express", 0)
+                                add_train_to_json(line, "south", 0)
                             elif marker["DestName"] in southbound_destinations:
                                 add_train_to_json(line, "south", 0)
                         elif int(eta) < 45:
@@ -86,6 +87,7 @@ def train_arrival_times_map(response, line):
                                 add_train_to_json(line, "north", int(eta))
                             elif marker["DestName"] in southbound_destinations and marker["DestName"] == "UIC-Halsted":
                                 add_train_to_json(line, "south-express", int(eta))
+                                add_train_to_json(line, "south", int(eta))
                             elif marker["DestName"] in southbound_destinations:
                                 add_train_to_json(line, "south", int(eta))
     return True
