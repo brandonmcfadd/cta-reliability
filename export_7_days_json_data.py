@@ -119,10 +119,14 @@ def parse_response_cta(data,last_refresh):
             "routes": {
                 "Blue": {
                     "ActualRuns": item["date_range[Blue Line - Actual]"],
-                    "ActualRunsOHareBranch": item["date_range[Branch - Blue Line - O'Hare Branch]"],
-                    "ActualRunsFPBranch": item["date_range[Branch - Blue Line - Forest Park Branch]"],
+                    "ActualRunsOHareBranch": item["date_range[Branch - Blue Line - O'Hare Branch - Actual]"],
+                    "ActualRunsFPBranch": item["date_range[Branch - Blue Line - Forest Park Branch - Actual]"],
                     "ScheduledRuns": item["date_range[Blue Line - Scheduled]"],
-                    "PercentRun": item["date_range[Blue Line - Percentage]"]
+                    "ScheduledRunsOHareBranch": item["date_range[Blue Line - Scheduled]"],
+                    "ScheduledRunsFPBranch": item["date_range[Branch - Blue Line - Forest Park - Scheduled]"],
+                    "PercentRun": item["date_range[Blue Line - Percentage]"],
+                    "PercentRunOHareBranch": item["date_range[Blue Line - Percentage]"],
+                    "PercentRunFPBranch": item["date_range[Branch - Blue Line - Forest Park - Percentage]"]
                 },
                 "Brown": {
                     "ActualRuns": item["date_range[Brown Line - Actual]"],
