@@ -63,7 +63,6 @@ def day_of_performance_stats(data):
 
 def prepare_tweet_text_1(data, is_good_day_flag):
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
-    is_good_day_flag = False
     if is_good_day_flag is True:
         type_of_day = "CTA Rail is having a good day! To do this the CTA cut 18% of scheduled service. Check out https://ctaction.org/service-cuts for more."
         expression = "!"
