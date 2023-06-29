@@ -77,14 +77,15 @@ def prepare_tweet_text_2(data):
     system_actual = data["system"]["ActualRuns"]
     system_sched = data["system"]["ScheduledRuns"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
-
-    text_output_part_2 = f"Current System Stats (actual/scheduled):\nSystem: {system_perc}% - {system_actual}/{system_sched}"
+    consistent_arrivals = 0
+    text_output_part_2 = f"Current System Stats (actual/scheduled):\nSystem: {system_perc}% - {system_actual:,}/{system_sched:,}"
     for line in data["routes"]:
+        consistent_arrivals += int(data["routes"][line]["Consistent_Headways"])
         actual_runs = data["routes"][line]["ActualRuns"]
         scheduled_runs = data["routes"][line]["ScheduledRuns"]
         percent_run = int(float(data["routes"][line]["PercentRun"]) * 100)
         text_output_part_2 = text_output_part_2 + \
-            f"\n{line}: {percent_run}% - {actual_runs}/{scheduled_runs}"
+            f"\n{line}: {percent_run}% - {actual_runs:,}/{scheduled_runs:,}"
     last_update_api = datetime.strptime(
         data["LastUpdated"], "%Y-%m-%dT%H:%M:%S%z")
     last_update_int = int(datetime.strftime(last_update_api, "%H"))
