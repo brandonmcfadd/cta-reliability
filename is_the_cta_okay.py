@@ -69,7 +69,6 @@ def prepare_tweet_text_1(data, is_good_day_flag):
         consistent_arrivals += int(data["routes"][line]["Consistent_Headways"])
     if consistent_arrivals > 0:
         consistent_arrivals_perc = int((consistent_arrivals/system_actual)*100)
-    is_good_day_flag = True
     if is_good_day_flag is True:
         type_of_day = "CTA Rail is having a good day! To do this the CTA cut 18% of scheduled service. Check out ctaction.org/service-cuts for more."
         expression = "!"
