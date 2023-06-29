@@ -126,42 +126,50 @@ def parse_response_cta(data,last_refresh):
                     "ScheduledRunsFPBranch": item["date_range[Branch - Blue Line - Forest Park - Scheduled]"],
                     "PercentRun": item["date_range[Blue Line - Percentage]"],
                     "PercentRunOHareBranch": item["date_range[Blue Line - Percentage]"],
-                    "PercentRunFPBranch": item["date_range[Branch - Blue Line - Forest Park - Percentage]"]
+                    "PercentRunFPBranch": item["date_range[Branch - Blue Line - Forest Park - Percentage]"],
+                    "Consistent_Headways": item["date_range[Blue Line - Consistent Headways]"]
                 },
                 "Brown": {
                     "ActualRuns": item["date_range[Brown Line - Actual]"],
                     "ScheduledRuns": item["date_range[Brown Line - Scheduled]"],
-                    "PercentRun": item["date_range[Brown Line - Percentage]"]
+                    "PercentRun": item["date_range[Brown Line - Percentage]"],
+                    "Consistent_Headways": item["date_range[Brown Line - Consistent Headways]"]
                 },
                 "Green": {
                     "ActualRuns": item["date_range[Green Line - Actual]"],
                     "ScheduledRuns": item["date_range[Green Line - Scheduled]"],
-                    "PercentRun": item["date_range[Green Line - Percentage]"]
+                    "PercentRun": item["date_range[Green Line - Percentage]"],
+                    "Consistent_Headways": item["date_range[Green Line - Consistent Headways]"]
                 },
                 "Orange": {
                     "ActualRuns": item["date_range[Orange Line - Actual]"],
                     "ScheduledRuns": item["date_range[Orange Line - Scheduled]"],
-                    "PercentRun": item["date_range[Orange Line - Percentage]"]
+                    "PercentRun": item["date_range[Orange Line - Percentage]"],
+                    "Consistent_Headways": item["date_range[Orange Line - Consistent Headways]"]
                 },
                 "Pink": {
                     "ActualRuns": item["date_range[Pink Line - Actual]"],
                     "ScheduledRuns": item["date_range[Pink Line - Scheduled]"],
-                    "PercentRun": item["date_range[Pink Line - Percentage]"]
+                    "PercentRun": item["date_range[Pink Line - Percentage]"],
+                    "Consistent_Headways": item["date_range[Pink Line - Consistent Headways]"]
                 },
                 "Purple": {
                     "ActualRuns": item["date_range[Purple Line - Actual]"],
                     "ScheduledRuns": item["date_range[Purple Line - Scheduled]"],
-                    "PercentRun": item["date_range[Purple Line - Percentage]"]
+                    "PercentRun": item["date_range[Purple Line - Percentage]"],
+                    "Consistent_Headways": item["date_range[Purple Line - Consistent Headways]"]
                 },
                 "Red": {
                     "ActualRuns": item["date_range[Red Line - Actual]"],
                     "ScheduledRuns": item["date_range[Red Line - Scheduled]"],
-                    "PercentRun": item["date_range[Red Line - Percentage]"]
+                    "PercentRun": item["date_range[Red Line - Percentage]"],
+                    "Consistent_Headways": item["date_range[Red Line - Consistent Headways]"]
                 },
                 "Yellow": {
                     "ActualRuns": item["date_range[Yellow Line - Actual]"],
                     "ScheduledRuns": item["date_range[Yellow Line - Scheduled]"],
-                    "PercentRun": item["date_range[Yellow Line - Percentage]"]
+                    "PercentRun": item["date_range[Yellow Line - Percentage]"],
+                    "Consistent_Headways": item["date_range[Yellow Line - Consistent Headways]"]
                 }
             }
         }
@@ -247,7 +255,7 @@ def parse_response_metra(data):
 
 bearer_token = get_token()
 
-remaining = 7
+remaining = 2
 
 last_refresh_time = get_last_refresh_time(cta_dataset_id)
 
