@@ -213,25 +213,26 @@ async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_cu
 @app.get("/api/v2/cta/get_train_arrivals_by_month/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
-    if date == "yesterday":
-        date = get_date("api-last-month")
-    if date == "availability":
-        files_available = sorted((f for f in os.listdir(main_file_path_csv_month + "cta/") if not f.startswith(".")), key=str.lower)
-        return files_available
-    else:
-        try:
-            csv_file = main_file_path_csv_month + "cta/" + date + ".csv"
-            print(csv_file)
-            results = open(csv_file, 'r', encoding="utf-8")
-            return StreamingResponse(
-                results,
-                media_type="text/csv",
-                headers={
-                    "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
-            )
-        except:  # pylint: disable=bare-except
-            endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
-            return generate_html_response_error(date, endpoint, get_date("current"))
+    return "The get_train_arrivals_by_month endpoint is disabled due to an error with exporting results."
+    # if date == "yesterday":
+    #     date = get_date("api-last-month")
+    # if date == "availability":
+    #     files_available = sorted((f for f in os.listdir(main_file_path_csv_month + "cta/") if not f.startswith(".")), key=str.lower)
+    #     return files_available
+    # else:
+    #     try:
+    #         csv_file = main_file_path_csv_month + "cta/" + date + ".csv"
+    #         print(csv_file)
+    #         results = open(csv_file, 'r', encoding="utf-8")
+    #         return StreamingResponse(
+    #             results,
+    #             media_type="text/csv",
+    #             headers={
+    #                 "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
+    #         )
+    #     except:  # pylint: disable=bare-except
+    #         endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
+    #         return generate_html_response_error(date, endpoint, get_date("current"))
 
 @app.get("/api/v2/cta/headways", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_special_station_json(token: str = Depends(get_current_username)):

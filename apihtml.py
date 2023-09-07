@@ -38,11 +38,11 @@ MAIN_PAGE = """
     Arrival data for the previous day is loaded at ~01:00 CST.</h4>
     <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/{yyyy-mm-dd}
     <br>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/2023-01-20</p>
-    <h3>Train Arrivals (by month)</h3>
-    <h4>Returns back the raw arrival data as a csv file. This file contains all of the arrivals being used in the <a href="https://brandonmcfadden.com/cta-reliability">PowerBi Reports</a>.<br>
-    Arrival data for the previous month is loaded at ~01:00 CST on the first day of the following month.</h4>
-    <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/{yyyy-mm}
-    <br>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/2023-01</p>
+    # <h3>Train Arrivals (by month)</h3>
+    # <h4>Returns back the raw arrival data as a csv file. This file contains all of the arrivals being used in the <a href="https://brandonmcfadden.com/cta-reliability">PowerBi Reports</a>.<br>
+    # Arrival data for the previous month is loaded at ~01:00 CST on the first day of the following month.</h4>
+    # <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/{yyyy-mm}
+    # <br>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/2023-01</p>
     <p><b>Note:</b> All Endpoints also allow the options /today and /yesterday in lieu of the date (with the exception of 'get_train_arrivals_by_day', which does not include data for the current day)</p>
     <h2>Data Availability:</h2>
     <p>CTA: June 20, 2022 through Current Day
