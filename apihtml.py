@@ -38,7 +38,7 @@ MAIN_PAGE = """
     Arrival data for the previous day is loaded at ~01:00 CST.</h4>
     <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/{yyyy-mm-dd}
     <br>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/2023-01-20</p>
-    <h3>Train Arrivals (by month) - <b>Temporarily Disabled!</b></h3>
+    <h3>Train Arrivals (by month)</h3>
     <h4>Returns back the raw arrival data as a csv file. This file contains all of the arrivals being used in the <a href="https://brandonmcfadden.com/cta-reliability">PowerBi Reports</a>.<br>
     Arrival data for the previous month is loaded at ~01:00 CST on the first day of the following month.</h4>
     <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/{yyyy-mm}
