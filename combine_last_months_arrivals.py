@@ -50,8 +50,7 @@ def combine_days_to_month(month):
     excl_merged = pd.DataFrame()
 
     for excl_file in excl_list:
-        excl_merged = excl_merged.append(
-        excl_file, ignore_index=True)
+        excl_merged = pd.concat([excl_merged, excl_file], ignore_index=True)
     excl_merged.sort_values(by='Arrival_Time')
     excl_merged.to_csv(f'{month_path}/{month}.csv', index=False)
 
