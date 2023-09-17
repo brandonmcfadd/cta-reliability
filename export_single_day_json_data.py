@@ -114,6 +114,7 @@ def parse_response_cta(data,last_refresh):
             "system": {
                 "ActualRuns": item["date_range[System - Actual]"],
                 "ScheduledRuns": item["date_range[System - Scheduled]"],
+                "ScheduledRunsRemaining": item["date_range[System - Remaining Scheduled]"],
                 "PercentRun": item["date_range[System - Percentage]"]
             },
             "routes": {
