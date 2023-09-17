@@ -1,6 +1,7 @@
 import os
 import json
 import tweepy
+import datetime
 import requests  # Used for API Calls
 from dotenv import load_dotenv  # Used to Load Env Var
 
@@ -55,12 +56,12 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     if consistent_arrivals > 0:
         consistent_arrivals_perc = int((consistent_arrivals/system_actual)*100)
     if is_good_day_flag is True:
-        type_of_day = "CTA Rail is having a good day! To do this the CTA cut 21% of scheduled service. Check out ctaction.org/service-cuts for more."
+        type_of_day = "CTA Rail is having a good day! To do this, the CTA cut 21% of scheduled service."
         expression = "!"
     else:
-        type_of_day = "CTA Rail is not having a good day even after cutting 21% of scheduled service. Check out ctaction.org/service-cuts for more."
+        type_of_day = "CTA Rail is not having a good day even after cutting 21% of scheduled service."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have run today{expression} Of those, {consistent_arrivals_perc}% arrived at consistent intervals.\nTo explore historical data, visit brandonmcfadden.com/cta-reliability."
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated today{expression} {consistent_arrivals_perc}% arrived at consistent intervals.\nFor more on service cuts: ctaction.org/service-cuts\nTo explore historical data: brandonmcfadden.com/cta-reliability"
     return text_output_part_1
 
 
@@ -68,9 +69,13 @@ def prepare_tweet_text_2(data):
     system_actual = data["system"]["ActualRuns"]
     system_sched = data["system"]["ScheduledRuns"]
     scheduled_runs_remaining = data["system"]["ScheduledRunsRemaining"]
+    last_updated = data["LastUpdated"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
+    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string = datetime.datetime.strftime(last_updated_datetime, '%-l%p').lower()
+
     consistent_arrivals = 0
-    text_output_part_2 = f"Current System Stats (actual/scheduled):\nSystem: {system_perc}% - {system_actual:,}/{system_sched:,}"
+    text_output_part_2 = f"System Stats as of {last_updated_string} (actual/scheduled):\nSystem: {system_perc}% - {system_actual:,}/{system_sched:,}"
     for line in data["routes"]:
         consistent_arrivals += int(data["routes"][line]["Consistent_Headways"])
         actual_runs = data["routes"][line]["ActualRuns"]
@@ -92,11 +97,11 @@ print(tweet_text_1)
 print()
 print(tweet_text_2)
 
-api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
-                    twitter_access_token, twitter_access_token_secret)
-status1 = api.create_tweet(text=tweet_text_1, )
-first_tweet = status1.data["id"]
-status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
-second_tweet = status2.data["id"]
-print(
-    f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet}")
+# api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
+#                     twitter_access_token, twitter_access_token_secret)
+# status1 = api.create_tweet(text=tweet_text_1, )
+# first_tweet = status1.data["id"]
+# status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
+# second_tweet = status2.data["id"]
+# print(
+#     f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet}")
