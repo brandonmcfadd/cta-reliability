@@ -61,7 +61,7 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     else:
         type_of_day = "CTA Rail is not having a good day even after cutting 21% of scheduled service."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated today{expression} {consistent_arrivals_perc}% arrived at consistent intervals.\nFor more on service cuts: ctaction.org/service-cuts\nTo explore historical data: brandonmcfadden.com/cta-reliability"
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated today{expression} {consistent_arrivals_perc}% arrived at consistent intervals.\nFor more on service cuts: ctaction.org/service-cuts.\nTo explore historical data: brandonmcfadden.com/cta-reliability."
     return text_output_part_1
 
 
