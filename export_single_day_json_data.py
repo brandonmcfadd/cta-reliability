@@ -257,8 +257,13 @@ def parse_response_metra(data):
 bearer_token = get_token()
 
 remaining = 2
+last_refresh_time = None
 
-last_refresh_time = get_last_refresh_time(cta_dataset_id)
+while last_refresh_time is None: 
+    last_refresh_time = get_last_refresh_time(cta_dataset_id)
+    if last_refresh_time is None:
+        print("Last Refresh Time is not available, sleeping 60 seconds")
+        sleep(60)
 
 while remaining >= 0:
     try: 
