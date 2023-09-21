@@ -26,8 +26,7 @@ main_file_path = os.getenv('FILE_PATH')
 # Constants
 integrity_file_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
 train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', \
-                                'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Is_Approaching', \
-                                'Is_Scheduled', 'Is_Delayed', 'Is_Fault']
+                                'Run_Number', 'Prediction_Time', 'Arrival_Time']
 
 
 def train_api_call_to_cta_api(stop_id):
@@ -148,9 +147,7 @@ def add_train_to_file_api(eta, station_name, stop_id):
             writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"], \
                 'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"], \
                 'Run_Number': eta["rn"], 'Prediction_Time': eta["prdt"], \
-                'Arrival_Time': eta["arrT"], 'Is_Approaching': eta["isApp"], \
-                'Is_Scheduled': eta["isSch"], 'Is_Delayed': eta["isDly"], \
-                'Is_Fault': eta["isFlt"]})
+                'Arrival_Time': eta["arrT"]})
 
 
 def add_train_to_file_map(destination, route, run_number, is_scheduled, prediction):
@@ -166,8 +163,7 @@ def add_train_to_file_map(destination, route, run_number, is_scheduled, predicti
         writer_object.writerow({'Station_ID': int(prediction[0]), 'Stop_ID': "NULL", \
             'Station_Name': prediction[1], 'Destination': destination, 'Route': route, \
             'Run_Number': run_number, 'Prediction_Time': current_long_time, \
-            'Arrival_Time': current_long_time, 'Is_Approaching': "NULL", \
-            'Is_Scheduled': is_scheduled, 'Is_Delayed': "NULL", 'Is_Fault': "NULL"})
+            'Arrival_Time': current_long_time})
 
 
 def train_arrival_times_map(response):
