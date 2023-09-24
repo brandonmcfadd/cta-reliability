@@ -61,7 +61,7 @@ def prepare_tweet_text_1(data, is_good_day_flag):
         type_of_day = "😎CTA Rail is having a good day! To do this, the CTA cut 21% of scheduled service."
         expression = "!"
     elif is_good_day_flag == 2:
-        type_of_day = "🤷CTA Rail is having a so-so day. To do this, the CTA cut 21% of scheduled service."
+        type_of_day = "🤷CTA Rail is having a so-so day even with a 21% cut of scheduled service."
         expression = "."
     else:
         type_of_day = "😡CTA Rail is not having a good day even after cutting 21% of scheduled service."
