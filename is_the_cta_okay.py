@@ -40,11 +40,13 @@ def get_run_data_from_api():
 def day_of_performance_stats(data):
     system_actual = int(data["system"]["ActualRuns"])
     system_scheduled = int(data["system"]["ScheduledRuns"])
-    if system_actual/system_scheduled >= 0.9:
-        good_day = True
+    if system_actual/system_scheduled >= 0.95:
+        type_of_day = 1
+    elif system_actual/system_scheduled >= 0.90 and system_actual/system_scheduled < 0.95:
+        type_of_day = 2
     else:
-        good_day = False
-    return good_day
+        type_of_day = 3
+    return type_of_day
 
 
 def prepare_tweet_text_1(data, is_good_day_flag):
@@ -55,11 +57,14 @@ def prepare_tweet_text_1(data, is_good_day_flag):
         consistent_arrivals += int(data["routes"][line]["Consistent_Headways"])
     if consistent_arrivals > 0:
         consistent_arrivals_perc = int((consistent_arrivals/system_actual)*100)
-    if is_good_day_flag is True:
-        type_of_day = "CTA Rail is having a good day! To do this, the CTA cut 21% of scheduled service."
+    if is_good_day_flag == 1:
+        type_of_day = "😎 CTA Rail is having a good day! To do this, the CTA cut 21% of scheduled service."
         expression = "!"
+    elif is_good_day_flag == 2:
+        type_of_day = "🤷 CTA Rail is having a so-so day. To do this, the CTA cut 21% of scheduled service."
+        expression = "."
     else:
-        type_of_day = "CTA Rail is not having a good day even after cutting 21% of scheduled service."
+        type_of_day = "😡 CTA Rail is not having a good day even after cutting 21% of scheduled service."
         expression = "."
     text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated today{expression} {consistent_arrivals_perc}% arrived at consistent intervals.\nFor more on service cuts: ctaction.org/service-cuts.\nTo explore historical data: brandonmcfadden.com/cta-reliability."
     return text_output_part_1
@@ -97,11 +102,11 @@ print(tweet_text_1)
 print()
 print(tweet_text_2)
 
-api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
-                    twitter_access_token, twitter_access_token_secret)
-status1 = api.create_tweet(text=tweet_text_1, )
-first_tweet = status1.data["id"]
-status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
-second_tweet = status2.data["id"]
-print(
-    f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet}")
+# api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
+#                     twitter_access_token, twitter_access_token_secret)
+# status1 = api.create_tweet(text=tweet_text_1, )
+# first_tweet = status1.data["id"]
+# status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
+# second_tweet = status2.data["id"]
+# print(
+#     f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet}")
