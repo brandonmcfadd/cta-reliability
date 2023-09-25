@@ -78,7 +78,10 @@ def prepare_tweet_text_2(data):
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
     last_updated_string = datetime.datetime.strftime(last_updated_datetime, '%-l%p').lower()
-
+    try:
+        scheduled_runs_remaining_text = f"{scheduled_runs_remaining:,}"
+    except:
+        scheduled_runs_remaining_text = "🤷"
     consistent_arrivals = 0
     text_output_part_2 = f"System Stats as of {last_updated_string} (actual/scheduled):\nSystem: {system_perc}% - {system_actual:,}/{system_sched:,}"
     for line in data["routes"]:
@@ -89,7 +92,7 @@ def prepare_tweet_text_2(data):
         text_output_part_2 = text_output_part_2 + \
             f"\n{line}: {percent_run}% - {actual_runs:,}/{scheduled_runs:,}"
     text_output_part_2 = text_output_part_2 + \
-        f"\nScheduled Runs Remaining: {scheduled_runs_remaining:,}"
+        f"\nScheduled Runs Remaining: {scheduled_runs_remaining_text}"
     return text_output_part_2
 
 
