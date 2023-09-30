@@ -7,6 +7,7 @@ from time import sleep
 import pandas as pd
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
+from azure.identity import ClientSecretCredential
 
 
 # Load .env variables
@@ -15,7 +16,9 @@ load_dotenv()
 microsoft_username = os.getenv('MICROSOFT_USERNAME')
 microsoft_password = os.getenv('MICROSOFT_PASSWORD')
 microsoft_client_id = os.getenv('MICROSOFT_CLIENT_ID')
+microsoft_tenant_id = os.getenv('MICROSOFT_TENANT_ID')
 microsoft_client_secret = os.getenv('MICROSOFT_CLIENT_SECRET')
+microsoft_workspace_id = os.getenv('MICROSOFT_WORKSPACE_ID')
 main_file_path_csv = os.getenv('FILE_PATH_CSV')
 cta_dataset_id = os.getenv('CTA_DATASET_ID')
 metra_dataset_id = os.getenv('METRA_DATASET_ID')
@@ -43,24 +46,18 @@ def get_date(date_type, delay):
 
 
 def get_token():
-    """used to get a MS token for PBI API"""
-    url = "https://login.microsoftonline.com/common/oauth2/token"
-
-    payload = f"grant_type=password\n&username={microsoft_username}\n&password={microsoft_password}\n&client_id={microsoft_client_id}\n&client_secret={microsoft_client_secret}\n&resource=https://analysis.windows.net/powerbi/api"
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'fpc=Ar43AgyVlG9Iq2cDNhyCm7TZQxmvAQAAAC18YtsOAAAAM7ttQwEAAADze2LbDgAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd'
-    }
-
-    response = requests.request(
-        "POST", url, headers=headers, data=payload).json()
-
-    return response.get('access_token')
+    """gets token for PBI service to make API calls under service principal"""
+    scope = 'https://analysis.windows.net/powerbi/api/.default'
+    client_secret_credential_class = ClientSecretCredential(
+        tenant_id=microsoft_tenant_id, client_id=microsoft_client_id, client_secret=microsoft_client_secret)
+    access_token_class = client_secret_credential_class.get_token(scope)
+    token_string = access_token_class.token
+    return token_string
 
 
 def get_report_data(dataset, delay):
-    """makes call to PBI API to actually get the data we need"""
-    url = f"https://api.powerbi.com/v1.0/myorg/datasets/{dataset}/executeQueries"
+    """makes api call to PBI service to extract data from dataset"""
+    url = f"https://api.powerbi.com/v1.0/myorg/groups/{microsoft_workspace_id}/datasets/{dataset}/executeQueries"
     year = get_date("year", delay)
     month = get_date("month", delay)
     day = get_date("day", delay)
@@ -72,16 +69,17 @@ def get_report_data(dataset, delay):
         ],
         "serializerSettings": {
             "includeNulls": True
-        },
-        "impersonatedUserName": "brandonmcfadden@brandonmcfadden.onmicrosoft.com"
+        }
     })
     headers = {
-        'Authorization': f'Bearer {bearer_token}',
+        'Authorization': f"Bearer {bearer_token}",
         'Content-Type': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = requests.request(
+        "POST", url, headers=headers, data=payload, timeout=360)
     response_json = json.loads(response.text)
+
     try:
         return response_json['results'][0].get('tables')[0].get('rows')
     except:  # pylint: disable=bare-except
@@ -124,8 +122,9 @@ remaining = 2
 
 while remaining > 0:
     try:
-        parse_response_cta(get_report_data(cta_dataset_id, remaining),remaining)
-    except: # pylint: disable=bare-except
+        parse_response_cta(get_report_data(
+            cta_dataset_id, remaining), remaining)
+    except:  # pylint: disable=bare-except
         print("Failed to grab #", remaining)
     remaining -= 1
     print("total cta remaining:", remaining)

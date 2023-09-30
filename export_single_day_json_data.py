@@ -1,10 +1,12 @@
-from datetime import datetime, timedelta
-from dateutil import tz
+"""interacts with PowerBi API to query for a specific days arrival data"""
 import os
+import json
 from time import sleep  # Used to retrieve secrets in .env file
+from datetime import datetime
+from dateutil import tz
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
-import json
+from azure.identity import ClientSecretCredential
 
 # Load .env variables
 load_dotenv()
@@ -12,7 +14,9 @@ load_dotenv()
 microsoft_username = os.getenv('MICROSOFT_USERNAME')
 microsoft_password = os.getenv('MICROSOFT_PASSWORD')
 microsoft_client_id = os.getenv('MICROSOFT_CLIENT_ID')
+microsoft_tenant_id = os.getenv('MICROSOFT_TENANT_ID')
 microsoft_client_secret = os.getenv('MICROSOFT_CLIENT_SECRET')
+microsoft_workspace_id = os.getenv('MICROSOFT_WORKSPACE_ID')
 main_file_path_json = os.getenv('FILE_PATH_JSON')
 cta_dataset_id = os.getenv('CTA_DATASET_ID')
 metra_dataset_id = os.getenv('METRA_DATASET_ID')
@@ -30,60 +34,54 @@ def get_date(date_type):
 
 
 def get_token():
-    url = "https://login.microsoftonline.com/common/oauth2/token"
-
-    payload = "grant_type=password\n&username={}\n&password={}\n&client_id={}\n&client_secret={}\n&resource=https://analysis.windows.net/powerbi/api".format(
-        microsoft_username, microsoft_password, microsoft_client_id, microsoft_client_secret)
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': 'fpc=Ar43AgyVlG9Iq2cDNhyCm7TZQxmvAQAAAC18YtsOAAAAM7ttQwEAAADze2LbDgAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd'
-    }
-
-    response = requests.request(
-        "POST", url, headers=headers, data=payload).json()
-
-    return(response.get('access_token'))
+    """gets token for PBI service to make API calls under service principal"""
+    scope = 'https://analysis.windows.net/powerbi/api/.default'
+    client_secret_credential_class = ClientSecretCredential(
+        tenant_id=microsoft_tenant_id, client_id=microsoft_client_id, client_secret=microsoft_client_secret)
+    access_token_class = client_secret_credential_class.get_token(scope)
+    token_string = access_token_class.token
+    return token_string
 
 
 def get_report_data(dataset, days_old):
-    url = "https://api.powerbi.com/v1.0/myorg/datasets/{}/executeQueries".format(
-        dataset)
+    """makes api call to PBI service to extract data from dataset"""
+    url = f"https://api.powerbi.com/v1.0/myorg/groups/{microsoft_workspace_id}/datasets/{dataset}/executeQueries"
 
     payload = json.dumps({
         "queries": [
             {
-                "query": "EVALUATE FILTER(date_range,date_range[Days Old]={})".format(days_old)
+                "query": f"EVALUATE FILTER(date_range,date_range[Days Old]={days_old})"
             }
         ],
         "serializerSettings": {
             "includeNulls": True
-        },
-        "impersonatedUserName": "brandonmcfadden@brandonmcfadden.onmicrosoft.com"
+        }
     })
     headers = {
-        'Authorization': 'Bearer {}'.format(bearer_token),
+        'Authorization': f"Bearer {bearer_token}",
         'Content-Type': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = requests.request(
+        "POST", url, headers=headers, data=payload, timeout=360)
     response_json = json.loads(response.text)
+
     try:
         return(response_json['results'][0].get('tables')[0].get('rows'))
-    except:
+    except:  # pylint: disable=bare-except
         print("error in:", response_json)
 
 
 def get_last_refresh_time(dataset):
-    url = f"https://api.powerbi.com/v1.0/myorg/datasets/{dataset}/refreshes?$top=1"
+    """grabs the last dataset refresh time to add to the files"""
+    url = f"https://api.powerbi.com/v1.0/myorg/groups/{microsoft_workspace_id}/datasets/{dataset}/refreshes?$top=1"
 
-    payload = json.dumps({
-        "impersonatedUserName": "brandonmcfadden@brandonmcfadden.onmicrosoft.com"
-    })
     headers = {
-        'Authorization': 'Bearer {}'.format(bearer_token),
+        'Authorization': f"Bearer {bearer_token}",
+        'Content-Type': 'application/json'
     }
-    
-    response = requests.request("GET", url, headers=headers, data=payload)
+
+    response = requests.request("GET", url, headers=headers, timeout=360)
     response_json = json.loads(response.text)
     try:
         end_time = response_json['value'][0].get('endTime')
@@ -93,93 +91,123 @@ def get_last_refresh_time(dataset):
         utc = utc.replace(tzinfo=from_zone)
         cst = utc.astimezone(to_zone)
         cst_string = datetime.strftime(cst, "%Y-%m-%dT%H:%M:%S%z")
-        return(cst_string)
-    except:
+        return cst_string
+    except:  # pylint: disable=bare-except
         print("error in:", response_json)
 
 
-def parse_response_cta(data,last_refresh):
+def parse_response_cta(data, last_refresh):
+    """takes the data from the API and prepares it to add to JSON output"""
+    system_total, system_scheduled, system_scheduled_remaining = 0, 0, 0
+    routes_information = {}
     for item in data:
         shortened_date = item["date_range[Dates]"][:10]
-        json_file = main_file_path_json + "cta/" + shortened_date + ".json"
-        file_data = {
-            "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
-            "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
-            "V2 API Information At": "http://rta-api.brandonmcfadden.com",
-            "Entity": "cta",
-            "Date": shortened_date,
-            "LastUpdated": last_refresh,
-            "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
-            "IntegrityPercentage": item["date_range[Integrity - Percentage]"],
-            "system": {
-                "ActualRuns": item["date_range[System - Actual]"],
-                "ScheduledRuns": item["date_range[System - Scheduled]"],
-                "ScheduledRunsRemaining": item["date_range[System - Remaining Scheduled]"],
-                "PercentRun": item["date_range[System - Percentage]"]
+        integrity_actual = item["date_range[Integrity - Actual]"]
+        integrity_percent = item["date_range[Integrity - Percentage]"]
+        system_total += item["date_range[Actual Arrivals]"]
+        system_scheduled += item["date_range[Scheduled Arrivals]"]
+        if item["date_range[Remaining Scheduled]"] is not None:
+            system_scheduled_remaining += item["date_range[Remaining Scheduled]"]
+        single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], item["date_range[Arrivals Percentage]"],
+                                    item["date_range[Remaining Scheduled]"], item["date_range[Consistent Headways]"], item["date_range[Longest Wait]"]]
+        routes_information[item["date_range[Route]"]
+                           ] = single_route_information
+    json_file = main_file_path_json + "cta/" + shortened_date + ".json"
+    file_data = {
+        "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
+        "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
+        "V2 API Information At": "http://rta-api.brandonmcfadden.com",
+        "Entity": "cta",
+        "Date": shortened_date,
+        "LastUpdated": last_refresh,
+        "IntegrityChecksPerformed": integrity_actual,
+        "IntegrityPercentage": integrity_percent,
+        "system": {
+            "ActualRuns": system_total,
+            "ScheduledRuns": system_scheduled,
+            "ScheduledRunsRemaining": system_scheduled_remaining,
+            "PercentRun": system_total/system_scheduled
+        },
+        "routes": {
+            "Blue": {
+                "ActualRuns": routes_information["Blue"][0],
+                "ActualRunsOHareBranch": routes_information["Blue"][0],
+                "ActualRunsFPBranch": 0,
+                "ScheduledRuns": routes_information["Blue"][1],
+                "ScheduledRunsOHareBranch": routes_information["Blue"][1],
+                "ScheduledRunsFPBranch": 0,
+                "PercentRun": routes_information["Blue"][2],
+                "PercentRunOHareBranch": routes_information["Blue"][2],
+                "PercentRunFPBranch": 0,
+                "RemainingScheduled": routes_information["Blue"][3],
+                "Consistent_Headways": routes_information["Blue"][4],
+                "LongestWait": routes_information["Blue"][5]
             },
-            "routes": {
-                "Blue": {
-                    "ActualRuns": item["date_range[Blue Line - Actual]"],
-                    "ActualRunsOHareBranch": item["date_range[Branch - Blue Line - O'Hare Branch - Actual]"],
-                    "ActualRunsFPBranch": item["date_range[Branch - Blue Line - Forest Park Branch - Actual]"],
-                    "ScheduledRuns": item["date_range[Blue Line - Scheduled]"],
-                    "ScheduledRunsOHareBranch": item["date_range[Blue Line - Scheduled]"],
-                    "ScheduledRunsFPBranch": item["date_range[Branch - Blue Line - Forest Park - Scheduled]"],
-                    "PercentRun": item["date_range[Blue Line - Percentage]"],
-                    "PercentRunOHareBranch": item["date_range[Blue Line - Percentage]"],
-                    "PercentRunFPBranch": item["date_range[Branch - Blue Line - Forest Park - Percentage]"],
-                    "Consistent_Headways": item["date_range[Blue Line - Consistent Headways]"]
-                },
-                "Brown": {
-                    "ActualRuns": item["date_range[Brown Line - Actual]"],
-                    "ScheduledRuns": item["date_range[Brown Line - Scheduled]"],
-                    "PercentRun": item["date_range[Brown Line - Percentage]"],
-                    "Consistent_Headways": item["date_range[Brown Line - Consistent Headways]"]
-                },
-                "Green": {
-                    "ActualRuns": item["date_range[Green Line - Actual]"],
-                    "ScheduledRuns": item["date_range[Green Line - Scheduled]"],
-                    "PercentRun": item["date_range[Green Line - Percentage]"],
-                    "Consistent_Headways": item["date_range[Green Line - Consistent Headways]"]
-                },
-                "Orange": {
-                    "ActualRuns": item["date_range[Orange Line - Actual]"],
-                    "ScheduledRuns": item["date_range[Orange Line - Scheduled]"],
-                    "PercentRun": item["date_range[Orange Line - Percentage]"],
-                    "Consistent_Headways": item["date_range[Orange Line - Consistent Headways]"]
-                },
-                "Pink": {
-                    "ActualRuns": item["date_range[Pink Line - Actual]"],
-                    "ScheduledRuns": item["date_range[Pink Line - Scheduled]"],
-                    "PercentRun": item["date_range[Pink Line - Percentage]"],
-                    "Consistent_Headways": item["date_range[Pink Line - Consistent Headways]"]
-                },
-                "Purple": {
-                    "ActualRuns": item["date_range[Purple Line - Actual]"],
-                    "ScheduledRuns": item["date_range[Purple Line - Scheduled]"],
-                    "PercentRun": item["date_range[Purple Line - Percentage]"],
-                    "Consistent_Headways": item["date_range[Purple Line - Consistent Headways]"]
-                },
-                "Red": {
-                    "ActualRuns": item["date_range[Red Line - Actual]"],
-                    "ScheduledRuns": item["date_range[Red Line - Scheduled]"],
-                    "PercentRun": item["date_range[Red Line - Percentage]"],
-                    "Consistent_Headways": item["date_range[Red Line - Consistent Headways]"]
-                },
-                "Yellow": {
-                    "ActualRuns": item["date_range[Yellow Line - Actual]"],
-                    "ScheduledRuns": item["date_range[Yellow Line - Scheduled]"],
-                    "PercentRun": item["date_range[Yellow Line - Percentage]"],
-                    "Consistent_Headways": item["date_range[Yellow Line - Consistent Headways]"]
-                }
+            "Brown": {
+                "ActualRuns": routes_information["Brown"][0],
+                "ScheduledRuns": routes_information["Brown"][1],
+                "PercentRun": routes_information["Brown"][2],
+                "RemainingScheduled": routes_information["Brown"][3],
+                "Consistent_Headways": routes_information["Brown"][4],
+                "LongestWait": routes_information["Brown"][5]
+            },
+            "Green": {
+                "ActualRuns": routes_information["Green"][0],
+                "ScheduledRuns": routes_information["Green"][1],
+                "PercentRun": routes_information["Green"][2],
+                "RemainingScheduled": routes_information["Green"][3],
+                "Consistent_Headways": routes_information["Green"][4],
+                "LongestWait": routes_information["Green"][5]
+            },
+            "Orange": {
+                "ActualRuns": routes_information["Orange"][0],
+                "ScheduledRuns": routes_information["Orange"][1],
+                "PercentRun": routes_information["Orange"][2],
+                "RemainingScheduled": routes_information["Orange"][3],
+                "Consistent_Headways": routes_information["Orange"][4],
+                "LongestWait": routes_information["Orange"][5]
+            },
+            "Pink": {
+                "ActualRuns": routes_information["Pink"][0],
+                "ScheduledRuns": routes_information["Pink"][1],
+                "PercentRun": routes_information["Pink"][2],
+                "RemainingScheduled": routes_information["Pink"][3],
+                "Consistent_Headways": routes_information["Pink"][4],
+                "LongestWait": routes_information["Pink"][5]
+            },
+            "Purple": {
+                "ActualRuns": routes_information["Purple"][0],
+                "ScheduledRuns": routes_information["Purple"][1],
+                "PercentRun": routes_information["Purple"][2],
+                "RemainingScheduled": routes_information["Purple"][3],
+                "Consistent_Headways": routes_information["Purple"][4],
+                "LongestWait": routes_information["Purple"][5]
+            },
+            "Red": {
+                "ActualRuns": routes_information["Red"][0],
+                "ScheduledRuns": routes_information["Red"][1],
+                "PercentRun": routes_information["Red"][2],
+                "RemainingScheduled": routes_information["Red"][3],
+                "Consistent_Headways": routes_information["Red"][4],
+                "LongestWait": routes_information["Red"][5]
+            },
+            "Yellow": {
+                "ActualRuns": routes_information["Yellow"][0],
+                "ScheduledRuns": routes_information["Yellow"][1],
+                "PercentRun": routes_information["Yellow"][2],
+                "RemainingScheduled": routes_information["Yellow"][3],
+                "Consistent_Headways": routes_information["Yellow"][4],
+                "LongestWait": routes_information["Yellow"][5]
             }
         }
+    }
 
-        with open(json_file, 'w') as f:
-            json.dump(file_data, f, indent=2)
+    with open(json_file, 'w', encoding="utf-8") as f:
+        json.dump(file_data, f, indent=2)
 
 
 def parse_response_metra(data):
+    """takes the data from the API and prepares it to add to JSON output"""
     for item in data:
         shortened_date = item["date_range[Dates]"][:10]
         json_file = main_file_path_json + "metra/" + shortened_date + ".json"
@@ -250,7 +278,7 @@ def parse_response_metra(data):
             }
         }
 
-        with open(json_file, 'w') as f:
+        with open(json_file, 'w', encoding="utf-8") as f:
             json.dump(file_data, f, indent=2)
 
 
@@ -259,21 +287,22 @@ bearer_token = get_token()
 remaining = 2
 last_refresh_time = None
 
-while last_refresh_time is None: 
+while last_refresh_time is None:
     last_refresh_time = get_last_refresh_time(cta_dataset_id)
     if last_refresh_time is None:
         print("Last Refresh Time is not available, sleeping 60 seconds")
         sleep(60)
 
 while remaining >= 0:
-    try: 
-        parse_response_cta(get_report_data(cta_dataset_id, remaining),last_refresh_time)
-    except: # pylint: disable=bare-except
+    try:
+        parse_response_cta(get_report_data(
+            cta_dataset_id, remaining), last_refresh_time)
+    except:  # pylint: disable=bare-except
         print("Failed to grab CTA #", remaining)
     print("total cta remaining:", remaining)
     try:
         parse_response_metra(get_report_data(metra_dataset_id, remaining))
-    except: # pylint: disable=bare-except
+    except:  # pylint: disable=bare-except
         print("Failed to grab Metra #", remaining)
     print("total metra remaining:", remaining)
     remaining -= 1
