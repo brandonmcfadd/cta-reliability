@@ -13,6 +13,7 @@ from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
 from dateutil.relativedelta import relativedelta
 import apihtml
+from csv import DictWriter
 
 app = FastAPI(docs_url=None)
 security = HTTPBasic()
@@ -243,4 +244,19 @@ async def return_special_station_json(token: str = Depends(get_current_username)
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/headways"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
+@app.post("/api/7000-series-tracker/{RunNumber}", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def save_7000_series_information(RunNumber: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        csv_file_path = main_file_path + "7000-series-tracker/7000-series.csv"
+        train_series_headers = ['Full_Date_Time', 'Run_Number']
+        with open(csv_file_path, 'a', newline='', encoding='utf8') as csvfile:
+            writer_object = DictWriter(
+                csvfile, fieldnames=train_series_headers)
+            writer_object.writerow({'Full_Date_Time': get_date("current"), 'Run_Number': RunNumber})
+        return 200
+    except:  # pylint: disable=bare-except
+        endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
