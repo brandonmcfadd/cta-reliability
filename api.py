@@ -271,7 +271,7 @@ async def save_7000_series_information(Name: str, RunNumber: int, token: str = D
                 json_file_loaded[get_date("api-today")].append(input_data)
         with open(json_file, 'w') as fp2:
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',',': '))
-        return f"Data Added: {input_data}"
+        return input_data
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
