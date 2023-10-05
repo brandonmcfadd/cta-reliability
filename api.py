@@ -211,7 +211,7 @@ async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_cu
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 @app.get("/api/v2/cta/get_train_arrivals_by_month/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
-async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_current_username)):
+async def return_arrivals_for_date_month_cta_v2(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     if date == "yesterday":
         date = get_date("api-last-month")
@@ -243,4 +243,37 @@ async def return_special_station_json(token: str = Depends(get_current_username)
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/v2/cta/headways"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
+@app.get("/api/7000-series-tracker/get", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def get_7000_series_information(token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        json_file = main_file_path + "7000-series-tracker/7000-series.json"
+        results = open(json_file, 'r', encoding="utf-8")
+        return Response(content=results.read(), media_type="application/json")
+    except:  # pylint: disable=bare-except
+        endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
+@app.post("/api/7000-series-tracker/{RunNumber}", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def save_7000_series_information(RunNumber: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        json_file = main_file_path + "7000-series-tracker/7000-series.json"
+        with open(json_file) as fd:
+            json_file_loaded = json.load(fd)
+        if get_date("api-today") in json_file_loaded:
+            print("Key exist in JSON data")
+            json_file_loaded[get_date("api-today")].append()
+        else:
+            print("Key doesn't exist in JSON data")
+        df_store = df_store.append({
+            "DateTime": get_date("current"),
+            "RunNumber": RunNumber
+        }, ignore_index=True)
+        df_store.to_json(json_file)
+        return 200
+    except:  # pylint: disable=bare-except
+        endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
