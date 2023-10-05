@@ -256,12 +256,12 @@ async def get_7000_series_information(token: str = Depends(get_current_username)
         endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
 
-@app.post("/api/7000-series-tracker/{RunNumber}", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
-async def save_7000_series_information(RunNumber: str, token: str = Depends(get_current_username)):
+@app.post("/api/7000-series-tracker/{Name}/{RunNumber}", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def save_7000_series_information(Name: str, RunNumber: int, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
         json_file = main_file_path + "7000-series-tracker/7000-series.json"
-        input_data = {"DateTime": get_date("current"),"RunNumber": RunNumber}
+        input_data = {"DateTime": get_date("current"),"Submitter": Name, "RunNumber": RunNumber}
         with open(json_file, 'r') as fp:
             json_file_loaded = json.load(fp)
             if get_date("api-today") in json_file_loaded:
