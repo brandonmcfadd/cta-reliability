@@ -265,7 +265,6 @@ async def save_7000_series_information(Name: str, RunNumber: int, token: str = D
         with open(json_file, 'r') as fp:
             json_file_loaded = json.load(fp)
             if get_date("api-today") in json_file_loaded:
-                print("Key exist in JSON data")
                 json_file_loaded[get_date("api-today")].append(input_data)
             else:
                 json_file_loaded = {**json_file_loaded, **{get_date("api-today"):[]}}
