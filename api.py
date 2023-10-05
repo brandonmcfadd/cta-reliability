@@ -261,18 +261,16 @@ async def save_7000_series_information(RunNumber: str, token: str = Depends(get_
     """Used to retrieve results"""
     try:
         json_file = main_file_path + "7000-series-tracker/7000-series.json"
-        with open(json_file) as fd:
-            json_file_loaded = json.load(fd)
-        if get_date("api-today") in json_file_loaded:
-            print("Key exist in JSON data")
-            json_file_loaded[get_date("api-today")].append()
-        else:
-            print("Key doesn't exist in JSON data")
-        df_store = df_store.append({
-            "DateTime": get_date("current"),
-            "RunNumber": RunNumber
-        }, ignore_index=True)
-        df_store.to_json(json_file)
+        with open(json_file, 'r') as fp:
+            json_file_loaded = json.load(fp)
+            if get_date("api-today") in json_file_loaded:
+                print("Key exist in JSON data")
+                json_file_loaded[get_date("api-today")].append({"DateTime": get_date("current"),"RunNumber": 123})
+            else:
+                json_file_loaded = {**json_file_loaded, **{get_date("api-today"):[]}}
+                json_file_loaded[get_date("api-today")].append({"DateTime": get_date("current"),"RunNumber": 123})
+        with open(json_file, 'w') as fp2:
+            json.dump(json_file_loaded, fp2, indent=4,  separators=(',',': '))
         return 200
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
