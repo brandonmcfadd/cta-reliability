@@ -261,17 +261,18 @@ async def save_7000_series_information(RunNumber: str, token: str = Depends(get_
     """Used to retrieve results"""
     try:
         json_file = main_file_path + "7000-series-tracker/7000-series.json"
+        input_data = {"DateTime": get_date("current"),"RunNumber": RunNumber}
         with open(json_file, 'r') as fp:
             json_file_loaded = json.load(fp)
             if get_date("api-today") in json_file_loaded:
                 print("Key exist in JSON data")
-                json_file_loaded[get_date("api-today")].append({"DateTime": get_date("current"),"RunNumber": 123})
+                json_file_loaded[get_date("api-today")].append(input_data)
             else:
                 json_file_loaded = {**json_file_loaded, **{get_date("api-today"):[]}}
-                json_file_loaded[get_date("api-today")].append({"DateTime": get_date("current"),"RunNumber": 123})
+                json_file_loaded[get_date("api-today")].append(input_data)
         with open(json_file, 'w') as fp2:
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',',': '))
-        return 200
+        return f"Data Added: {input_data}"
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
