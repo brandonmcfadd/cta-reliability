@@ -264,6 +264,7 @@ while True:  # Where the magic happens
     enable_train_tracker_api = settings["train-tracker"]["api-enabled"]
     enable_train_tracker_map = settings["train-tracker"]["map-enabled"]
     train_station_stop_ids = settings["train-tracker"]["station-ids"]
+    train_station_stop_ids_new = settings["train-tracker"]["new-station-ids"]
     train_station_map_ids = settings["train-tracker"]["map-station-ids"]
     train_station_tracked_destinations = settings["train-tracker"]["tracked-destinations"]
 
@@ -275,15 +276,26 @@ while True:  # Where the magic happens
     print("\n" + current_time_console)
 
     # API Portion runs if enabled and station id's exist
-    if train_station_stop_ids != "" and enable_train_tracker_api == "True":
-        for train_stop_id_to_check in train_station_stop_ids:
-            try:
+    if datetime.strftime(datetime.now(), "%Y-%m-%d") >= "2023-10-08":
+        if train_station_stop_ids_new != "" and enable_train_tracker_api == "True":
+            for train_stop_id_to_check in train_station_stop_ids_new:
                 try:
-                    response1 = train_api_call_to_cta_api(train_stop_id_to_check)
+                    try:
+                        response1 = train_api_call_to_cta_api(train_stop_id_to_check)
+                    except: # pylint: disable=bare-except
+                        response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
                 except: # pylint: disable=bare-except
-                    response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
-            except: # pylint: disable=bare-except
-                print("Ultimate Failure :()")
+                    print(f"Ultimate Failure :( {train_stop_id_to_check}")
+    else:
+        if train_station_stop_ids != "" and enable_train_tracker_api == "True":
+            for train_stop_id_to_check in train_station_stop_ids:
+                try:
+                    try:
+                        response1 = train_api_call_to_cta_api(train_stop_id_to_check)
+                    except: # pylint: disable=bare-except
+                        response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
+                except: # pylint: disable=bare-except
+                    print(f"Ultimate Failure :( {train_stop_id_to_check}")
 
     # Map Portion runs if enabled and station id's exist
     if train_station_map_ids != "" \

@@ -40,6 +40,8 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now()-relativedelta(months=1), "%Y-%m")
     elif date_type == "current":
         date = datetime.strftime(datetime.now(), "%d %b %Y %H:%M:%S")
+    elif date_type == "code-time":
+        date = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S%z")
     return date
 
 
@@ -261,7 +263,7 @@ async def save_7000_series_information(Name: str, RunNumber: int, token: str = D
     """Used to retrieve results"""
     try:
         json_file = main_file_path + "7000-series-tracker/7000-series.json"
-        input_data = {"DateTime": get_date("current"),"Submitter": Name, "RunNumber": RunNumber}
+        input_data = {"DateTime": get_date("code-time"),"Submitter": Name, "RunNumber": RunNumber}
         with open(json_file, 'r') as fp:
             json_file_loaded = json.load(fp)
             if get_date("api-today") in json_file_loaded:
