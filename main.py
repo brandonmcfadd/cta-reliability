@@ -276,7 +276,7 @@ while True:  # Where the magic happens
     print("\n" + current_time_console)
 
     # API Portion runs if enabled and station id's exist
-    if datetime.strftime(datetime.now(), "%Y-%m-%d") >= "2023-10-08":
+    if datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S") >= "2023-10-08T03:00:00":
         if train_station_stop_ids_new != "" and enable_train_tracker_api == "True":
             for train_stop_id_to_check in train_station_stop_ids_new:
                 try:
@@ -285,7 +285,7 @@ while True:  # Where the magic happens
                     except: # pylint: disable=bare-except
                         response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
                 except: # pylint: disable=bare-except
-                    print(f"Ultimate Failure :( {train_stop_id_to_check}")
+                    print(f"Ultimate Failure :( - Stop ID: {train_stop_id_to_check}")
     else:
         if train_station_stop_ids != "" and enable_train_tracker_api == "True":
             for train_stop_id_to_check in train_station_stop_ids:
@@ -295,7 +295,7 @@ while True:  # Where the magic happens
                     except: # pylint: disable=bare-except
                         response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
                 except: # pylint: disable=bare-except
-                    print(f"Ultimate Failure :( {train_stop_id_to_check}")
+                    print(f"Ultimate Failure :(  - Stop ID: {train_stop_id_to_check}")
 
     # Map Portion runs if enabled and station id's exist
     if train_station_map_ids != "" \
