@@ -29,12 +29,31 @@ train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destinat
                                 'Run_Number', 'Prediction_Time', 'Arrival_Time']
 
 
-def train_api_call_to_cta_api(stop_id):
+def train_api_call_to_cta_api(map_id):
+    """Gotta talk to the CTA and get Train Times"""
+    print(f"Making Main Secure URL CTA Train API Call for stop: {map_id}")
+    try:
+        api_response = requests.get(
+            train_tracker_url_api.format(train_api_key, map_id), timeout=10)
+        train_arrival_times(api_response.json())
+        api_response.raise_for_status()
+    except requests.exceptions.HTTPError as errh:
+        print ("Main URL - Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        print ("Main URL - Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        print ("Main URL - Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        print ("Main URL - Error in API Call to Train Tracker",err)
+    return api_response
+
+
+def train_api_call_to_cta_api_old_get(stop_id):
     """Gotta talk to the CTA and get Train Times"""
     print(f"Making Main Secure URL CTA Train API Call for stop: {stop_id}")
     try:
         api_response = requests.get(
-            train_tracker_url_api.format(train_api_key, stop_id), timeout=10)
+            train_tracker_url_api_old.format(train_api_key, stop_id), timeout=10)
         train_arrival_times(api_response.json())
         api_response.raise_for_status()
     except requests.exceptions.HTTPError as errh:
@@ -64,24 +83,6 @@ def train_api_call_to_cta_api_backup(stop_id):
         print ("Backup URL - Timeout Error:",errt)
     except requests.exceptions.RequestException as err:
         print ("Backup URL - Error in API Call to Train Tracker",err)
-    return api_response
-
-
-def train_api_call_to_cta_map():
-    """Gotta talk to the CTA and get Train Times part 2!"""
-    print("Making CTA Train Map API Call...")
-    try:
-        api_response = requests.get(train_tracker_url_map, timeout=10)
-        train_arrival_times_map(api_response.json())
-        api_response.raise_for_status()
-    except requests.exceptions.HTTPError as errh:
-        print ("Map - Http Error:",errh)
-    except requests.exceptions.ConnectionError as errc:
-        print ("Map - Error Connecting:",errc)
-    except requests.exceptions.Timeout as errt:
-        print ("Map - Timeout Error:",errt)
-    except requests.exceptions.RequestException as err:
-        print ("Map - Error in API Call to Train Tracker",err)
     return api_response
 
 
@@ -148,35 +149,6 @@ def add_train_to_file_api(eta, station_name, stop_id):
                 'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"], \
                 'Run_Number': eta["rn"], 'Prediction_Time': eta["prdt"], \
                 'Arrival_Time': eta["arrT"]})
-
-
-def add_train_to_file_map(destination, route, run_number, is_scheduled, prediction):
-    """Parses API Result from Train Tracker API and adds ETA's to a list"""
-    current_month = datetime.strftime(datetime.now(), "%b%Y")
-    current_long_time = datetime.strftime(
-        datetime.now(), "%Y-%m-%dT%H:%M:%S")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals_backup-" + \
-        str(current_month) + ".csv"
-    with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
-        writer_object = DictWriter(
-            csvfile, fieldnames=train_arrivals_csv_headers)
-        writer_object.writerow({'Station_ID': int(prediction[0]), 'Stop_ID': "NULL", \
-            'Station_Name': prediction[1], 'Destination': destination, 'Route': route, \
-            'Run_Number': run_number, 'Prediction_Time': current_long_time, \
-            'Arrival_Time': current_long_time})
-
-
-def train_arrival_times_map(response):
-    """Used to parse the Train Tracker Map API Response"""
-    for train in response['dataObject']:
-        for marker in train["Markers"]:
-            for prediction in marker["Predictions"]:
-                if str(prediction[0]) in train_station_map_ids and marker["DestName"] \
-                        in train_station_tracked_destinations \
-                        and str(prediction[2]) == "<b>Due</b>":
-                    add_train_to_file_map(
-                        marker["DestName"], marker["LineName"], \
-                        marker["RunNumber"], marker["IsSched"], prediction)
 
 
 def check_main_train_file_exists():
@@ -256,6 +228,7 @@ while True:  # Where the magic happens
 
     # API URL's
     train_tracker_url_api = settings["train-tracker"]["api-url"]
+    train_tracker_url_api_old = settings["train-tracker"]["api-url-old"]
     train_tracker_url_api_backup = settings["train-tracker"]["api-url-backup"]
     train_tracker_url_map = settings["train-tracker"]["map-url"]
     train_tracker_url_map_backup = settings["train-tracker"]["map-url-backup"]
@@ -263,10 +236,9 @@ while True:  # Where the magic happens
     # Variables for Settings information - Only make settings changes in the settings.json file
     enable_train_tracker_api = settings["train-tracker"]["api-enabled"]
     enable_train_tracker_map = settings["train-tracker"]["map-enabled"]
-    train_station_stop_ids = settings["train-tracker"]["map-ids"]
-    train_station_map_ids = settings["train-tracker"]["map-station-ids"]
-    train_station_tracked_destinations = settings["train-tracker"]["tracked-destinations"]
-
+    train_station_stop_ids = settings["train-tracker"]["station-ids"]
+    train_station_map_ids = settings["train-tracker"]["map-ids"]
+    
     # Setting Up Variable for Storing Station Information
     arrival_information = json.loads('{"trains":{},"buses":{}}')
 
@@ -276,21 +248,23 @@ while True:  # Where the magic happens
 
     # API Portion runs if enabled and station id's exist
 
-    if train_station_stop_ids != "" and enable_train_tracker_api == "True":
-        for train_stop_id_to_check in train_station_stop_ids:
-            try:
+    if datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S") >= "2023-10-08T03:00:00":
+        if train_station_map_ids != "" and enable_train_tracker_api == "True":
+            for train_map_id_to_check in train_station_map_ids:
                 try:
-                    response1 = train_api_call_to_cta_api(train_stop_id_to_check)
+                    try:
+                        response1 = train_api_call_to_cta_api(train_map_id_to_check)
+                    except: # pylint: disable=bare-except
+                        response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
                 except: # pylint: disable=bare-except
-                    response2 = train_api_call_to_cta_api_backup(train_stop_id_to_check)
-            except: # pylint: disable=bare-except
-                print(f"Ultimate Failure :(  - Stop ID: {train_stop_id_to_check}")
-
-    # Map Portion runs if enabled and station id's exist
-    if train_station_map_ids != "" \
-            and train_station_tracked_destinations != "" \
-            and enable_train_tracker_map == "True":
-        response2 = train_api_call_to_cta_map()
+                    print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
+    else:
+        if train_station_stop_ids != "" and enable_train_tracker_api == "True":
+            for train_stop_id_to_check in train_station_stop_ids:
+                try:
+                    response1 = train_api_call_to_cta_api_old_get(train_stop_id_to_check)
+                except: # pylint: disable=bare-except
+                    print(f"Ultimate Failure :( {train_stop_id_to_check}")
 
     add_integrity_file_line("Success")
 
