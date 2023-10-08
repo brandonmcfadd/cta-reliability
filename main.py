@@ -48,25 +48,6 @@ def train_api_call_to_cta_api(map_id):
     return api_response
 
 
-def train_api_call_to_cta_api_old_get(stop_id):
-    """Gotta talk to the CTA and get Train Times"""
-    print(f"Making Main Secure URL CTA Train API Call for stop: {stop_id}")
-    try:
-        api_response = requests.get(
-            train_tracker_url_api_old.format(train_api_key, stop_id), timeout=10)
-        train_arrival_times(api_response.json())
-        api_response.raise_for_status()
-    except requests.exceptions.HTTPError as errh:
-        print ("Main URL - Http Error:",errh)
-    except requests.exceptions.ConnectionError as errc:
-        print ("Main URL - Error Connecting:",errc)
-    except requests.exceptions.Timeout as errt:
-        print ("Main URL - Timeout Error:",errt)
-    except requests.exceptions.RequestException as err:
-        print ("Main URL - Error in API Call to Train Tracker",err)
-    return api_response
-
-
 def train_api_call_to_cta_api_backup(stop_id):
     """Gotta talk to the CTA and get Train Times"""
     print(f"Making Backup Insecure URL CTA Train API Call for stop: {stop_id}")
@@ -167,22 +148,6 @@ def check_main_train_file_exists():
         print("Main Train File Exists...Continuing...")
 
 
-def check_backup_train_file_exists():
-    """Used to check if file exists"""
-    current_month = datetime.strftime(datetime.now(), "%b%Y")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals_backup-" + \
-        str(current_month) + ".csv"
-    train_csv_file = os.path.exists(file_path)
-    if train_csv_file is False:
-        print("Backup Train File Doesn't Exist...Creating File and Adding Headers...")
-        with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
-            writer_object = DictWriter(
-                csvfile, fieldnames=train_arrivals_csv_headers)
-            writer_object.writeheader()
-    else:
-        print("Backup Train File Exists...Continuing...")
-
-
 def check_integrity_file_exists():
     """Used to check if file exists"""
     current_month = datetime.strftime(datetime.now(), "%b%Y")
@@ -229,42 +194,29 @@ while True:  # Where the magic happens
     # API URL's
     train_tracker_url_api = settings["train-tracker"]["api-url"]
     train_tracker_url_api_old = settings["train-tracker"]["api-url-old"]
-    train_tracker_url_api_backup = settings["train-tracker"]["api-url-backup"]
-    train_tracker_url_map = settings["train-tracker"]["map-url"]
-    train_tracker_url_map_backup = settings["train-tracker"]["map-url-backup"]
-
+    
     # Variables for Settings information - Only make settings changes in the settings.json file
     enable_train_tracker_api = settings["train-tracker"]["api-enabled"]
-    enable_train_tracker_map = settings["train-tracker"]["map-enabled"]
-    train_station_stop_ids = settings["train-tracker"]["station-ids"]
     train_station_map_ids = settings["train-tracker"]["map-ids"]
     
     # Setting Up Variable for Storing Station Information
-    arrival_information = json.loads('{"trains":{},"buses":{}}')
+    arrival_information = json.loads('{"trains":{}}')
 
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
     print("\n" + current_time_console)
 
-    # API Portion runs if enabled and station id's exist
+    # API Portion runs if enabled and map id's exist
 
-    if datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S") >= "2023-10-08T03:00:00":
-        if train_station_map_ids != "" and enable_train_tracker_api == "True":
-            for train_map_id_to_check in train_station_map_ids:
+    if train_station_map_ids != "" and enable_train_tracker_api == "True":
+        for train_map_id_to_check in train_station_map_ids:
+            try:
                 try:
-                    try:
-                        response1 = train_api_call_to_cta_api(train_map_id_to_check)
-                    except: # pylint: disable=bare-except
-                        response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
+                    response1 = train_api_call_to_cta_api(train_map_id_to_check)
                 except: # pylint: disable=bare-except
-                    print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
-    else:
-        if train_station_stop_ids != "" and enable_train_tracker_api == "True":
-            for train_stop_id_to_check in train_station_stop_ids:
-                try:
-                    response1 = train_api_call_to_cta_api_old_get(train_stop_id_to_check)
-                except: # pylint: disable=bare-except
-                    print(f"Ultimate Failure :( {train_stop_id_to_check}")
+                    response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
+            except: # pylint: disable=bare-except
+                print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
 
     add_integrity_file_line("Success")
 
