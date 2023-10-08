@@ -193,20 +193,20 @@ while True:  # Where the magic happens
 
     # API URL's
     train_tracker_url_api = settings["train-tracker"]["api-url"]
-    train_tracker_url_api_old = settings["train-tracker"]["api-url-old"]
-    
+    train_tracker_url_api_backup = settings["train-tracker"]["api-url-backup"]
+
     # Variables for Settings information - Only make settings changes in the settings.json file
     enable_train_tracker_api = settings["train-tracker"]["api-enabled"]
     train_station_map_ids = settings["train-tracker"]["map-ids"]
     
     # Setting Up Variable for Storing Station Information
-    arrival_information = json.loads('{"trains":{}}')
+    arrival_information = json.loads('{"trains":{},"buses":{}}')
 
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
     print("\n" + current_time_console)
 
-    # API Portion runs if enabled and map id's exist
+    # API Portion runs if enabled and station id's exist
 
     if train_station_map_ids != "" and enable_train_tracker_api == "True":
         for train_map_id_to_check in train_station_map_ids:
