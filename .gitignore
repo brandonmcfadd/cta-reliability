@@ -175,5 +175,6 @@ creds.json
 train_arrivals/*
 *.rdb
 gtfs_clean/*
+archive/*
 station_tweeting.py
 send_tweet.py
