@@ -198,25 +198,42 @@ while True:  # Where the magic happens
     # Variables for Settings information - Only make settings changes in the settings.json file
     enable_train_tracker_api = settings["train-tracker"]["api-enabled"]
     train_station_map_ids = settings["train-tracker"]["map-ids"]
+    temp_train_station_map_ids = settings["train-tracker"]["temp-map-ids"]
+    temp_train_station_map_ids_start_time = settings["train-tracker"]["temp-map-ids-start-time"]
+    temp_train_station_map_ids_end_time = settings["train-tracker"]["temp-map-ids-end-time"]
     
     # Setting Up Variable for Storing Station Information
     arrival_information = json.loads('{"trains":{},"buses":{}}')
 
+    current_time = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S")
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
     print("\n" + current_time_console)
 
     # API Portion runs if enabled and station id's exist
 
-    if train_station_map_ids != "" and enable_train_tracker_api == "True":
-        for train_map_id_to_check in train_station_map_ids:
-            try:
+    if current_time >= temp_train_station_map_ids_start_time and current_time <= temp_train_station_map_ids_end_time:
+        print("Currently Operating Under Temporary Map IDs")
+        if temp_train_station_map_ids != "" and enable_train_tracker_api == "True":
+            for train_map_id_to_check in temp_train_station_map_ids:
                 try:
-                    response1 = train_api_call_to_cta_api(train_map_id_to_check)
+                    try:
+                        response1 = train_api_call_to_cta_api(train_map_id_to_check)
+                    except: # pylint: disable=bare-except
+                        response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
                 except: # pylint: disable=bare-except
-                    response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
-            except: # pylint: disable=bare-except
-                print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
+                    print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
+    else:
+        print("Currently Operating Under Standard Map IDs")
+        if train_station_map_ids != "" and enable_train_tracker_api == "True":
+            for train_map_id_to_check in train_station_map_ids:
+                try:
+                    try:
+                        response1 = train_api_call_to_cta_api(train_map_id_to_check)
+                    except: # pylint: disable=bare-except
+                        response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
+                except: # pylint: disable=bare-except
+                    print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
 
     add_integrity_file_line("Success")
 
