@@ -1,5 +1,7 @@
 """cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
 import os  # Used to retrieve secrets in .env file
+import logging
+from logging.handlers import RotatingFileHandler
 import json  # Used for JSON Handling
 import time  # Used to Get Current Time
 # Used for converting Prediction from Current Time
@@ -23,21 +25,30 @@ load_dotenv()
 # ENV Variables
 main_file_path = os.getenv('FILE_PATH')
 
+# Logging Information
+LOG_FILENAME = main_file_path + '/cta-reliability/logs/station-headways.log'
+logging.basicConfig(level=logging.INFO)
+handler = RotatingFileHandler(LOG_FILENAME, maxBytes=1e6, backupCount=10)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logging.getLogger().addHandler(handler)
+
 def train_api_call_to_cta_map(line,line_long):
     """Gotta talk to the CTA and get Train Times part 2!"""
-    print(f"Making CTA Train Map API Call for the {line} line...")
+    logging.info("Making CTA Train Map API Call for the %s line...", line)
     try:
         api_response = requests.get(train_tracker_url_map.format(line), timeout=10)
         train_arrival_times_map(api_response.json(), line_long)
         api_response.raise_for_status()
     except requests.exceptions.HTTPError as errh:
-        print("Map - Http Error:", errh)
+        logging.error("Map - Http Error: %s", errh)
     except requests.exceptions.ConnectionError as errc:
-        print("Map - Error Connecting:", errc)
+        logging.error("Map - Error Connecting: %s", errc)
     except requests.exceptions.Timeout as errt:
-        print("Map - Timeout Error:", errt)
+        logging.error("Map - Timeout Error: %s", errt)
     except requests.exceptions.RequestException as err:
-        print("Map - Error in API Call to Train Tracker", err)
+        logging.error("Map - Error in API Call to Train TrackerL %s", err)
     return api_response
 
 
@@ -74,7 +85,6 @@ def train_arrival_times_map(response, line):
                         if eta == "":
                             continue
                         elif str(prediction[2]) == "<b>Due</b>":
-                            print(marker["DestName"])
                             if marker["DestName"] in northbound_destinations:
                                 add_train_to_json(line, "north", 0)
                             elif marker["DestName"] in southbound_destinations and marker["DestName"] == "UIC-Halsted":
@@ -133,10 +143,10 @@ def output_data_to_file():
     file_path = main_file_path + "cta-reliability/train_arrivals/json/"
     with open(file_path + "special-station.json", 'w', encoding='utf-8') as file1:
         json.dump(arrival_information, file1, indent=2)
-    print("File Outputs Complete")
+    logging.info("File Outputs Complete")
 
 
-print("Welcome to TrainTracker, Python Edition!")
+logging.info("Welcome to TrainTracker, Python Edition!")
 # Check to make sure output file exists and write headers
 while True:  # Where the magic happens
 # Settings
@@ -156,7 +166,7 @@ while True:  # Where the magic happens
 
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
-    print("\n" + current_time_console)
+    logging.info(current_time_console)
 
     lines_to_process = {"R":"Red","P":"Pur","Y":"Yel","B":"Blu","V":"Pnk","G":"Grn","T":"Brn","O":"Org"}
     # lines_to_process = {"B":"Blu"}
@@ -167,7 +177,8 @@ while True:  # Where the magic happens
     output_data_to_file()
 
 
-    # # Wait and do it again
-    SLEEP_AMOUNT = 10
-    print("\nSleeping " + str(SLEEP_AMOUNT) + " Seconds\n")
+    # Wait and do it again
+    SLEEP_AMOUNT = 30
+    SLEEP_STRING = "Sleeping " + str(SLEEP_AMOUNT) + " Seconds"
+    logging.info(SLEEP_STRING)
     time.sleep(SLEEP_AMOUNT)

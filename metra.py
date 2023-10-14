@@ -1,5 +1,7 @@
 """cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
 import os  # Used to retrieve secrets in .env file
+import logging
+from logging.handlers import RotatingFileHandler
 import json  # Used for JSON Handling
 import time  # Used to Get Current Time
 # Used for converting Prediction from Current Time
@@ -16,6 +18,15 @@ main_file_path = os.getenv('FILE_PATH')
 metra_username = os.getenv('METRA_USERNAME')
 metra_password = os.getenv('METRA_PASSWORD')
 
+# Logging Information
+LOG_FILENAME = main_file_path + '/cta-reliability/logs/metra-reliability.log'
+logging.basicConfig(level=logging.INFO)
+handler = RotatingFileHandler(LOG_FILENAME, maxBytes=1e6, backupCount=10)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logging.getLogger().addHandler(handler)
+
 # Constants
 integrity_file_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
 metra_vehicles_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Vehicle_Trip_TripID',
@@ -24,13 +35,13 @@ metra_vehicles_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Vehicle_Tri
 
 def train_api_call_to_metra():
     """Gotta talk to Metra and get vehicle positions!"""
-    print("Making Metra API Call...")
+    logging.info("Making Metra API Call...")
     try:
         api_response = requests.get(
             metra_tracker_url_api, auth=(metra_username, metra_password))
         add_train_to_file_api(api_response.json())
     except:  # pylint: disable=bare-except
-        print("Error in API Call to Metra Train Tracker")
+        logging.error("Error in API Call to Metra Train Tracker")
     return api_response
 
 
@@ -66,13 +77,13 @@ def check_main_train_file_exists():
         str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
-        print("File Doesn't Exist...Creating File and Adding Headers...")
+        logging.warning("File Doesn't Exist...Creating File and Adding Headers...")
         with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=metra_vehicles_csv_headers)
             writer_object.writeheader()
     else:
-        print("File Exists...Continuing...")
+        logging.info("File Exists...Continuing...")
 
 
 def check_integrity_file_exists():
@@ -82,13 +93,13 @@ def check_integrity_file_exists():
         str(current_month) + ".csv"
     integrity_csv_file = os.path.exists(file_path)
     if integrity_csv_file is False:
-        print("File Doesn't Exist...Creating File and Adding Headers...")
+        logging.warning("File Doesn't Exist...Creating File and Adding Headers...")
         with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=integrity_file_csv_headers)
             writer_object.writeheader()
     else:
-        print("File Exists...Continuing...")
+        logging.info("File Exists...Continuing...")
 
 
 def add_integrity_file_line(status):
@@ -106,7 +117,7 @@ def add_integrity_file_line(status):
                                'Simple_Date_Time': current_simple_time, 'Status': status})
 
 
-print("Welcome to Metra TrainTracker, Python Edition!")
+logging.info("Welcome to Metra TrainTracker, Python Edition!")
 # Check to make sure output file exists and write headers
 while True:  # Where the magic happens
     check_main_train_file_exists()
@@ -128,7 +139,7 @@ while True:  # Where the magic happens
 
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
-    print("\n" + current_time_console)
+    logging.info(current_time_console)
 
     # If we get to this point, log a successful attempt to reach the API's
     add_integrity_file_line("Success")
@@ -138,6 +149,7 @@ while True:  # Where the magic happens
         response1 = train_api_call_to_metra()
 
     # Wait and do it again
-    SLEEP_AMOUNT = 900
-    print("Sleeping " + str(SLEEP_AMOUNT) + " Seconds")
+    SLEEP_AMOUNT = 30
+    SLEEP_STRING = "Sleeping " + str(SLEEP_AMOUNT) + " Seconds"
+    logging.info(SLEEP_STRING)
     time.sleep(SLEEP_AMOUNT)
