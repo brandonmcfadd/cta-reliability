@@ -2,6 +2,8 @@
 from datetime import datetime, timedelta
 import os  # Used to retrieve secrets in .env file
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv  # Used to Load Env Var
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -122,6 +124,15 @@ async def startup():
     """Tells API to Prep redis for Rate Limit"""
     redis_value = redis.from_url(
         "redis://localhost", encoding="utf-8", decode_responses=True)
+    # Logging Information
+    logger = logging.getLogger("uvicorn.access")
+    log_filename = main_file_path + '/cta-reliability/logs/api-service.log'
+    logging.basicConfig(level=logging.INFO)
+    handler = RotatingFileHandler(log_filename, maxBytes=1e6, backupCount=10)
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
     await FastAPILimiter.init(redis_value)
 
 
