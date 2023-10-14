@@ -1,6 +1,8 @@
 """cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
-import os # Used to retrieve secrets in .env file
-import json # Used for JSON Handling
+import os  # Used to retrieve secrets in .env file
+import logging
+from logging.handlers import RotatingFileHandler
+import json  # Used for JSON Handling
 import time  # Used to Get Current Time
 # Used for converting Prediction from Current Time
 from datetime import datetime, timedelta
@@ -16,6 +18,15 @@ except AttributeError:
     # no pyopenssl support used / needed / available
     pass
 
+# Logging Information
+LOG_FILENAME = './logs/cta-reliability.log'
+logging.basicConfig(level=logging.INFO)
+handler = RotatingFileHandler(LOG_FILENAME, maxBytes=1e6, backupCount=10)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logging.getLogger().addHandler(handler)
+
 # Load .env variables
 load_dotenv()
 
@@ -25,45 +36,48 @@ main_file_path = os.getenv('FILE_PATH')
 
 # Constants
 integrity_file_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
-train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route', \
-                                'Run_Number', 'Prediction_Time', 'Arrival_Time']
+train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route',
+                              'Run_Number', 'Prediction_Time', 'Arrival_Time']
 
 
 def train_api_call_to_cta_api(map_id):
     """Gotta talk to the CTA and get Train Times"""
-    print(f"Making Main Secure URL CTA Train API Call for stop: {map_id}")
+    logging.info(
+        "Making Main Secure URL CTA Train API Call for stop: %s", map_id)
     try:
         api_response = requests.get(
             train_tracker_url_api.format(train_api_key, map_id), timeout=10)
         train_arrival_times(api_response.json())
         api_response.raise_for_status()
     except requests.exceptions.HTTPError as errh:
-        print ("Main URL - Http Error:",errh)
+        logging.error("Main URL - Http Error: %s", errh)
     except requests.exceptions.ConnectionError as errc:
-        print ("Main URL - Error Connecting:",errc)
+        logging.error("Main URL - Error Connecting: %s", errc)
     except requests.exceptions.Timeout as errt:
-        print ("Main URL - Timeout Error:",errt)
+        logging.error("Main URL - Timeout Error: %s", errt)
     except requests.exceptions.RequestException as err:
-        print ("Main URL - Error in API Call to Train Tracker",err)
+        logging.error("Main URL - Error in API Call to Train Tracker: %s", err)
     return api_response
 
 
 def train_api_call_to_cta_api_backup(stop_id):
     """Gotta talk to the CTA and get Train Times"""
-    print(f"Making Backup Insecure URL CTA Train API Call for stop: {stop_id}")
+    logging.warning(
+        "Making Backup Insecure URL CTA Train API Call for stop: %s", stop_id)
     try:
         api_response = requests.get(
             train_tracker_url_api_backup.format(train_api_key, stop_id), timeout=10)
         train_arrival_times(api_response.json())
         api_response.raise_for_status()
     except requests.exceptions.HTTPError as errh:
-        print ("Backup URL - Http Error:",errh)
+        logging.error("Backup URL - Http Error: %s", errh)
     except requests.exceptions.ConnectionError as errc:
-        print ("Backup URL - Error Connecting:",errc)
+        logging.error("Backup URL - Error Connecting: %s", errc)
     except requests.exceptions.Timeout as errt:
-        print ("Backup URL - Timeout Error:",errt)
+        logging.error("Backup URL - Timeout Error: %s", errt)
     except requests.exceptions.RequestException as err:
-        print ("Backup URL - Error in API Call to Train Tracker",err)
+        logging.error(
+            "Backup URL - Error in API Call to Train Tracker: %s", err)
     return api_response
 
 
@@ -126,10 +140,11 @@ def add_train_to_file_api(eta, station_name, stop_id):
         with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=train_arrivals_csv_headers)
-            writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"], \
-                'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 'Route': eta["rt"], \
-                'Run_Number': eta["rn"], 'Prediction_Time': eta["prdt"], \
-                'Arrival_Time': eta["arrT"]})
+            writer_object.writerow({'Station_ID': eta["staId"], 'Stop_ID': eta["stpId"],
+                                    'Station_Name': eta["staNm"], 'Destination': eta["destNm"], 
+                                    'Route': eta["rt"], 'Run_Number': eta["rn"], 
+                                    'Prediction_Time': eta["prdt"],
+                                    'Arrival_Time': eta["arrT"]})
 
 
 def check_main_train_file_exists():
@@ -139,13 +154,14 @@ def check_main_train_file_exists():
         str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
-        print("Main Train File Doesn't Exist...Creating File and Adding Headers...")
+        logging.info(
+            "Main Train File Doesn't Exist...Creating File and Adding Headers...")
         with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=train_arrivals_csv_headers)
             writer_object.writeheader()
     else:
-        print("Main Train File Exists...Continuing...")
+        logging.info("Main Train File Exists...Continuing...")
 
 
 def check_integrity_file_exists():
@@ -155,13 +171,14 @@ def check_integrity_file_exists():
         str(current_month) + ".csv"
     integrity_csv_file = os.path.exists(file_path)
     if integrity_csv_file is False:
-        print("Integrity File Doesn't Exist...Creating File and Adding Headers...")
+        logging.info(
+            "Integrity File Doesn't Exist...Creating File and Adding Headers...")
         with open(file_path, 'w+', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=integrity_file_csv_headers)
             writer_object.writeheader()
     else:
-        print("Integrity File Exists...Continuing...")
+        logging.info("Integrity File Exists...Continuing...")
 
 
 def add_integrity_file_line(status):
@@ -179,7 +196,7 @@ def add_integrity_file_line(status):
                                'Simple_Date_Time': current_simple_time, 'Status': status})
 
 
-print("Welcome to TrainTracker, Python Edition!")
+logging.info("Welcome to TrainTracker, Python Edition!")
 # Check to make sure output file exists and write headers
 while True:  # Where the magic happens
     check_main_train_file_exists()
@@ -201,43 +218,51 @@ while True:  # Where the magic happens
     temp_train_station_map_ids = settings["train-tracker"]["temp-map-ids"]
     temp_train_station_map_ids_start_time = settings["train-tracker"]["temp-map-ids-start-time"]
     temp_train_station_map_ids_end_time = settings["train-tracker"]["temp-map-ids-end-time"]
-    
+
     # Setting Up Variable for Storing Station Information
     arrival_information = json.loads('{"trains":{},"buses":{}}')
 
     current_time = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S")
     current_time_console = "The Current Time is: " + \
         datetime.strftime(datetime.now(), "%H:%M:%S")
-    print("\n" + current_time_console)
+    logging.info(current_time_console)
 
     # API Portion runs if enabled and station id's exist
 
-    if current_time >= temp_train_station_map_ids_start_time and current_time <= temp_train_station_map_ids_end_time:
-        print("Currently Operating Under Temporary Map IDs")
+    if (current_time >= temp_train_station_map_ids_start_time and
+            current_time <= temp_train_station_map_ids_end_time):
+        logging.warning("Currently Operating Under Temporary Map IDs")
         if temp_train_station_map_ids != "" and enable_train_tracker_api == "True":
             for train_map_id_to_check in temp_train_station_map_ids:
                 try:
                     try:
-                        response1 = train_api_call_to_cta_api(train_map_id_to_check)
-                    except: # pylint: disable=bare-except
-                        response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
-                except: # pylint: disable=bare-except
-                    print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
+                        response1 = train_api_call_to_cta_api(
+                            train_map_id_to_check)
+                    except:  # pylint: disable=bare-except
+                        response2 = train_api_call_to_cta_api_backup(
+                            train_map_id_to_check)
+                except:  # pylint: disable=bare-except
+                    logging.critical(
+                        "Ultimate Failure :(  - Map ID: %s", train_map_id_to_check)
     else:
-        print("Currently Operating Under Standard Map IDs")
+        logging.info("Currently Operating Under Standard Map IDs")
         if train_station_map_ids != "" and enable_train_tracker_api == "True":
             for train_map_id_to_check in train_station_map_ids:
                 try:
                     try:
-                        response1 = train_api_call_to_cta_api(train_map_id_to_check)
-                    except: # pylint: disable=bare-except
-                        response2 = train_api_call_to_cta_api_backup(train_map_id_to_check)
-                except: # pylint: disable=bare-except
-                    print(f"Ultimate Failure :(  - Map ID: {train_map_id_to_check}")
+                        response1 = train_api_call_to_cta_api(
+                            train_map_id_to_check)
+                    except:  # pylint: disable=bare-except
+                        response2 = train_api_call_to_cta_api_backup(
+                            train_map_id_to_check)
+                except:  # pylint: disable=bare-except
+                    logging.critical(
+                        "Ultimate Failure :(  - Map ID: %s", train_map_id_to_check)
 
     add_integrity_file_line("Success")
 
     # Wait and do it again
     SLEEP_AMOUNT = 30
-    print("Sleeping " + str(SLEEP_AMOUNT) + " Seconds\n")
+    SLEEP_STRING = "Sleeping " + str(SLEEP_AMOUNT) + " Seconds"
+    logging.info(SLEEP_STRING)
     time.sleep(SLEEP_AMOUNT)
