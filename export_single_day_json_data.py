@@ -105,7 +105,7 @@ def parse_response_cta(data, last_refresh):
         integrity_actual = item["date_range[Integrity - Actual]"]
         integrity_percent = item["date_range[Integrity - Percentage]"]
         system_total += item["date_range[Actual Arrivals]"]
-        system_scheduled += item["date_range[Scheduled Arrivals]"]
+        if item["date_range[Scheduled Arrivals]"] is not None: system_scheduled += item["date_range[Scheduled Arrivals]"]
         if item["date_range[Remaining Scheduled]"] is not None:
             system_scheduled_remaining += item["date_range[Remaining Scheduled]"]
         single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], item["date_range[Arrivals Percentage]"],
