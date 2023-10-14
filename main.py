@@ -27,7 +27,7 @@ train_api_key = os.getenv('TRAIN_API_KEY')
 main_file_path = os.getenv('FILE_PATH')
 
 # Logging Information
-LOG_FILENAME = main_file_path + '/logs/cta-reliability.log'
+LOG_FILENAME = main_file_path + '/cta-reliability/logs/cta-reliability.log'
 logging.basicConfig(level=logging.INFO)
 handler = RotatingFileHandler(LOG_FILENAME, maxBytes=1e6, backupCount=10)
 formatter = logging.Formatter(
