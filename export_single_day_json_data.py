@@ -105,11 +105,14 @@ def parse_response_cta(data, last_refresh):
         integrity_actual = item["date_range[Integrity - Actual]"]
         integrity_percent = item["date_range[Integrity - Percentage]"]
         system_total += item["date_range[Actual Arrivals]"]
-        if item["date_range[Scheduled Arrivals]"] is not None: system_scheduled += item["date_range[Scheduled Arrivals]"]
+        if item["date_range[Scheduled Arrivals]"] is not None:
+            system_scheduled += item["date_range[Scheduled Arrivals]"]
         if item["date_range[Remaining Scheduled]"] is not None:
             system_scheduled_remaining += item["date_range[Remaining Scheduled]"]
         single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], item["date_range[Arrivals Percentage]"],
-                                    item["date_range[Remaining Scheduled]"], item["date_range[Consistent Headways]"], item["date_range[Longest Wait]"]]
+                                    item["date_range[Remaining Scheduled]"], item["date_range[Consistent Headways]"], item["date_range[Longest Wait]"], 
+                                    item["date_range[Actual Arrivals - Morning Peak]"], item["date_range[Actual Arrivals - Evening Peak]"], 
+                                    item["date_range[Scheduled Arrivals - Morning Peak]"], item["date_range[Scheduled Arrivals - Evening Peak]"]]
         routes_information[item["date_range[Route]"]
                            ] = single_route_information
     json_file = main_file_path_json + "cta/" + shortened_date + ".json"
@@ -141,7 +144,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRunFPBranch": 0,
                 "RemainingScheduled": routes_information["Blue"][3],
                 "Consistent_Headways": routes_information["Blue"][4],
-                "LongestWait": routes_information["Blue"][5]
+                "LongestWait": routes_information["Blue"][5],
+                "ActualRunsMorningPeak": routes_information["Blue"][6],
+                "ActualRunsEveningPeak": routes_information["Blue"][7],
+                "ScheduledRunsMorningPeak": routes_information["Blue"][8],
+                "ScheduledRunsEveningPeak": routes_information["Blue"][9]
             },
             "Brown": {
                 "ActualRuns": routes_information["Brown"][0],
@@ -149,7 +156,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRun": routes_information["Brown"][2],
                 "RemainingScheduled": routes_information["Brown"][3],
                 "Consistent_Headways": routes_information["Brown"][4],
-                "LongestWait": routes_information["Brown"][5]
+                "LongestWait": routes_information["Brown"][5],
+                "ActualRunsMorningPeak": routes_information["Brown"][6],
+                "ActualRunsEveningPeak": routes_information["Brown"][7],
+                "ScheduledRunsMorningPeak": routes_information["Brown"][8],
+                "ScheduledRunsEveningPeak": routes_information["Brown"][9]
             },
             "Green": {
                 "ActualRuns": routes_information["Green"][0],
@@ -157,7 +168,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRun": routes_information["Green"][2],
                 "RemainingScheduled": routes_information["Green"][3],
                 "Consistent_Headways": routes_information["Green"][4],
-                "LongestWait": routes_information["Green"][5]
+                "LongestWait": routes_information["Green"][5],
+                "ActualRunsMorningPeak": routes_information["Green"][6],
+                "ActualRunsEveningPeak": routes_information["Green"][7],
+                "ScheduledRunsMorningPeak": routes_information["Green"][8],
+                "ScheduledRunsEveningPeak": routes_information["Green"][9]
             },
             "Orange": {
                 "ActualRuns": routes_information["Orange"][0],
@@ -165,7 +180,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRun": routes_information["Orange"][2],
                 "RemainingScheduled": routes_information["Orange"][3],
                 "Consistent_Headways": routes_information["Orange"][4],
-                "LongestWait": routes_information["Orange"][5]
+                "LongestWait": routes_information["Orange"][5],
+                "ActualRunsMorningPeak": routes_information["Orange"][6],
+                "ActualRunsEveningPeak": routes_information["Orange"][7],
+                "ScheduledRunsMorningPeak": routes_information["Orange"][8],
+                "ScheduledRunsEveningPeak": routes_information["Orange"][9]
             },
             "Pink": {
                 "ActualRuns": routes_information["Pink"][0],
@@ -173,7 +192,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRun": routes_information["Pink"][2],
                 "RemainingScheduled": routes_information["Pink"][3],
                 "Consistent_Headways": routes_information["Pink"][4],
-                "LongestWait": routes_information["Pink"][5]
+                "LongestWait": routes_information["Pink"][5],
+                "ActualRunsMorningPeak": routes_information["Pink"][6],
+                "ActualRunsEveningPeak": routes_information["Pink"][7],
+                "ScheduledRunsMorningPeak": routes_information["Pink"][8],
+                "ScheduledRunsEveningPeak": routes_information["Pink"][9]
             },
             "Purple": {
                 "ActualRuns": routes_information["Purple"][0],
@@ -181,7 +204,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRun": routes_information["Purple"][2],
                 "RemainingScheduled": routes_information["Purple"][3],
                 "Consistent_Headways": routes_information["Purple"][4],
-                "LongestWait": routes_information["Purple"][5]
+                "LongestWait": routes_information["Purple"][5],
+                "ActualRunsMorningPeak": routes_information["Purple"][6],
+                "ActualRunsEveningPeak": routes_information["Purple"][7],
+                "ScheduledRunsMorningPeak": routes_information["Purple"][8],
+                "ScheduledRunsEveningPeak": routes_information["Purple"][9]
             },
             "Red": {
                 "ActualRuns": routes_information["Red"][0],
@@ -189,7 +216,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRun": routes_information["Red"][2],
                 "RemainingScheduled": routes_information["Red"][3],
                 "Consistent_Headways": routes_information["Red"][4],
-                "LongestWait": routes_information["Red"][5]
+                "LongestWait": routes_information["Red"][5],
+                "ActualRunsMorningPeak": routes_information["Red"][6],
+                "ActualRunsEveningPeak": routes_information["Red"][7],
+                "ScheduledRunsMorningPeak": routes_information["Red"][8],
+                "ScheduledRunsEveningPeak": routes_information["Red"][9]
             },
             "Yellow": {
                 "ActualRuns": routes_information["Yellow"][0],
@@ -197,7 +228,11 @@ def parse_response_cta(data, last_refresh):
                 "PercentRun": routes_information["Yellow"][2],
                 "RemainingScheduled": routes_information["Yellow"][3],
                 "Consistent_Headways": routes_information["Yellow"][4],
-                "LongestWait": routes_information["Yellow"][5]
+                "LongestWait": routes_information["Yellow"][5],
+                "ActualRunsMorningPeak": routes_information["Yellow"][6],
+                "ActualRunsEveningPeak": routes_information["Yellow"][7],
+                "ScheduledRunsMorningPeak": routes_information["Yellow"][8],
+                "ScheduledRunsEveningPeak": routes_information["Yellow"][9]
             }
         }
     }
