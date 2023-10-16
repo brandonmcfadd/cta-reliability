@@ -96,7 +96,7 @@ def get_last_refresh_time(dataset):
         print("error in:", response_json)
 
 
-def parse_response_cta(data, last_refresh):
+def parse_response_cta(data, last_refresh, days_old):
     """takes the data from the API and prepares it to add to JSON output"""
     system_total, system_scheduled, system_scheduled_remaining = 0, 0, 0
     routes_information = {}
@@ -110,8 +110,8 @@ def parse_response_cta(data, last_refresh):
         if item["date_range[Remaining Scheduled]"] is not None:
             system_scheduled_remaining += item["date_range[Remaining Scheduled]"]
         single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], item["date_range[Arrivals Percentage]"],
-                                    item["date_range[Remaining Scheduled]"], item["date_range[Consistent Headways]"], item["date_range[Longest Wait]"], 
-                                    item["date_range[Actual Arrivals - Morning Peak]"], item["date_range[Actual Arrivals - Evening Peak]"], 
+                                    item["date_range[Remaining Scheduled]"], item["date_range[Consistent Headways]"], item["date_range[Longest Wait]"],
+                                    item["date_range[Actual Arrivals - Morning Peak]"], item["date_range[Actual Arrivals - Evening Peak]"],
                                     item["date_range[Scheduled Arrivals - Morning Peak]"], item["date_range[Scheduled Arrivals - Evening Peak]"]]
         routes_information[item["date_range[Route]"]
                            ] = single_route_information
@@ -238,10 +238,11 @@ def parse_response_cta(data, last_refresh):
     }
 
     with open(json_file, 'w', encoding="utf-8") as f:
+        print(f"Remaining: {days_old} | Saving Data In: {json_file}")
         json.dump(file_data, f, indent=2)
 
 
-def parse_response_metra(data):
+def parse_response_metra(data, days_old):
     """takes the data from the API and prepares it to add to JSON output"""
     for item in data:
         shortened_date = item["date_range[Dates]"][:10]
@@ -314,6 +315,7 @@ def parse_response_metra(data):
         }
 
         with open(json_file, 'w', encoding="utf-8") as f:
+            print(f"Remaining: {days_old} | Saving Data In: {json_file}")
             json.dump(file_data, f, indent=2)
 
 
@@ -331,14 +333,15 @@ while last_refresh_time is None:
 while remaining >= 0:
     try:
         parse_response_cta(get_report_data(
-            cta_dataset_id, remaining), last_refresh_time)
+            cta_dataset_id, remaining), last_refresh_time, remaining)
     except:  # pylint: disable=bare-except
         print("Failed to grab CTA #", remaining)
-    print("total cta remaining:", remaining)
+
     try:
-        parse_response_metra(get_report_data(metra_dataset_id, remaining))
+        parse_response_metra(get_report_data(
+            metra_dataset_id, remaining), remaining)
     except:  # pylint: disable=bare-except
         print("Failed to grab Metra #", remaining)
-    print("total metra remaining:", remaining)
+
     remaining -= 1
     sleep(1)
