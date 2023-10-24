@@ -1,6 +1,8 @@
 """Used to Upload the aggregate files from the local server to Azure Blob for the PowerBi Reports"""
 from datetime import datetime
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv  # Used to Load Env Var
 from azure.storage.blob import BlobServiceClient
@@ -14,6 +16,16 @@ storage_account_name = os.getenv('STORAGE_ACCOUNT_NAME')
 connection_string = os.getenv('CONNECTION_STRING')
 container_name = os.getenv('CONTAINER_NAME')
 main_file_path = os.getenv('FILE_PATH')
+
+# Logging Information
+LOG_FILENAME = main_file_path + '/cta-reliability/logs/file-uploads.log'
+logging.basicConfig(level=logging.INFO)
+handler = RotatingFileHandler(LOG_FILENAME, maxBytes=10e6, backupCount=10)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logging.getLogger().addHandler(handler)
+
 
 # Constants
 MAIN_FILE_PATH_1 = "/cta-reliability/train_arrivals/train_arrivals-"
@@ -34,7 +46,7 @@ def upload_to_blob_storage(file_path, file_name):
         container=container_name, blob=file_name)
     with open(file_path, "rb") as data:
         blob_client.upload_blob(data, overwrite=True)
-        print(f"Uploaded {file_name}.")
+        logging.info("Uploaded %s.", file_name)
 
 
 if current_day == "01" or current_day == "1":
@@ -58,35 +70,35 @@ if current_day == "01" or current_day == "1":
     file_path_4_last_month = main_file_path + MAIN_FILE_PATH_4 + \
         str(last_month) + ".csv"
 
-    print("Uploading file from path: " + file_path_1_last_month)
+    logging.info("Uploading file from path: %s", file_path_1_last_month)
     upload_to_blob_storage(file_path_1_last_month,
                            f'train_arrivals/train_arrivals-{last_month}.csv')
 
-    print("Uploading file from path: " + file_path_2_last_month)
+    logging.info("Uploading file from path: %s", file_path_2_last_month)
     upload_to_blob_storage(file_path_2_last_month,
                            f'train_arrivals/integrity-check-{last_month}.csv')
 
-    print("Uploading file from path: " + 3)
+    logging.info("Uploading file from path: %s", file_path_3_last_month)
     upload_to_blob_storage(
-        3, f'train_arrivals/metra_train_positions-{last_month}.csv')
+        file_path_3_last_month, f'train_arrivals/metra_train_positions-{last_month}.csv')
 
-    print("Uploading file from path: " + 4)
+    logging.info("Uploading file from path: %s", file_path_4_last_month)
     upload_to_blob_storage(
-        4, f'train_arrivals/metra-integrity-check-{last_month}.csv')
+        file_path_4_last_month, f'train_arrivals/metra-integrity-check-{last_month}.csv')
 
-    print("Uploading file from path: " + file_path_1)
+    logging.info("Uploading file from path: %s",file_path_1)
     upload_to_blob_storage(
         file_path_1, f'train_arrivals/train_arrivals-{current_month}.csv')
 
-    print("Uploading file from path: " + file_path_2)
+    logging.info("Uploading file from path: %s",file_path_2)
     upload_to_blob_storage(
         file_path_2, f'train_arrivals/integrity-check-{current_month}.csv')
 
-    print("Uploading file from path: " + file_path_3)
+    logging.info("Uploading file from path: %s",file_path_3)
     upload_to_blob_storage(
         file_path_3, f'train_arrivals/metra_train_positions-{current_month}.csv')
 
-    print("Uploading file from path: " + file_path_4)
+    logging.info("Uploading file from path: %s",file_path_4)
     upload_to_blob_storage(
         file_path_4, f'train_arrivals/metra-integrity-check-{current_month}.csv')
 else:
@@ -98,18 +110,18 @@ else:
         str(current_month) + ".csv"
     file_path_4 = main_file_path + MAIN_FILE_PATH_4 + \
         str(current_month) + ".csv"
-    print("Uploading file from path: " + file_path_1)
+    logging.info("Uploading file from path: %s",file_path_1)
     upload_to_blob_storage(
         file_path_1, f'train_arrivals/train_arrivals-{current_month}.csv')
 
-    print("Uploading file from path: " + file_path_2)
+    logging.info("Uploading file from path: %s",file_path_2)
     upload_to_blob_storage(
         file_path_2, f'train_arrivals/integrity-check-{current_month}.csv')
 
-    print("Uploading file from path: " + file_path_3)
+    logging.info("Uploading file from path: %s",file_path_3)
     upload_to_blob_storage(
         file_path_3, f'train_arrivals/metra_train_positions-{current_month}.csv')
 
-    print("Uploading file from path: " + file_path_4)
+    logging.info("Uploading file from path: %s",file_path_4)
     upload_to_blob_storage(
         file_path_4, f'train_arrivals/metra-integrity-check-{current_month}.csv')
