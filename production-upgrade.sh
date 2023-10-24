@@ -1,3 +1,4 @@
+python3 -m pip install --upgrade pip
 sudo git stash
 sudo git stash drop
 sudo git pull
