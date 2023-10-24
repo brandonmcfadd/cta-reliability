@@ -128,7 +128,7 @@ async def startup():
     logger = logging.getLogger("uvicorn.access")
     log_filename = main_file_path + '/cta-reliability/logs/api-service.log'
     logging.basicConfig(level=logging.INFO)
-    handler = RotatingFileHandler(log_filename, maxBytes=1e6, backupCount=10)
+    handler = RotatingFileHandler(log_filename, maxBytes=10e6, backupCount=10)
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)

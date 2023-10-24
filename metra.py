@@ -21,7 +21,7 @@ metra_password = os.getenv('METRA_PASSWORD')
 # Logging Information
 LOG_FILENAME = main_file_path + '/cta-reliability/logs/metra-reliability.log'
 logging.basicConfig(level=logging.INFO)
-handler = RotatingFileHandler(LOG_FILENAME, maxBytes=1e6, backupCount=10)
+handler = RotatingFileHandler(LOG_FILENAME, maxBytes=10e6, backupCount=10)
 formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
