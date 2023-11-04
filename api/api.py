@@ -26,6 +26,7 @@ main_file_path = os.getenv('FILE_PATH')
 main_file_path_json = os.getenv('FILE_PATH_JSON')
 main_file_path_csv = os.getenv('FILE_PATH_CSV')
 main_file_path_csv_month = os.getenv('FILE_PATH_CSV_MONTH')
+deploy_secret = os.getenv('DEPLOY_SECRET')
 
 
 def get_date(date_type):
@@ -289,12 +290,17 @@ async def save_7000_series_information(Name: str, RunNumber: int, token: str = D
         endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
 
-@app.post("/api/cta-reliability/production-upgrade/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
-async def production_upgrade(token: str = Depends(get_current_username)):
+@app.post("/api/cta-reliability/production-upgrade/{secret}", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def production_upgrade(secret: str, token: str = Depends(get_current_username)):
     """Used to trigger upgrade of cta-reliability"""
     try:
-        prod_upgrade = subprocess.run(main_file_path + "cta-reliability/production-upgrade.sh", capture_output=True, check=False)
-        return prod_upgrade.stdout
+        if str(secret) == str(deploy_secret):
+            # prod_upgrade = subprocess.run(main_file_path + "cta-reliability/production-upgrade.sh", capture_output=True, check=False)
+            prod_upgrade = subprocess.run(main_file_path + "cta-reliability/test.sh", capture_output=True, check=False)
+            output = prod_upgrade.stdout
+        else:
+            output = "Invalid Secret"
+        return output
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/cta-reliability/production-upgrade/"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
