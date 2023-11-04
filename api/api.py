@@ -3,13 +3,13 @@ from datetime import datetime, timedelta
 import os  # Used to retrieve secrets in .env file
 import json
 import logging
+import subprocess
 from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv  # Used to Load Env Var
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi import Response
-from fastapi.responses import PlainTextResponse
 import redis.asyncio as redis
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
@@ -275,16 +275,26 @@ async def save_7000_series_information(Name: str, RunNumber: int, token: str = D
     try:
         json_file = main_file_path + "7000-series-tracker/7000-series.json"
         input_data = {"DateTime": get_date("code-time"),"Submitter": Name, "RunNumber": RunNumber}
-        with open(json_file, 'r') as fp:
+        with open(json_file, 'r', encoding="utf-8") as fp:
             json_file_loaded = json.load(fp)
             if get_date("api-today") in json_file_loaded:
                 json_file_loaded[get_date("api-today")].append(input_data)
             else:
                 json_file_loaded = {**json_file_loaded, **{get_date("api-today"):[]}}
                 json_file_loaded[get_date("api-today")].append(input_data)
-        with open(json_file, 'w') as fp2:
+        with open(json_file, 'w', encoding="utf-8") as fp2:
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',',': '))
         return input_data
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/7000-series-tracker"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
+@app.post("/api/cta-reliability/production-upgrade/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def production_upgrade(token: str = Depends(get_current_username)):
+    """Used to trigger upgrade of cta-reliability"""
+    try:
+        prod_upgrade = subprocess.run(main_file_path + "cta-reliability/production-upgrade.sh", capture_output=True, check=False)
+        return prod_upgrade.stdout
+    except:  # pylint: disable=bare-except
+        endpoint = "http://rta-api.brandonmcfadden.com/api/cta-reliability/production-upgrade/"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
