@@ -172,6 +172,10 @@ creds.json
 .tokens
 *.rdb
 gtfs_clean/*
+gtfs_clean/google_transit*
+gtfs_clean/GTFS Data*
+gtfs_clean/powerbi_import/export/*
+gtfs_clean/powerbi_import/import/*
 archive/*
 *station_tweeting.py
 *send_tweet.py
