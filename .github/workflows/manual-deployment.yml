@@ -1,9 +1,6 @@
-name: Automated Deployment to Production
+name: Manual Deployment to Production
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
   main:
