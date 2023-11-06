@@ -26,7 +26,7 @@ load_dotenv()
 main_file_path = os.getenv('FILE_PATH')
 
 # Logging Information
-LOG_FILENAME = main_file_path + '/cta-reliability/logs/station-headways.log'
+LOG_FILENAME = main_file_path + 'logs/station-headways.log'
 logging.basicConfig(level=logging.INFO)
 handler = RotatingFileHandler(LOG_FILENAME, maxBytes=10e6, backupCount=10)
 formatter = logging.Formatter(
@@ -140,7 +140,7 @@ def output_data_to_file():
     """puts the data in a json file for the api"""
     date = datetime.strftime(datetime.utcnow(), "%Y-%m-%dT%H:%M:%SZ")
     arrival_information["last_update"] = date
-    file_path = main_file_path + "cta-reliability/train_arrivals/json/"
+    file_path = main_file_path + "train_arrivals/json/"
     with open(file_path + "special-station.json", 'w', encoding='utf-8') as file1:
         json.dump(arrival_information, file1, indent=2)
     logging.info("File Outputs Complete")
@@ -150,7 +150,7 @@ logging.info("Welcome to TrainTracker, Python Edition!")
 # Check to make sure output file exists and write headers
 while True:  # Where the magic happens
 # Settings
-    file = open(file=main_file_path + '/cta-reliability/settings.json',
+    file = open(file=main_file_path + 'settings.json',
                 mode='r',
                 encoding='utf-8')
     settings = json.load(file)

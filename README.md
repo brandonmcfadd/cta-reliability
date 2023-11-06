@@ -46,6 +46,21 @@ The station selected along each line is one where all trains, regardless of dest
     * The Train Tracker API uses Station ID's in integer form, while the Train Tracker Map uses them in float form (I wish I understood why it is this way)
 * 'L' Station codes can be found on the following [site](https://data.cityofchicago.org/Transportation/CTA-System-Information-List-of-L-Stops/8pix-ypme) from the City of Chicago's Data Portal.
 
+## Enviornment File
+* You'll need to create a .env file in your directory to safely store your secrets.
+    * Don't forget to add your .env file to your .gitignore list and never check application secrets, usernames or passwords into a GitHub repo! 
+* The following entries are required in your .env file:
+    * CTA
+        ```
+        TRAIN_API_KEY = 'insert key here'
+        FILE_PATH = 'full file path/cta-reliability'
+        ```
+    * Metra
+        ```
+        METRA_USERNAME = 'metra username'
+        METRA_PASSWORD = 'metra password'
+        ```
+
 ## Running the program
 * Once you have everything [Installed](#Installation) and [Configured](#Configuration) Run the main program `python3 main.py`
 

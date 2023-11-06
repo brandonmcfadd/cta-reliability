@@ -27,7 +27,7 @@ train_api_key = os.getenv('TRAIN_API_KEY')
 main_file_path = os.getenv('FILE_PATH')
 
 # Logging Information
-LOG_FILENAME = main_file_path + '/cta-reliability/logs/cta-reliability.log'
+LOG_FILENAME = main_file_path + 'logs/cta-reliability.log'
 logging.basicConfig(level=logging.INFO)
 handler = RotatingFileHandler(LOG_FILENAME, maxBytes=10e6, backupCount=10)
 formatter = logging.Formatter(
@@ -136,7 +136,7 @@ def add_train_to_file_api(eta, station_name, stop_id):
         arrival_information["trains"][station_name][stop_id][
             "estimated_times"].append(str(estimated_time) + "min")
         current_month = datetime.strftime(datetime.now(), "%b%Y")
-        file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals-" + \
+        file_path = main_file_path + "train_arrivals/train_arrivals-" + \
             str(current_month) + ".csv"
         with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
@@ -151,7 +151,7 @@ def add_train_to_file_api(eta, station_name, stop_id):
 def check_main_train_file_exists():
     """Used to check if file exists"""
     current_month = datetime.strftime(datetime.now(), "%b%Y")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/train_arrivals-" + \
+    file_path = main_file_path + "train_arrivals/train_arrivals-" + \
         str(current_month) + ".csv"
     train_csv_file = os.path.exists(file_path)
     if train_csv_file is False:
@@ -168,7 +168,7 @@ def check_main_train_file_exists():
 def check_integrity_file_exists():
     """Used to check if file exists"""
     current_month = datetime.strftime(datetime.now(), "%b%Y")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/integrity-check-" + \
+    file_path = main_file_path + "train_arrivals/integrity-check-" + \
         str(current_month) + ".csv"
     integrity_csv_file = os.path.exists(file_path)
     if integrity_csv_file is False:
@@ -188,7 +188,7 @@ def add_integrity_file_line(status):
     current_simple_time = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M")
     current_long_time = datetime.strftime(
         datetime.now(), "%Y-%m-%dT%H:%M:%S.%f%z")
-    file_path = main_file_path + "/cta-reliability/train_arrivals/integrity-check-" + \
+    file_path = main_file_path + "train_arrivals/integrity-check-" + \
         str(current_month) + ".csv"
     with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
@@ -204,7 +204,7 @@ while True:  # Where the magic happens
     # check_backup_train_file_exists()
     check_integrity_file_exists()
     # Settings
-    file = open(file=main_file_path + '/cta-reliability/settings.json',
+    file = open(file=main_file_path + 'settings.json',
                 mode='r',
                 encoding='utf-8')
     settings = json.load(file)
