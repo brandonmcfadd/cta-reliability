@@ -1,0 +1,25 @@
+name: Automated Deployment to Production
+
+on: workflow_dispatch
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP request
+        id: request
+        uses: tyrrrz/action-http-request@master
+        with:
+          url: http://rta-api.brandonmcfadden.com/api/cta-reliability/production-upgrade/${{ secrets.DEPLOY_PASSWORD }}
+          method: POST
+          headers: |
+            Authorization: ${{ secrets.API_AUTH }}
+          retry-count: 1
+          retry-delay: 500
+
+      - name: Print outputs
+        run: |
+          echo "Status: ${{ steps.request.outputs.status }}"
+          echo "Success: ${{ steps.request.outputs.success }}"
+          echo "Headers: ${{ steps.request.outputs.headers }}"
+          echo "Body: ${{ steps.request.outputs.body }}"
