@@ -10,8 +10,9 @@ from dateutil.relativedelta import relativedelta
 # Load .env variables
 load_dotenv()
 
-main_file_path_csv_day = os.getenv('FILE_PATH_CSV')
-main_file_path_csv_month = os.getenv('FILE_PATH_CSV_MONTH')
+main_file_path = os.getenv('FILE_PATH')
+main_file_path_csv_day = main_file_path + "train_arrivals/csv/"
+main_file_path_csv_month = main_file_path + "train_arrivals/csv_month/"
 
 
 def get_date(date_type, delay):

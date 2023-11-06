@@ -11,7 +11,7 @@ load_dotenv()
 github_pat = os.getenv('GITHUB_PAT')
 github_username = os.getenv('GITHUB_USERNAME')
 github_repo = os.getenv('GITHUB_REPO')
-main_file_path = os.getenv('FILE_PATH') + "cta-reliability/"
+main_file_path = os.getenv('FILE_PATH')
 
 def create_github_issue(title,body):
     # GitHub API endpoint for creating issues
@@ -65,6 +65,15 @@ def update_last_alert_number(alert_id):
     with open(json_file_path, "w") as file:
         json.dump(data, file, indent=4)
     print("JSON file updated successfully.")
+
+# Settings
+file = open(file=main_file_path + 'settings.json',
+            mode='r',
+            encoding='utf-8')
+settings = json.load(file)
+
+# API URL's
+alerts_api_url = settings["alerts-api"]["api-url"]
 
 alerts_to_process = get_alerts()
 process_alerts(alerts_to_process)    

@@ -18,7 +18,7 @@ container_name = os.getenv('CONTAINER_NAME')
 main_file_path = os.getenv('FILE_PATH')
 
 # Logging Information
-LOG_FILENAME = main_file_path + '/cta-reliability/logs/file-uploads.log'
+LOG_FILENAME = main_file_path + 'logs/file-uploads.log'
 logging.basicConfig(level=logging.INFO)
 handler = RotatingFileHandler(LOG_FILENAME, maxBytes=10e6, backupCount=10)
 formatter = logging.Formatter(
@@ -28,10 +28,10 @@ logging.getLogger().addHandler(handler)
 
 
 # Constants
-MAIN_FILE_PATH_1 = "/cta-reliability/train_arrivals/train_arrivals-"
-MAIN_FILE_PATH_2 = "/cta-reliability/train_arrivals/integrity-check-"
-MAIN_FILE_PATH_3 = "/cta-reliability/train_arrivals/metra_train_positions-"
-MAIN_FILE_PATH_4 = "/cta-reliability/train_arrivals/metra-integrity-check-"
+MAIN_FILE_PATH_1 = "train_arrivals/train_arrivals-"
+MAIN_FILE_PATH_2 = "train_arrivals/integrity-check-"
+MAIN_FILE_PATH_3 = "train_arrivals/metra_train_positions-"
+MAIN_FILE_PATH_4 = "train_arrivals/metra-integrity-check-"
 
 # Dates
 current_day = datetime.strftime(datetime.now(), "%d")
