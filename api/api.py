@@ -295,8 +295,8 @@ async def production_upgrade(secret: str, token: str = Depends(get_current_usern
     """Used to trigger upgrade of cta-reliability"""
     try:
         if str(secret) == str(deploy_secret):
-            prod_upgrade = subprocess.run(main_file_path + "production-upgrade.sh", capture_output=True, check=False)
-            output = prod_upgrade.stdout
+            prod_upgrade = os.system(f'sudo {main_file_path}/production-upgrade.sh')
+            output = prod_upgrade
         else:
             output = "Invalid Secret"
         return output
