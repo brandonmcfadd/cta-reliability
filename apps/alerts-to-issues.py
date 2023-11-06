@@ -1,23 +1,8 @@
 """cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
 import os  # Used to retrieve secrets in .env file
-import logging
-from logging.handlers import RotatingFileHandler
 import json  # Used for JSON Handling
-import time  # Used to Get Current Time
-# Used for converting Prediction from Current Time
-from datetime import datetime, timedelta
-from csv import DictWriter
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
-import urllib3
-requests.packages.urllib3.disable_warnings()
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-try:
-    requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-except AttributeError:
-    # no pyopenssl support used / needed / available
-    pass
-
 
 # Load .env variables
 load_dotenv()
