@@ -19,10 +19,3 @@ jobs:
             Authorization: ${{ secrets.API_AUTH }}
           retry-count: 1
           retry-delay: 500
-
-      - name: Print outputs
-        run: |
-          echo "Status: ${{ steps.request.outputs.status }}"
-          echo "Success: ${{ steps.request.outputs.success }}"
-          echo "Headers: ${{ steps.request.outputs.headers }}"
-          echo "Body: ${{ steps.request.outputs.body }}"
