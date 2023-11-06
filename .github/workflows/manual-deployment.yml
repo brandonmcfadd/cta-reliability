@@ -21,3 +21,5 @@ jobs:
         run: |
           echo "Status: ${{ steps.request.outputs.status }}"
           echo "Success: ${{ steps.request.outputs.success }}"
+          echo "Headers: ${{ steps.request.outputs.headers }}"
+          echo "Body: ${{ steps.request.outputs.body }}"
