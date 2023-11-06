@@ -47,7 +47,8 @@ def process_alerts(alerts_response):
     for alert in alerts_response["CTAAlerts"]["Alert"]:
         alert_id = int(alert["AlertId"])
         if alert["Impact"] == "Planned Work w/Part Closure" and alert_id > read_last_alert_number():
-            create_github_issue(alert["Headline"],alert["ShortDescription"])
+            alert_body = f'Alert: {alert["ShortDescription"]}\n\nEvent Start: {alert["EventStart"]}\nEvent End: {alert["EventEnd"]}\n\nURL: {alert["AlertURL"]["#cdata-section"]}'
+            create_github_issue(alert["Headline"],alert_body)
             update_last_alert_number(alert_id)
 
 def read_last_alert_number():
