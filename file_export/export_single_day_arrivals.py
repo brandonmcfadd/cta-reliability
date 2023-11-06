@@ -13,13 +13,12 @@ from azure.identity import ClientSecretCredential
 # Load .env variables
 load_dotenv()
 
-microsoft_username = os.getenv('MICROSOFT_USERNAME')
-microsoft_password = os.getenv('MICROSOFT_PASSWORD')
 microsoft_client_id = os.getenv('MICROSOFT_CLIENT_ID')
 microsoft_tenant_id = os.getenv('MICROSOFT_TENANT_ID')
 microsoft_client_secret = os.getenv('MICROSOFT_CLIENT_SECRET')
 microsoft_workspace_id = os.getenv('MICROSOFT_WORKSPACE_ID')
-main_file_path_csv = os.getenv('FILE_PATH_CSV')
+main_file_path = os.getenv('FILE_PATH')
+main_file_path_csv = main_file_path + "train_arrivals/csv/"
 cta_dataset_id = os.getenv('CTA_DATASET_ID')
 metra_dataset_id = os.getenv('METRA_DATASET_ID')
 

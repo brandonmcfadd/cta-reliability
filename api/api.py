@@ -50,7 +50,7 @@ def get_date(date_type):
 
 def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
     """Used to verify Creds"""
-    file = open(file=main_file_path + 'cta-reliability/.tokens',
+    file = open(file=main_file_path + '.tokens',
                 mode='r',
                 encoding='utf-8')
     tokens = json.load(file)
@@ -127,7 +127,7 @@ async def startup():
         "redis://localhost", encoding="utf-8", decode_responses=True)
     # Logging Information
     logger = logging.getLogger("uvicorn.access")
-    log_filename = main_file_path + '/cta-reliability/logs/api-service.log'
+    log_filename = main_file_path + '/logs/api-service.log'
     logging.basicConfig(level=logging.INFO)
     handler = RotatingFileHandler(log_filename, maxBytes=10e6, backupCount=10)
     formatter = logging.Formatter(
@@ -251,7 +251,7 @@ async def return_arrivals_for_date_month_cta_v2(date: str, token: str = Depends(
 async def return_special_station_json(token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
-        json_file = main_file_path + "cta-reliability/train_arrivals/json/special-station.json"
+        json_file = main_file_path + "train_arrivals/json/special-station.json"
         print(json_file)
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
@@ -295,7 +295,7 @@ async def production_upgrade(secret: str, token: str = Depends(get_current_usern
     """Used to trigger upgrade of cta-reliability"""
     try:
         if str(secret) == str(deploy_secret):
-            prod_upgrade = subprocess.run(main_file_path + "cta-reliability/production-upgrade.sh", capture_output=True, check=False)
+            prod_upgrade = subprocess.run(main_file_path + "production-upgrade.sh", capture_output=True, check=False)
             output = prod_upgrade.stdout
         else:
             output = "Invalid Secret"
