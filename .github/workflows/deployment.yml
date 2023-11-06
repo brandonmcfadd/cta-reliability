@@ -1,3 +1,5 @@
+name: Automated Deployment to Production
+
 on:
   push:
     branches:
