@@ -23,6 +23,7 @@ security = HTTPBasic()
 load_dotenv()
 
 main_file_path = os.getenv('FILE_PATH')
+main_file_path_7000 = os.getenv('FILE_PATH_7000')
 main_file_path_json = main_file_path + "train_arrivals/json/"
 main_file_path_csv = main_file_path + "train_arrivals/csv/"
 main_file_path_csv_month = main_file_path + "train_arrivals/csv_month/"
@@ -263,7 +264,7 @@ async def return_special_station_json(token: str = Depends(get_current_username)
 async def get_7000_series_information(token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
-        json_file = main_file_path + "7000-series-tracker/7000-series.json"
+        json_file = main_file_path_7000 + "7000-series.json"
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
@@ -274,7 +275,7 @@ async def get_7000_series_information(token: str = Depends(get_current_username)
 async def save_7000_series_information(Name: str, RunNumber: int, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
-        json_file = main_file_path + "7000-series-tracker/7000-series.json"
+        json_file = main_file_path_7000 + "7000-series.json"
         input_data = {"DateTime": get_date("code-time"),"Submitter": Name, "RunNumber": RunNumber}
         with open(json_file, 'r', encoding="utf-8") as fp:
             json_file_loaded = json.load(fp)
@@ -295,8 +296,9 @@ async def production_upgrade(secret: str, token: str = Depends(get_current_usern
     """Used to trigger upgrade of cta-reliability"""
     try:
         if str(secret) == str(deploy_secret):
-            prod_upgrade = subprocess.run(main_file_path + "production-upgrade.sh", capture_output=True, check=False)
-            output = prod_upgrade.stdout
+            output = subprocess.call('production-upgrade', shell=True, env=dict(ENV='/home/brandon_brandonmcfadden_com/.bash_aliases'))
+            print("Script Ran Successfully")
+            return output
         else:
             output = "Invalid Secret"
         return output
