@@ -1,8 +1,10 @@
 #!/bin/sh
 python3 -m pip install --upgrade pip
+cd /home/brandon_brandonmcfadden_com/cta-reliability/
 sudo git stash
-sudo git stash drop
-sudo git pull
+sudo git stash -- /home/brandon_brandonmcfadden_com/cta-reliability/
+sudo git stash drop -- /home/brandon_brandonmcfadden_com/cta-reliability/
+sudo git pull -- /home/brandon_brandonmcfadden_com/cta-reliability/
 sudo chown -R brandon_brandonmcfadden_com:brandon_brandonmcfadden_com .
 sudo chmod +x production-upgrade.sh
 pip install -r /home/brandon_brandonmcfadden_com/cta-reliability/requirements.txt
