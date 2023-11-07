@@ -1,4 +1,5 @@
 #!/bin/sh
+cd $(dirname $0)
 python3 -m pip install --upgrade pip
 cd /home/brandon_brandonmcfadden_com/cta-reliability/
 sudo git stash
