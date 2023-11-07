@@ -4,6 +4,7 @@ import os  # Used to retrieve secrets in .env file
 import json
 import logging
 import subprocess
+from subprocess import run, PIPE
 from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv  # Used to Load Env Var
 from fastapi import FastAPI, HTTPException, Depends, status
@@ -296,7 +297,10 @@ async def production_upgrade(secret: str, token: str = Depends(get_current_usern
     """Used to trigger upgrade of cta-reliability"""
     try:
         if str(secret) == str(deploy_secret):
-            output = subprocess.call('production-upgrade', shell=True, env=dict(ENV='/home/brandon_brandonmcfadden_com/.bash_aliases'))
+            # output = subprocess.call('production-upgrade', shell=True, env=dict(ENV='/home/brandon_brandonmcfadden_com/.bash_aliases'))
+            cmd = f"sudo {main_file_path}/production-upgrade.sh"
+            command = run(cmd, shell=True, stdout=PIPE)
+            output = [i for i in command.stdout.decode().split('\n') if i]
             print("Script Ran Successfully")
             return output
         else:
