@@ -22,9 +22,7 @@ def create_github_issue(title,body):
     issue_data = {
         "title": title,
         "body": body,
-        "assignees": [
-            'brandonmcfadd'
-        ],
+        "assignees": [github_username],
     }
 
     # Headers with the access token
