@@ -6,7 +6,7 @@ from datetime import datetime
 import shutil
 import requests, zipfile, io
 
-directory_path = os.getcwd() + "/gtfs_clean"
+directory_path = os.getcwd() + "/gtfs"
 stop_times_path = directory_path + "/powerbi_import/export/stop_times.txt"
 trips_path = directory_path + "/powerbi_import/export/trips.txt"
 calendar_path = directory_path + "/powerbi_import/export/calendar.txt"
