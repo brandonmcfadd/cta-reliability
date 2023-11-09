@@ -171,7 +171,6 @@ send_email.py
 creds.json
 .tokens
 *.rdb
-gtfs_clean/*
 gtfs_clean/google_transit*
 gtfs_clean/GTFS Data*
 gtfs_clean/powerbi_import/export/*
