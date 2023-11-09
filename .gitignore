@@ -184,3 +184,5 @@ train_arrivals/json/metra/*.json
 train_arrivals/special/last_is_cta_okay_tweets.json
 train_arrivals/json/special-station.json
 train_arrivals/special/last_alert.json
+train_arrivals/special/alerts.json
+train_arrivals/special/gtfs_checks.json
