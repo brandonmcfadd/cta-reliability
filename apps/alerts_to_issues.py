@@ -11,7 +11,7 @@ load_dotenv()
 github_pat = os.getenv('GITHUB_PAT')
 github_username = os.getenv('GITHUB_USERNAME')
 github_repo = os.getenv('GITHUB_REPO')
-main_file_path = os.getenv('FILE_PATH') + "cta-reliability/"
+main_file_path = os.getenv('FILE_PATH')
 
 def create_github_issue(title,body):
     # GitHub API endpoint for creating issues
