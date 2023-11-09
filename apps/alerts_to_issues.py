@@ -20,7 +20,8 @@ def create_github_issue(title,body):
     # Issue data
     issue_data = {
         "title": title,
-        "body": body
+        "body": body,
+        "assignees": [github_username],
     }
 
     # Headers with the access token
