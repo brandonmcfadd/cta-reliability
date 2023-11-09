@@ -7,13 +7,13 @@ import shutil
 import requests, zipfile, io
 
 directory_path = os.getcwd() + "/gtfs"
-stop_times_path = directory_path + "/powerbi_import/export/stop_times.txt"
-trips_path = directory_path + "/powerbi_import/export/trips.txt"
-calendar_path = directory_path + "/powerbi_import/export/calendar.txt"
+stop_times_path = directory_path + "/powerbi/export/stop_times.txt"
+trips_path = directory_path + "/powerbi/export/trips.txt"
+calendar_path = directory_path + "/powerbi/export/calendar.txt"
 
 # Providing the folder path
-origin = directory_path + "/powerbi_import/import/"
-target = directory_path + "/powerbi_import/export/"
+origin = directory_path + "/powerbi/import/"
+target = directory_path + "/powerbi/export/"
 
 # Download new package
 print("Downloading Updated GTFS Package")
@@ -25,8 +25,10 @@ z.extractall(origin)
 files = os.listdir(origin)
 
 # Fetching all the files to directory
+file_names = ["calendar.txt", "stop_times.txt", "trips.txt"]
 for file_name in files:
-   shutil.copy(origin+file_name, target+file_name)
+   if file_name in file_names:
+       shutil.copy(origin+file_name, target+file_name)
 print("Files are copied successfully")
 
 schedule_date = input("Enter the Schedule Effective Date (mm-dd-yyyy): ")
