@@ -31,9 +31,20 @@ for file_name in files:
        shutil.copy(origin+file_name, target+file_name)
 print("Files are copied successfully")
 
+count = 1
+date_options = []
+with open(calendar_path, "r", encoding="utf-8") as file:
+    for line in file:
+        split_values = line.split(',')
+        date_options.append(f"{split_values[8]},{split_values[9][:-1]}")
+unique_date_options = list(set(date_options))
+for option in unique_date_options:
+    print(f"#{count} - {option}")
+    count += 1
+
+calendar_line_input = input("Enter the Desired Schedule Period from selection: ")
 schedule_date = input("Enter the Schedule Effective Date (mm-dd-yyyy): ")
-calendar_line_input = input("Enter the Desired Schedule Period (20231106,20240131): ") + "|service_id"
-calendar_regex = re.compile(calendar_line_input, re.MULTILINE)
+calendar_regex = re.compile(unique_date_options[int(calendar_line_input)-1] + "|service_id", re.MULTILINE)
 stop_times_regex = re.compile(
     r',30072,|,30073,|,30070,|,30071,|,30381,|,30382,|,30215,|,30216,|,30040,|,30041,|,30164,|,30241,|,30064,|,30065,|,30297,|,30298,|trip_id', re.MULTILINE)
 trips_regex = re.compile(
