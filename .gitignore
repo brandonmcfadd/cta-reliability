@@ -173,15 +173,8 @@ creds.json
 *.rdb
 gtfs/google_transit*
 gtfs/GTFS Data*
-gtfs/powerbi_import/import/
 gtfs/powerbi/import/*
 archive/*
-*station_tweeting.py
-*send_tweet.py
-train_arrivals/json/cta/*.json
-train_arrivals/json/metra/*.json
-train_arrivals/special/last_is_cta_okay_tweets.json
-train_arrivals/json/special-station.json
-train_arrivals/special/last_alert.json
-train_arrivals/special/alerts.json
-train_arrivals/special/gtfs_checks.json
+train_arrivals/*
+twitter_bots/send_tweet.py
+twitter_bots/station_tweeting.py
