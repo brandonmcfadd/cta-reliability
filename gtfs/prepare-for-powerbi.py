@@ -76,6 +76,14 @@ def regex_runner(pattern, filename, runtype="None"):
                     elif split_line[3] == "30216": # Orange - Midway
                         modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
+                    elif split_line[3] == "30064": # Orange - Loop
+                        modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
+                        modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
+                        print(f"{modified_line}", end='')
+                    elif split_line[3] == "30065": # Orange - Midway
+                        modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
+                        modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
+                        print(f"{modified_line}", end='')
                     elif split_line[3] == "30040": # Pink - Loop
                         modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
@@ -119,6 +127,11 @@ def regex_runner(pattern, filename, runtype="None"):
                         print(f"{modified_line_1}", end='')
                         print(f"{modified_line_2}", end='')
                     elif split_line[0] == "Y": # Yellow
+                        modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
+                        modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
+                        print(f"{modified_line_1}", end='')
+                        print(f"{modified_line_2}", end='')
+                    elif split_line[0] == "Red": # Yellow
                         modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
                         modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
                         print(f"{modified_line_1}", end='')
