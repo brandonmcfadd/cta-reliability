@@ -185,3 +185,6 @@ train_arrivals/json/special-station.json
 train_arrivals/special/last_alert.json
 train_arrivals/special/alerts.json
 train_arrivals/special/gtfs_checks.json
+gtfs/powerbi/export/calendar.txt
+gtfs/powerbi/export/stop_times.txt
+gtfs/powerbi/export/trips.txt
