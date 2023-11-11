@@ -96,10 +96,10 @@ def regex_runner(pattern, filename, runtype="None"):
                     elif split_line[3] == "30298": # Yellow - Inbound
                         modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
-                    elif split_line[3] == irops_stations[0]: # Irops 1
+                    elif split_line[3] == irops[1]: # Irops 1
                         modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
-                    elif split_line[3] == irops_stations[1]: # Irops 2
+                    elif split_line[3] == irops[2]: # Irops 2
                         modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
                     else:
