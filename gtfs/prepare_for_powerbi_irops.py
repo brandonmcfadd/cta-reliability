@@ -2,9 +2,10 @@
 import fileinput
 import re
 import os
-from datetime import datetime
 import shutil
-import requests, zipfile, io
+import zipfile
+import io
+import requests
 
 directory_path = os.getcwd() + "/gtfs"
 stop_times_path = directory_path + "/powerbi/export/stop_times.txt"
@@ -17,7 +18,7 @@ target = directory_path + "/powerbi/export/"
 
 # Download new package
 print("Downloading Updated GTFS Package")
-r = requests.get("https://www.transitchicago.com/downloads/sch_data/google_transit.zip")
+r = requests.get("https://www.transitchicago.com/downloads/sch_data/google_transit.zip", timeout=300)
 z = zipfile.ZipFile(io.BytesIO(r.content))
 z.extractall(origin)
 
@@ -27,8 +28,8 @@ files = os.listdir(origin)
 # Fetching all the files to directory
 file_names = ["calendar.txt", "stop_times.txt", "trips.txt"]
 for file_name in files:
-   if file_name in file_names:
-       shutil.copy(origin+file_name, target+file_name)
+    if file_name in file_names:
+        shutil.copy(origin+file_name, target+file_name)
 print("Files are copied successfully")
 
 count = 1
@@ -61,9 +62,9 @@ sunday_trip_ids = []
 def regex_runner(pattern, filename, runtype="None"):
     """Takes a regex pattern and only keeps matching lines"""
     matched = re.compile(pattern).search
-    with fileinput.FileInput(filename, inplace=True) as file:
-        for line in file:
-            if matched(line):  # save lines that match
+    with fileinput.FileInput(filename, inplace=True) as file_input:
+        for single_line in file_input:
+            if matched(single_line):  # save lines that match
                 split_line = line.split(',')
                 if runtype=="stop_times":
                     if split_line[3] == "30070": # Brown - Kimball
@@ -148,21 +149,22 @@ def regex_runner(pattern, filename, runtype="None"):
 def get_ids(path, column):
     """extracts items from columns that match"""
     # Using readlines()
-    file1 = open(path, 'r')
+    file1 = open(path, 'r', encoding="utf-8")
     lines = file1.readlines()
     ids = ''
-    count = 0
+    current_count = 0
     # Strips the newline character
-    for line in lines:
-        split_line = line.split(',')
-        if count == 0:
+    for single_line in lines:
+        split_line = single_line.split(',')
+        if current_count == 0:
             ids += (split_line[column])
         else:
             ids += ",|," + (split_line[column])
-        count += 1
+        current_count += 1
     return ids
 
 def file_rename(path, date):
+    """renames inbound file"""
     os.rename(path,f"{path[:-4]}_{date}.txt")
 
 print("Performing Regex Cleanup on 'calendar.txt'")
