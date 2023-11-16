@@ -1,7 +1,8 @@
+"""grabs data from the api and sends it off to the isCTAokay twitter account"""
 import os
 import json
-import tweepy
 import datetime
+import tweepy
 import requests  # Used for API Calls
 from dotenv import load_dotenv  # Used to Load Env Var
 
@@ -23,8 +24,11 @@ file = open(file=main_file_path + 'settings.json',
             encoding='utf-8')
 settings = json.load(file)
 
+def get_ordinal_suffix(day: int) -> str:
+    return {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th') if day not in (11, 12, 13) else 'th'
 
 def get_run_data_from_api():
+    """hits the api and returns the current days data"""
     todays_stats_api_url = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/today"
 
     my_api_call_headers = {
@@ -38,6 +42,7 @@ def get_run_data_from_api():
 
 
 def day_of_performance_stats(data):
+    """determines the type of day we having"""
     system_actual = int(data["system"]["ActualRuns"])
     system_scheduled = int(data["system"]["ScheduledRuns"])
     if system_actual/system_scheduled >= 0.95:
@@ -50,9 +55,16 @@ def day_of_performance_stats(data):
 
 
 def prepare_tweet_text_1(data, is_good_day_flag):
+    """preps the tweet text for the first tweet"""
     system_actual = data["system"]["ActualRuns"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     consistent_arrivals = 0
+    last_updated = data["LastUpdated"]
+    system_perc = int(float(data["system"]["PercentRun"]) * 100)
+    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %d')
+    last_updated_string_int = datetime.datetime.strftime(last_updated_datetime, '%d')
+    last_updated_string_ending = get_ordinal_suffix(int(last_updated_string_int))
     for line in data["routes"]:
         consistent_arrivals += int(data["routes"][line]["Consistent_Headways"])
     if consistent_arrivals > 0:
@@ -66,11 +78,12 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     else:
         type_of_day = "😡CTA Rail is not having a good day even after cutting 24% of scheduled service."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated today{expression} {consistent_arrivals_perc}% arrived at consistent intervals.\nFor more on service cuts: ctaction.org/service-cuts.\nTo explore historical data: brandonmcfadden.com/cta-reliability."
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated on {last_updated_string_full}{last_updated_string_ending}{expression} {consistent_arrivals_perc}% arrived at consistent intervals.\nFor more on service cuts: ctaction.org/service-cuts.\nTo explore historical data: brandonmcfadden.com/cta-reliability."
     return text_output_part_1
 
 
 def prepare_tweet_text_2(data):
+    "prepares the reply tweet for tweet 1"
     system_actual = data["system"]["ActualRuns"]
     system_sched = data["system"]["ScheduledRuns"]
     scheduled_runs_remaining = data["system"]["ScheduledRunsRemaining"]
