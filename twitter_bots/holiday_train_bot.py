@@ -73,6 +73,7 @@ def find_holiday_train(response, run_number):
                         minutes = re.sub('[^0-9]+', '', str(prediction[2]))
                         eta = f"{minutes}min"
                     output_line = f'{output_line}\n• {prediction[1]} - {eta}'
+                output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
                 send_tweet(output_line)
     return output_line
 
