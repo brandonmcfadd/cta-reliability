@@ -2,9 +2,9 @@
 import os
 import json
 import re
+from datetime import datetime, timedelta
 import tweepy
 import requests  # Used for API Calls
-from datetime import datetime
 from dotenv import load_dotenv  # Used to Load Env Var
 
 # Load .env variables
@@ -34,7 +34,6 @@ metra_runs = json.load(file)
 
 train_tracker_url_map = settings["train-tracker"]["map-url"]
 metra_tracker_url = settings["metra-api"]["trips-api-url"]
-RUN_NUMBER_TO_FIND = "1225"
 
 
 def get_date(date_type):
@@ -43,7 +42,17 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%Y%m%d")
     elif date_type == "today":
         date = datetime.strftime(datetime.now(), "%Y-%m-%d")
+    elif date_type == "dayofweek":
+        date = datetime.strftime(datetime.now(), "%w")
     return date
+
+
+def minutes_between(date_1):
+    """Takes the difference between two times and returns the minutes"""
+    date_1 = datetime.strptime(date_1, "%Y-%m-%dT%H:%M:%S.%fZ")
+    difference = date_1 - datetime.utcnow()
+    difference_in_minutes = int(difference / timedelta(minutes=1))
+    return difference_in_minutes
 
 
 def train_api_call_to_cta_map():
@@ -69,15 +78,16 @@ def train_api_call_to_metra():
     print("Making Metra API Call...")
     try:
         api_response = requests.get(
-            metra_tracker_url, auth=(metra_username, metra_password))
+            metra_tracker_url, auth=(metra_username, metra_password), timeout=240)
         api_response_json = api_response.json()
     except:  # pylint: disable=bare-except
         print("Error in API Call to Metra Train Tracker")
     return api_response_json
 
 
-def find_CTA_holiday_train(response, run_number):
+def find_cta_holiday_train(response, run_number):
     """takes output from the API and looks for the holiday train (usually Run # 1225)"""
+    output_line = ""
     for train in response['dataObject']:
         for marker in train["Markers"]:
             if marker["RunNumber"] == run_number:
@@ -89,9 +99,9 @@ def find_CTA_holiday_train(response, run_number):
                     destination = marker["DestName"]
                 elif marker["LineName"] == "Blu":
                     line_name = "Blue"
-                    if marker["DestName"] == "O'Hare&nbsp;<img alt='' height='13' src='/cms/images/icon_ttairport.png' width='13' style='padding-top:2px;' />":
+                    if "icon_ttairport" in marker["DestName"]:
                         destination = "O'Hare"
-                    else: 
+                    else:
                         destination = marker["DestName"]
                 elif marker["LineName"] == "Pnk":
                     line_name = "Pink"
@@ -104,9 +114,9 @@ def find_CTA_holiday_train(response, run_number):
                     destination = marker["DestName"]
                 elif marker["LineName"] == "Org":
                     line_name = "Orange"
-                    if marker["DestName"] == "Midway&nbsp;<img alt='' height='13' src='/cms/images/icon_ttairport.png' width='13' style='padding-top:2px;' />":
+                    if "icon_ttairport" in marker["DestName"]:
                         destination = "Midway"
-                    else: 
+                    else:
                         destination = marker["DestName"]
                 else:
                     line_name = "Red"
@@ -120,53 +130,65 @@ def find_CTA_holiday_train(response, run_number):
                         eta = f"{minutes} minutes"
                     output_line = f'{output_line}\n• {prediction[1]} - {eta}'
                 output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
-                send_tweet(output_line)
-    return output_line
-
-def find_Metra_holiday_train(response, date):
-    """takes output from the API and looks for the holiday train (usually Run # 1225)"""
-    output_line = "The CTA Holiday Train is Active!"
-    for train in response:
-        print(train)
-        # for marker in train["Markers"]:
-        #     if marker["RunNumber"] == run_number:
-        #         if marker["LineName"] == "Pur":
-        #             line_name = "Purple"
-        #         elif marker["LineName"] == "Yel":
-        #             line_name = "Yellow"
-        #         elif marker["LineName"] == "Blu":
-        #             line_name = "Blue"
-        #         elif marker["LineName"] == "Pnk":
-        #             line_name = "Pink"
-        #         elif marker["LineName"] == "Grn":
-        #             line_name = "Green"
-        #         elif marker["LineName"] == "Brn":
-        #             line_name = "Brown"
-        #         elif marker["LineName"] == "Org":
-        #             line_name = "Orange"
-        #         else:
-        #             line_name = "Red"
-        #         output_line = f'{output_line}\nRun # {marker["RunNumber"]} ({line_name} line {marker["DirMod"]} {marker["DestName"]})\nNext Stops:'
-        #         for prediction in marker["Predictions"]:
-        #             if str(prediction[2]) == "<b>Due</b>":
-        #                 eta = "Due"
-        #             else:
-        #                 minutes = re.sub('[^0-9]+', '', str(prediction[2]))
-        #                 eta = f"{minutes} minutes"
-        #             output_line = f'{output_line}\n• {prediction[1]} - {eta}'
-        #         output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
-                # print(output_line)
+                print(output_line)
                 # send_tweet(output_line)
     return output_line
+
+
+def find_metra_holiday_train(response):
+    """takes output from the API and looks for the holiday train"""
+    for train in response:
+        process = False
+        trip_id = train["trip_update"]["vehicle"]["label"]
+        route_id = train["trip_update"]["trip"]["route_id"]
+        try:
+            if route_id == "ME":
+                route_name = "Electric"
+                if get_date("dayofweek") == "0":
+                    if trip_id in metra_runs["Sunday"]:
+                        process = True
+                elif get_date("dayofweek") == "6":
+                    if trip_id in metra_runs["Saturday"]:
+                        process = True
+                else:
+                    if trip_id in metra_runs["Weekday"]:
+                        process = True
+            elif route_id == "RI":
+                route_name = "Rock Island"
+                if trip_id in metra_runs[get_date("today")]:
+                    process = True
+            else:
+                route_name = route_id
+                if trip_id in metra_runs[get_date("today")]:
+                    process = True
+            if process is True:
+                output_text = f"Holiday Themed Metra {route_name} train # {trip_id} is active!\nNext Stops:"
+                count = 0
+                while count in range(5):
+                    stop_name = str(
+                        train["trip_update"]["stop_time_update"][count]["stop_id"]).capitalize()
+                    minutes_away = minutes_between(
+                        train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
+                    output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
+                    count += 1
+                print(output_text)
+        # send_tweet(output_text)
+        except:  # pylint: disable=bare-except
+            process = False
+            continue
+    return output_text
+
 
 def send_tweet(tweet_text_input):
     """sends the tweet data if the right run is found!"""
     api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
-                    twitter_access_token, twitter_access_token_secret)
+                        twitter_access_token, twitter_access_token_secret)
     status1 = api.create_tweet(text=tweet_text_input)
     first_tweet = status1.data["id"]
     print(
         f"sent new tweets https://twitter.com/ChiHolidayTrain/status/{first_tweet} with contents\n{tweet_text_input}")
 
-cta_tweet_text = find_CTA_holiday_train(train_api_call_to_cta_map(), RUN_NUMBER_TO_FIND)
-# metra_tweet_text = find_Metra_holiday_train(train_api_call_to_metra(), metra_runs)
+
+cta_tweet_text = find_cta_holiday_train(
+    train_api_call_to_cta_map(), "1225")
+metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())

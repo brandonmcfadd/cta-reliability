@@ -18,7 +18,7 @@
         "api-url-backup": "http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key={}&mapid={}&outputType=JSON",
         "station-api-url": "https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key={}&mapid={}&outputType=JSON",
         "station-api-url-backup": "http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key={}&mapid={}&outputType=JSON",
-        "map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=3",
+        "map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=5",
         "special-map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=100",
         "headway-map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line={}&MaxPredictions=100",
         "map-url-backup": "http://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=2",
