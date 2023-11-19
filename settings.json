@@ -30,6 +30,7 @@
     },
     "metra-api": {
         "api-enabled": "True",
-        "api-url": "https://gtfsapi.metrarail.com/gtfs/positions"
+        "api-url": "https://gtfsapi.metrarail.com/gtfs/positions",
+        "trips-api-url": "https://gtfsapi.metrarail.com/gtfs/tripUpdates"
     }
 }
