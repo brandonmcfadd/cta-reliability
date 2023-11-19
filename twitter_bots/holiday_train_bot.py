@@ -32,6 +32,12 @@ file = open(file=main_file_path + 'sorting_information/metra_holiday_trains.json
             encoding='utf-8')
 metra_runs = json.load(file)
 
+# Metra Stop Info
+file = open(file=main_file_path + 'sorting_information/metra_stop_information.json',
+            mode='r',
+            encoding='utf-8')
+metra_stops = json.load(file)
+
 train_tracker_url_map = settings["train-tracker"]["map-url"]
 metra_tracker_url = settings["metra-api"]["trips-api-url"]
 
@@ -131,7 +137,7 @@ def find_cta_holiday_train(response, run_number):
                     output_line = f'{output_line}\n• {prediction[1]} - {eta}'
                 output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
                 print(output_line)
-                # send_tweet(output_line)
+                send_tweet(output_line)
     return output_line
 
 
@@ -165,14 +171,13 @@ def find_metra_holiday_train(response):
                 output_text = f"Holiday Themed Metra {route_name} train # {trip_id} is active!\nNext Stops:"
                 count = 0
                 while count in range(5):
-                    stop_name = str(
-                        train["trip_update"]["stop_time_update"][count]["stop_id"]).capitalize()
+                    stop_name = metra_stops[train["trip_update"]["stop_time_update"][count]["stop_id"]]["stop_name"]
                     minutes_away = minutes_between(
                         train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
                     output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
                     count += 1
                 print(output_text)
-        # send_tweet(output_text)
+                send_tweet(output_text)
         except:  # pylint: disable=bare-except
             process = False
             continue

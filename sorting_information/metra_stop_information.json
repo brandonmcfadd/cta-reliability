@@ -1,0 +1,2402 @@
+{
+    "GENEVA": {
+        "stop_id": "GENEVA",
+        "stop_name": "Geneva",
+        "stop_desc": "",
+        "stop_lat": 41.8816667,
+        "stop_lon": -88.31,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/GENEVA",
+        "wheelchair_boarding": 1
+    },
+    "WCHICAGO": {
+        "stop_id": "WCHICAGO",
+        "stop_name": "West Chicago",
+        "stop_desc": "",
+        "stop_lat": 41.8811111,
+        "stop_lon": -88.1988889,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/WCHICAGO",
+        "wheelchair_boarding": 1
+    },
+    "WINFIELD": {
+        "stop_id": "WINFIELD",
+        "stop_name": "Winfield",
+        "stop_desc": "",
+        "stop_lat": 41.87,
+        "stop_lon": -88.1569444,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/WINFIELD",
+        "wheelchair_boarding": 1
+    },
+    "WHEATON": {
+        "stop_id": "WHEATON",
+        "stop_name": "Wheaton",
+        "stop_desc": "",
+        "stop_lat": 41.8644444,
+        "stop_lon": -88.1119444,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/WHEATON",
+        "wheelchair_boarding": 1
+    },
+    "COLLEGEAVE": {
+        "stop_id": "COLLEGEAVE",
+        "stop_name": "College Ave",
+        "stop_desc": "",
+        "stop_lat": 41.8683333,
+        "stop_lon": -88.0902778,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/COLLEGEAVE",
+        "wheelchair_boarding": 1
+    },
+    "GLENELLYN": {
+        "stop_id": "GLENELLYN",
+        "stop_name": "Glen Ellyn",
+        "stop_desc": "",
+        "stop_lat": 41.8766667,
+        "stop_lon": -88.0647222,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/GLENELLYN",
+        "wheelchair_boarding": 1
+    },
+    "LOMBARD": {
+        "stop_id": "LOMBARD",
+        "stop_name": "Lombard",
+        "stop_desc": "",
+        "stop_lat": 41.8866667,
+        "stop_lon": -88.0186111,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/LOMBARD",
+        "wheelchair_boarding": 1
+    },
+    "VILLAPARK": {
+        "stop_id": "VILLAPARK",
+        "stop_name": "Villa Park",
+        "stop_desc": "",
+        "stop_lat": 41.8963889,
+        "stop_lon": -87.9775,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/VILLAPARK",
+        "wheelchair_boarding": 1
+    },
+    "ELMHURST": {
+        "stop_id": "ELMHURST",
+        "stop_name": "Elmhurst",
+        "stop_desc": "",
+        "stop_lat": 41.8997222,
+        "stop_lon": -87.9408333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/ELMHURST",
+        "wheelchair_boarding": 1
+    },
+    "BERKELEY": {
+        "stop_id": "BERKELEY",
+        "stop_name": "Berkeley",
+        "stop_desc": "",
+        "stop_lat": 41.8961111,
+        "stop_lon": -87.9152778,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/BERKELEY",
+        "wheelchair_boarding": 1
+    },
+    "BELLWOOD": {
+        "stop_id": "BELLWOOD",
+        "stop_name": "Bellwood",
+        "stop_desc": "",
+        "stop_lat": 41.8913889,
+        "stop_lon": -87.8825,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/BELLWOOD",
+        "wheelchair_boarding": 1
+    },
+    "MELROSEPK": {
+        "stop_id": "MELROSEPK",
+        "stop_name": "Melrose Park",
+        "stop_desc": "",
+        "stop_lat": 41.8902778,
+        "stop_lon": -87.8555556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/MELROSEPK",
+        "wheelchair_boarding": 1
+    },
+    "MAYWOOD": {
+        "stop_id": "MAYWOOD",
+        "stop_name": "Maywood",
+        "stop_desc": "",
+        "stop_lat": 41.8883333,
+        "stop_lon": -87.8386111,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/MAYWOOD",
+        "wheelchair_boarding": 1
+    },
+    "RIVRFOREST": {
+        "stop_id": "RIVRFOREST",
+        "stop_name": "River Forest",
+        "stop_desc": "",
+        "stop_lat": 41.8869444,
+        "stop_lon": -87.825,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/RIVRFOREST",
+        "wheelchair_boarding": 0
+    },
+    "OAKPARK": {
+        "stop_id": "OAKPARK",
+        "stop_name": "Oak Park",
+        "stop_desc": "",
+        "stop_lat": 41.8869444,
+        "stop_lon": -87.8011111,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/OAKPARK",
+        "wheelchair_boarding": 1
+    },
+    "KEDZIE": {
+        "stop_id": "KEDZIE",
+        "stop_name": "Kedzie",
+        "stop_desc": "",
+        "stop_lat": 41.8883333,
+        "stop_lon": -87.7069444,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/KEDZIE",
+        "wheelchair_boarding": 0
+    },
+    "AURORA": {
+        "stop_id": "AURORA",
+        "stop_name": "Aurora",
+        "stop_desc": "",
+        "stop_lat": 41.7608333,
+        "stop_lon": -88.3083333,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/AURORA",
+        "wheelchair_boarding": 1
+    },
+    "ROUTE59": {
+        "stop_id": "ROUTE59",
+        "stop_name": "Route 59",
+        "stop_desc": "",
+        "stop_lat": 41.7777778,
+        "stop_lon": -88.2086111,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/ROUTE59",
+        "wheelchair_boarding": 1
+    },
+    "NAPERVILLE": {
+        "stop_id": "NAPERVILLE",
+        "stop_name": "Naperville",
+        "stop_desc": "",
+        "stop_lat": 41.7797222,
+        "stop_lon": -88.1455556,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/NAPERVILLE",
+        "wheelchair_boarding": 1
+    },
+    "LISLE": {
+        "stop_id": "LISLE",
+        "stop_name": "Lisle",
+        "stop_desc": "",
+        "stop_lat": 41.7977778,
+        "stop_lon": -88.0719444,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/LISLE",
+        "wheelchair_boarding": 1
+    },
+    "BELMONT": {
+        "stop_id": "BELMONT",
+        "stop_name": "Belmont",
+        "stop_desc": "",
+        "stop_lat": 41.7952778,
+        "stop_lon": -88.0380556,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/BELMONT",
+        "wheelchair_boarding": 1
+    },
+    "MAINST-DG": {
+        "stop_id": "MAINST-DG",
+        "stop_name": "Downers Grove",
+        "stop_desc": "",
+        "stop_lat": 41.7952778,
+        "stop_lon": -88.0097222,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/MAINST-DG",
+        "wheelchair_boarding": 1
+    },
+    "FAIRVIEWDG": {
+        "stop_id": "FAIRVIEWDG",
+        "stop_name": "Fairview Ave.",
+        "stop_desc": "",
+        "stop_lat": 41.7952778,
+        "stop_lon": -87.9936111,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/FAIRVIEWDG",
+        "wheelchair_boarding": 1
+    },
+    "WESTMONT": {
+        "stop_id": "WESTMONT",
+        "stop_name": "Westmont",
+        "stop_desc": "",
+        "stop_lat": 41.7955556,
+        "stop_lon": -87.9763889,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/WESTMONT",
+        "wheelchair_boarding": 1
+    },
+    "CLARNDNHIL": {
+        "stop_id": "CLARNDNHIL",
+        "stop_name": "Clarendon Hills",
+        "stop_desc": "",
+        "stop_lat": 41.7969444,
+        "stop_lon": -87.9536111,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/CLARNDNHIL",
+        "wheelchair_boarding": 1
+    },
+    "WHINSDALE": {
+        "stop_id": "WHINSDALE",
+        "stop_name": "West Hinsdale",
+        "stop_desc": "",
+        "stop_lat": 41.7988889,
+        "stop_lon": -87.9452778,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/WHINSDALE",
+        "wheelchair_boarding": 1
+    },
+    "HINSDALE": {
+        "stop_id": "HINSDALE",
+        "stop_name": "Hinsdale",
+        "stop_desc": "",
+        "stop_lat": 41.8027778,
+        "stop_lon": -87.9283333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/HINSDALE",
+        "wheelchair_boarding": 1
+    },
+    "HIGHLANDS": {
+        "stop_id": "HIGHLANDS",
+        "stop_name": "Highlands",
+        "stop_desc": "",
+        "stop_lat": 41.805,
+        "stop_lon": -87.9183333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/HIGHLANDS",
+        "wheelchair_boarding": 0
+    },
+    "WESTSPRING": {
+        "stop_id": "WESTSPRING",
+        "stop_name": "Western Springs",
+        "stop_desc": "",
+        "stop_lat": 41.8088889,
+        "stop_lon": -87.9011111,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/WESTSPRING",
+        "wheelchair_boarding": 1
+    },
+    "STONEAVE": {
+        "stop_id": "STONEAVE",
+        "stop_name": "Stone Ave.",
+        "stop_desc": "",
+        "stop_lat": 41.8141667,
+        "stop_lon": -87.8783333,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/STONEAVE",
+        "wheelchair_boarding": 0
+    },
+    "LAGRANGE": {
+        "stop_id": "LAGRANGE",
+        "stop_name": "LaGrange Road",
+        "stop_desc": "",
+        "stop_lat": 41.8158333,
+        "stop_lon": -87.8711111,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/LAGRANGE",
+        "wheelchair_boarding": 1
+    },
+    "CONGRESSPK": {
+        "stop_id": "CONGRESSPK",
+        "stop_name": "Congress Park",
+        "stop_desc": "",
+        "stop_lat": 41.8188889,
+        "stop_lon": -87.8575,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/CONGRESSPK",
+        "wheelchair_boarding": 0
+    },
+    "BROOKFIELD": {
+        "stop_id": "BROOKFIELD",
+        "stop_name": "Brookfield",
+        "stop_desc": "",
+        "stop_lat": 41.8219444,
+        "stop_lon": -87.8430556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/BROOKFIELD",
+        "wheelchair_boarding": 1
+    },
+    "HOLLYWOOD": {
+        "stop_id": "HOLLYWOOD",
+        "stop_name": "Hollywood",
+        "stop_desc": "",
+        "stop_lat": 41.8244444,
+        "stop_lon": -87.8338889,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/HOLLYWOOD",
+        "wheelchair_boarding": 1
+    },
+    "RIVERSIDE": {
+        "stop_id": "RIVERSIDE",
+        "stop_name": "Riverside",
+        "stop_desc": "",
+        "stop_lat": 41.8272222,
+        "stop_lon": -87.82,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/RIVERSIDE",
+        "wheelchair_boarding": 1
+    },
+    "HARLEM": {
+        "stop_id": "HARLEM",
+        "stop_name": "Harlem Ave.",
+        "stop_desc": "",
+        "stop_lat": 41.8313889,
+        "stop_lon": -87.8019444,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/HARLEM",
+        "wheelchair_boarding": 1
+    },
+    "BERWYN": {
+        "stop_id": "BERWYN",
+        "stop_name": "Berwyn",
+        "stop_desc": "",
+        "stop_lat": 41.8330556,
+        "stop_lon": -87.7936111,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/BERWYN",
+        "wheelchair_boarding": 1
+    },
+    "LAVERGNE": {
+        "stop_id": "LAVERGNE",
+        "stop_name": "Lavergne",
+        "stop_desc": "",
+        "stop_lat": 41.8355556,
+        "stop_lon": -87.7833333,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/LAVERGNE",
+        "wheelchair_boarding": 1
+    },
+    "CICERO": {
+        "stop_id": "CICERO",
+        "stop_name": "Cicero",
+        "stop_desc": "",
+        "stop_lat": 41.8441667,
+        "stop_lon": -87.7455556,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/CICERO",
+        "wheelchair_boarding": 0
+    },
+    "BNWESTERN": {
+        "stop_id": "BNWESTERN",
+        "stop_name": "Western Avenue",
+        "stop_desc": "",
+        "stop_lat": 41.8577778,
+        "stop_lon": -87.6852778,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/BNWESTERN",
+        "wheelchair_boarding": 0
+    },
+    "HALSTED": {
+        "stop_id": "HALSTED",
+        "stop_name": "Halsted Street",
+        "stop_desc": "",
+        "stop_lat": 41.8602778,
+        "stop_lon": -87.6472222,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/BNSF/stations/HALSTED",
+        "wheelchair_boarding": 0
+    },
+    "JOLIET": {
+        "stop_id": "JOLIET",
+        "stop_name": "Joliet",
+        "stop_desc": "",
+        "stop_lat": 41.5244444,
+        "stop_lon": -88.0797222,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/JOLIET",
+        "wheelchair_boarding": 1
+    },
+    "LOCKPORT": {
+        "stop_id": "LOCKPORT",
+        "stop_name": "Lockport",
+        "stop_desc": "",
+        "stop_lat": 41.585,
+        "stop_lon": -88.0602778,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/HC/stations/LOCKPORT",
+        "wheelchair_boarding": 1
+    },
+    "LEMONT": {
+        "stop_id": "LEMONT",
+        "stop_name": "Lemont",
+        "stop_desc": "",
+        "stop_lat": 41.6736111,
+        "stop_lon": -88.0025,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/HC/stations/LEMONT",
+        "wheelchair_boarding": 1
+    },
+    "WILLOWSPRN": {
+        "stop_id": "WILLOWSPRN",
+        "stop_name": "Willow Springs",
+        "stop_desc": "",
+        "stop_lat": 41.7333333,
+        "stop_lon": -87.8783333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/HC/stations/WILLOWSPRN",
+        "wheelchair_boarding": 1
+    },
+    "SUMMIT": {
+        "stop_id": "SUMMIT",
+        "stop_name": "Summit",
+        "stop_desc": "",
+        "stop_lat": 41.795,
+        "stop_lon": -87.8097222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/HC/stations/SUMMIT",
+        "wheelchair_boarding": 1
+    },
+    "179TH-SWS": {
+        "stop_id": "179TH-SWS",
+        "stop_name": "Orland Park 179th",
+        "stop_desc": "",
+        "stop_lat": 41.5638889,
+        "stop_lon": -87.9025,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/179TH-SWS",
+        "wheelchair_boarding": 1
+    },
+    "153RD-SWS": {
+        "stop_id": "153RD-SWS",
+        "stop_name": "Orland Park 153rd",
+        "stop_desc": "",
+        "stop_lat": 41.6094444,
+        "stop_lon": -87.8733333,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/153RD-SWS",
+        "wheelchair_boarding": 1
+    },
+    "143RD-SWS": {
+        "stop_id": "143RD-SWS",
+        "stop_name": "Orland Park 143rd",
+        "stop_desc": "",
+        "stop_lat": 41.6305556,
+        "stop_lon": -87.8591667,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/143RD-SWS",
+        "wheelchair_boarding": 1
+    },
+    "PALOSPARK": {
+        "stop_id": "PALOSPARK",
+        "stop_name": "Palos Park",
+        "stop_desc": "",
+        "stop_lat": 41.6688889,
+        "stop_lon": -87.8202778,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/PALOSPARK",
+        "wheelchair_boarding": 1
+    },
+    "WORTH": {
+        "stop_id": "WORTH",
+        "stop_name": "Worth",
+        "stop_desc": "",
+        "stop_lat": 41.6913889,
+        "stop_lon": -87.7958333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/WORTH",
+        "wheelchair_boarding": 1
+    },
+    "CHICRIDGE": {
+        "stop_id": "CHICRIDGE",
+        "stop_name": "Chicago Ridge",
+        "stop_desc": "",
+        "stop_lat": 41.7033333,
+        "stop_lon": -87.7802778,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/CHICRIDGE",
+        "wheelchair_boarding": 1
+    },
+    "OAKLAWN": {
+        "stop_id": "OAKLAWN",
+        "stop_name": "Oak Lawn Patriot",
+        "stop_desc": "",
+        "stop_lat": 41.7194444,
+        "stop_lon": -87.7486111,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/OAKLAWN",
+        "wheelchair_boarding": 1
+    },
+    "ASHBURN": {
+        "stop_id": "ASHBURN",
+        "stop_name": "Ashburn",
+        "stop_desc": "",
+        "stop_lat": 41.7416667,
+        "stop_lon": -87.7125,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/ASHBURN",
+        "wheelchair_boarding": 1
+    },
+    "WRIGHTWOOD": {
+        "stop_id": "WRIGHTWOOD",
+        "stop_name": "Wrightwood",
+        "stop_desc": "",
+        "stop_lat": 41.7488889,
+        "stop_lon": -87.7036111,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/WRIGHTWOOD",
+        "wheelchair_boarding": 1
+    },
+    "CLYBOURN": {
+        "stop_id": "CLYBOURN",
+        "stop_name": "Clybourn",
+        "stop_desc": "",
+        "stop_lat": 41.9169444,
+        "stop_lon": -87.6680556,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/CLYBOURN",
+        "wheelchair_boarding": 0
+    },
+    "RAVENSWOOD": {
+        "stop_id": "RAVENSWOOD",
+        "stop_name": "Ravenswood",
+        "stop_desc": "",
+        "stop_lat": 41.9683333,
+        "stop_lon": -87.6744444,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/RAVENSWOOD",
+        "wheelchair_boarding": 0
+    },
+    "ROGERPK": {
+        "stop_id": "ROGERPK",
+        "stop_name": "Rogers Park",
+        "stop_desc": "",
+        "stop_lat": 42.0094444,
+        "stop_lon": -87.6755556,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/ROGERPK",
+        "wheelchair_boarding": 1
+    },
+    "MAINST": {
+        "stop_id": "MAINST",
+        "stop_name": "Main St.",
+        "stop_desc": "",
+        "stop_lat": 42.0333333,
+        "stop_lon": -87.68,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/MAINST",
+        "wheelchair_boarding": 1
+    },
+    "EVANSTON": {
+        "stop_id": "EVANSTON",
+        "stop_name": "Evanston (Davis St.)",
+        "stop_desc": "",
+        "stop_lat": 42.0480556,
+        "stop_lon": -87.6847222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/EVANSTON",
+        "wheelchair_boarding": 1
+    },
+    "CENTRALST": {
+        "stop_id": "CENTRALST",
+        "stop_name": "Central St.",
+        "stop_desc": "",
+        "stop_lat": 42.0641667,
+        "stop_lon": -87.6980556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/CENTRALST",
+        "wheelchair_boarding": 1
+    },
+    "WILMETTE": {
+        "stop_id": "WILMETTE",
+        "stop_name": "Wilmette",
+        "stop_desc": "",
+        "stop_lat": 42.0772222,
+        "stop_lon": -87.7091667,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/WILMETTE",
+        "wheelchair_boarding": 1
+    },
+    "KENILWORTH": {
+        "stop_id": "KENILWORTH",
+        "stop_name": "Kenilworth",
+        "stop_desc": "",
+        "stop_lat": 42.0863889,
+        "stop_lon": -87.7166667,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/KENILWORTH",
+        "wheelchair_boarding": 1
+    },
+    "WINNETKA": {
+        "stop_id": "WINNETKA",
+        "stop_name": "Winnetka",
+        "stop_desc": "",
+        "stop_lat": 42.1052778,
+        "stop_lon": -87.7327778,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/WINNETKA",
+        "wheelchair_boarding": 1
+    },
+    "HUBARDWOOD": {
+        "stop_id": "HUBARDWOOD",
+        "stop_name": "Hubbard Woods",
+        "stop_desc": "",
+        "stop_lat": 42.1180556,
+        "stop_lon": -87.7436111,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/HUBARDWOOD",
+        "wheelchair_boarding": 0
+    },
+    "GLENCOE": {
+        "stop_id": "GLENCOE",
+        "stop_name": "Glencoe",
+        "stop_desc": "",
+        "stop_lat": 42.1355556,
+        "stop_lon": -87.7580556,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/GLENCOE",
+        "wheelchair_boarding": 1
+    },
+    "BRAESIDE": {
+        "stop_id": "BRAESIDE",
+        "stop_name": "Braeside",
+        "stop_desc": "",
+        "stop_lat": 42.1527778,
+        "stop_lon": -87.7725,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/BRAESIDE",
+        "wheelchair_boarding": 1
+    },
+    "RAVINIA": {
+        "stop_id": "RAVINIA",
+        "stop_name": "Ravinia",
+        "stop_desc": "",
+        "stop_lat": 42.165,
+        "stop_lon": -87.7827778,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/RAVINIA",
+        "wheelchair_boarding": 1
+    },
+    "HIGHLANDPK": {
+        "stop_id": "HIGHLANDPK",
+        "stop_name": "Highland Park",
+        "stop_desc": "",
+        "stop_lat": 42.1833333,
+        "stop_lon": -87.7975,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/HIGHLANDPK",
+        "wheelchair_boarding": 1
+    },
+    "HIGHWOOD": {
+        "stop_id": "HIGHWOOD",
+        "stop_name": "Highwood",
+        "stop_desc": "",
+        "stop_lat": 42.2033333,
+        "stop_lon": -87.8105556,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/HIGHWOOD",
+        "wheelchair_boarding": 1
+    },
+    "FTSHERIDAN": {
+        "stop_id": "FTSHERIDAN",
+        "stop_name": "Fort Sheridan",
+        "stop_desc": "",
+        "stop_lat": 42.2175,
+        "stop_lon": -87.8208333,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/FTSHERIDAN",
+        "wheelchair_boarding": 1
+    },
+    "LKFOREST": {
+        "stop_id": "LKFOREST",
+        "stop_name": "Lake Forest.",
+        "stop_desc": "",
+        "stop_lat": 42.2525,
+        "stop_lon": -87.8397222,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/LKFOREST",
+        "wheelchair_boarding": 1
+    },
+    "LAKEBLUFF": {
+        "stop_id": "LAKEBLUFF",
+        "stop_name": "Lake Bluff",
+        "stop_desc": "",
+        "stop_lat": 42.2797222,
+        "stop_lon": -87.8466667,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/LAKEBLUFF",
+        "wheelchair_boarding": 1
+    },
+    "GRTLAKES": {
+        "stop_id": "GRTLAKES",
+        "stop_name": "Great Lakes",
+        "stop_desc": "",
+        "stop_lat": 42.3069444,
+        "stop_lon": -87.8463889,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/GRTLAKES",
+        "wheelchair_boarding": 1
+    },
+    "NCHICAGO": {
+        "stop_id": "NCHICAGO",
+        "stop_name": "North Chicago",
+        "stop_desc": "",
+        "stop_lat": 42.3286111,
+        "stop_lon": -87.8369444,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/NCHICAGO",
+        "wheelchair_boarding": 1
+    },
+    "WAUKEGAN": {
+        "stop_id": "WAUKEGAN",
+        "stop_name": "Waukegan",
+        "stop_desc": "",
+        "stop_lat": 42.3605556,
+        "stop_lon": -87.8283333,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/WAUKEGAN",
+        "wheelchair_boarding": 1
+    },
+    "ZION": {
+        "stop_id": "ZION",
+        "stop_name": "Zion",
+        "stop_desc": "",
+        "stop_lat": 42.4491667,
+        "stop_lon": -87.8180556,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/ZION",
+        "wheelchair_boarding": 1
+    },
+    "WINTHROP": {
+        "stop_id": "WINTHROP",
+        "stop_name": "Winthrop Harbor",
+        "stop_desc": "",
+        "stop_lat": 42.4827778,
+        "stop_lon": -87.8161111,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/WINTHROP",
+        "wheelchair_boarding": 1
+    },
+    "FOXLAKE": {
+        "stop_id": "FOXLAKE",
+        "stop_name": "Fox Lake",
+        "stop_desc": "",
+        "stop_lat": 42.3983333,
+        "stop_lon": -88.1822222,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/FOXLAKE",
+        "wheelchair_boarding": 1
+    },
+    "INGLESIDE": {
+        "stop_id": "INGLESIDE",
+        "stop_name": "Ingleside",
+        "stop_desc": "",
+        "stop_lat": 42.3838889,
+        "stop_lon": -88.1536111,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/INGLESIDE",
+        "wheelchair_boarding": 1
+    },
+    "LONGLAKE": {
+        "stop_id": "LONGLAKE",
+        "stop_name": "Long Lake",
+        "stop_desc": "",
+        "stop_lat": 42.3680556,
+        "stop_lon": -88.1280556,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/LONGLAKE",
+        "wheelchair_boarding": 1
+    },
+    "ROUNDLAKE": {
+        "stop_id": "ROUNDLAKE",
+        "stop_name": "Round Lake",
+        "stop_desc": "",
+        "stop_lat": 42.3544444,
+        "stop_lon": -88.0941667,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/ROUNDLAKE",
+        "wheelchair_boarding": 1
+    },
+    "GRAYSLAKE": {
+        "stop_id": "GRAYSLAKE",
+        "stop_name": "Grayslake",
+        "stop_desc": "",
+        "stop_lat": 42.3336111,
+        "stop_lon": -88.0433333,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/GRAYSLAKE",
+        "wheelchair_boarding": 1
+    },
+    "LIBERTYVIL": {
+        "stop_id": "LIBERTYVIL",
+        "stop_name": "Libertyville",
+        "stop_desc": "",
+        "stop_lat": 42.2911111,
+        "stop_lon": -87.9563889,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/LIBERTYVIL",
+        "wheelchair_boarding": 1
+    },
+    "LAKEFRST": {
+        "stop_id": "LAKEFRST",
+        "stop_name": "Lake Forest",
+        "stop_desc": "",
+        "stop_lat": 42.2236111,
+        "stop_lon": -87.8747222,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/LAKEFRST",
+        "wheelchair_boarding": 1
+    },
+    "DEERFIELD": {
+        "stop_id": "DEERFIELD",
+        "stop_name": "Deerfield",
+        "stop_desc": "",
+        "stop_lat": 42.1680556,
+        "stop_lon": -87.85,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/DEERFIELD",
+        "wheelchair_boarding": 1
+    },
+    "LAKECOOKRD": {
+        "stop_id": "LAKECOOKRD",
+        "stop_name": "Lake-Cook",
+        "stop_desc": "",
+        "stop_lat": 42.1516667,
+        "stop_lon": -87.8413889,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/LAKECOOKRD",
+        "wheelchair_boarding": 1
+    },
+    "NBROOK": {
+        "stop_id": "NBROOK",
+        "stop_name": "Northbrook",
+        "stop_desc": "",
+        "stop_lat": 42.1269444,
+        "stop_lon": -87.8277778,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/NBROOK",
+        "wheelchair_boarding": 1
+    },
+    "NGLENVIEW": {
+        "stop_id": "NGLENVIEW",
+        "stop_name": "Glen/N. Glenview",
+        "stop_desc": "",
+        "stop_lat": 42.0975,
+        "stop_lon": -87.8158333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/NGLENVIEW",
+        "wheelchair_boarding": 1
+    },
+    "GLENVIEW": {
+        "stop_id": "GLENVIEW",
+        "stop_name": "Glenview",
+        "stop_desc": "",
+        "stop_lat": 42.075,
+        "stop_lon": -87.8055556,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/GLENVIEW",
+        "wheelchair_boarding": 1
+    },
+    "GOLF": {
+        "stop_id": "GOLF",
+        "stop_name": "Golf",
+        "stop_desc": "",
+        "stop_lat": 42.0583333,
+        "stop_lon": -87.7969444,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/GOLF",
+        "wheelchair_boarding": 1
+    },
+    "MORTONGRV": {
+        "stop_id": "MORTONGRV",
+        "stop_name": "Morton Grove",
+        "stop_desc": "",
+        "stop_lat": 42.035,
+        "stop_lon": -87.7852778,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/MORTONGRV",
+        "wheelchair_boarding": 1
+    },
+    "EDGEBROOK": {
+        "stop_id": "EDGEBROOK",
+        "stop_name": "Edgebrook",
+        "stop_desc": "",
+        "stop_lat": 41.9977778,
+        "stop_lon": -87.7655556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/EDGEBROOK",
+        "wheelchair_boarding": 1
+    },
+    "FORESTGLEN": {
+        "stop_id": "FORESTGLEN",
+        "stop_name": "Forest Glen",
+        "stop_desc": "",
+        "stop_lat": 41.9780556,
+        "stop_lon": -87.7555556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/FORESTGLEN",
+        "wheelchair_boarding": 0
+    },
+    "MAYFAIR": {
+        "stop_id": "MAYFAIR",
+        "stop_name": "Mayfair",
+        "stop_desc": "",
+        "stop_lat": 41.9597222,
+        "stop_lon": -87.7458333,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/MAYFAIR",
+        "wheelchair_boarding": 0
+    },
+    "GRAYLAND": {
+        "stop_id": "GRAYLAND",
+        "stop_name": "Grayland",
+        "stop_desc": "",
+        "stop_lat": 41.9488889,
+        "stop_lon": -87.7402778,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/GRAYLAND",
+        "wheelchair_boarding": 0
+    },
+    "HEALY": {
+        "stop_id": "HEALY",
+        "stop_name": "Healy",
+        "stop_desc": "",
+        "stop_lat": 41.9247222,
+        "stop_lon": -87.7277778,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/HEALY",
+        "wheelchair_boarding": 1
+    },
+    "WESTERNAVE": {
+        "stop_id": "WESTERNAVE",
+        "stop_name": "Western Ave",
+        "stop_desc": "",
+        "stop_lat": 41.8891667,
+        "stop_lon": -87.6880556,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/WESTERNAVE",
+        "wheelchair_boarding": 1
+    },
+    "RAVINIAPK": {
+        "stop_id": "RAVINIAPK",
+        "stop_name": "Ravinia Park",
+        "stop_desc": "",
+        "stop_lat": 42.1580556,
+        "stop_lon": -87.7769444,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/RAVINIAPK",
+        "wheelchair_boarding": 1
+    },
+    "INDIANHILL": {
+        "stop_id": "INDIANHILL",
+        "stop_name": "Indian Hill",
+        "stop_desc": "",
+        "stop_lat": 42.0944444,
+        "stop_lon": -87.7238889,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/INDIANHILL",
+        "wheelchair_boarding": 0
+    },
+    "KENOSHA": {
+        "stop_id": "KENOSHA",
+        "stop_name": "Kenosha",
+        "stop_desc": "",
+        "stop_lat": 42.5858333,
+        "stop_lon": -87.8258333,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-N/stations/KENOSHA",
+        "wheelchair_boarding": 1
+    },
+    "HARVARD": {
+        "stop_id": "HARVARD",
+        "stop_name": "Harvard",
+        "stop_desc": "",
+        "stop_lat": 42.4197222,
+        "stop_lon": -88.6175,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/HARVARD",
+        "wheelchair_boarding": 1
+    },
+    "WOODSTOCK": {
+        "stop_id": "WOODSTOCK",
+        "stop_name": "Woodstock",
+        "stop_desc": "",
+        "stop_lat": 42.3169444,
+        "stop_lon": -88.4475,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/WOODSTOCK",
+        "wheelchair_boarding": 1
+    },
+    "CRYSTAL": {
+        "stop_id": "CRYSTAL",
+        "stop_name": "Crystal Lake",
+        "stop_desc": "",
+        "stop_lat": 42.2441667,
+        "stop_lon": -88.3172222,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/CRYSTAL",
+        "wheelchair_boarding": 1
+    },
+    "MCHENRY": {
+        "stop_id": "MCHENRY",
+        "stop_name": "McHenry",
+        "stop_desc": "",
+        "stop_lat": 42.3433333,
+        "stop_lon": -88.2761111,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/MCHENRY",
+        "wheelchair_boarding": 1
+    },
+    "CARY": {
+        "stop_id": "CARY",
+        "stop_name": "Cary",
+        "stop_desc": "",
+        "stop_lat": 42.2088889,
+        "stop_lon": -88.2413889,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/CARY",
+        "wheelchair_boarding": 1
+    },
+    "FOXRG": {
+        "stop_id": "FOXRG",
+        "stop_name": "Fox River Grove",
+        "stop_desc": "",
+        "stop_lat": 42.1977778,
+        "stop_lon": -88.2194444,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/FOXRG",
+        "wheelchair_boarding": 1
+    },
+    "BARRINGTON": {
+        "stop_id": "BARRINGTON",
+        "stop_name": "Barrington",
+        "stop_desc": "",
+        "stop_lat": 42.1527778,
+        "stop_lon": -88.1319444,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/BARRINGTON",
+        "wheelchair_boarding": 1
+    },
+    "PALATINE": {
+        "stop_id": "PALATINE",
+        "stop_name": "Palatine",
+        "stop_desc": "",
+        "stop_lat": 42.1130556,
+        "stop_lon": -88.0483333,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/PALATINE",
+        "wheelchair_boarding": 1
+    },
+    "ARLINGTNPK": {
+        "stop_id": "ARLINGTNPK",
+        "stop_name": "Arlington Park",
+        "stop_desc": "",
+        "stop_lat": 42.0952778,
+        "stop_lon": -88.0091667,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/ARLINGTNPK",
+        "wheelchair_boarding": 1
+    },
+    "ARLINGTNHT": {
+        "stop_id": "ARLINGTNHT",
+        "stop_name": "Arlington Heights",
+        "stop_desc": "",
+        "stop_lat": 42.0841667,
+        "stop_lon": -87.9836111,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/ARLINGTNHT",
+        "wheelchair_boarding": 1
+    },
+    "MTPROSPECT": {
+        "stop_id": "MTPROSPECT",
+        "stop_name": "Mt. Prospect",
+        "stop_desc": "",
+        "stop_lat": 42.0630556,
+        "stop_lon": -87.9361111,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/MTPROSPECT",
+        "wheelchair_boarding": 1
+    },
+    "CUMBERLAND": {
+        "stop_id": "CUMBERLAND",
+        "stop_name": "Cumberland",
+        "stop_desc": "",
+        "stop_lat": 42.0525,
+        "stop_lon": -87.9122222,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/CUMBERLAND",
+        "wheelchair_boarding": 0
+    },
+    "DESPLAINES": {
+        "stop_id": "DESPLAINES",
+        "stop_name": "Des Plaines",
+        "stop_desc": "",
+        "stop_lat": 42.0408333,
+        "stop_lon": -87.8866667,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/DESPLAINES",
+        "wheelchair_boarding": 1
+    },
+    "DEEROAD": {
+        "stop_id": "DEEROAD",
+        "stop_name": "Dee Road",
+        "stop_desc": "",
+        "stop_lat": 42.0241667,
+        "stop_lon": -87.8561111,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/DEEROAD",
+        "wheelchair_boarding": 1
+    },
+    "PARKRIDGE": {
+        "stop_id": "PARKRIDGE",
+        "stop_name": "Park Ridge",
+        "stop_desc": "",
+        "stop_lat": 42.0102778,
+        "stop_lon": -87.8316667,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/PARKRIDGE",
+        "wheelchair_boarding": 1
+    },
+    "IRVINGPK": {
+        "stop_id": "IRVINGPK",
+        "stop_name": "Irving Park",
+        "stop_desc": "",
+        "stop_lat": 41.9525,
+        "stop_lon": -87.7297222,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/IRVINGPK",
+        "wheelchair_boarding": 1
+    },
+    "BIGTIMBER": {
+        "stop_id": "BIGTIMBER",
+        "stop_name": "Big Timber",
+        "stop_desc": "",
+        "stop_lat": 42.0586111,
+        "stop_lon": -88.3277778,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/BIGTIMBER",
+        "wheelchair_boarding": 1
+    },
+    "ELGIN": {
+        "stop_id": "ELGIN",
+        "stop_name": "Elgin",
+        "stop_desc": "",
+        "stop_lat": 42.0361111,
+        "stop_lon": -88.2861111,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/ELGIN",
+        "wheelchair_boarding": 1
+    },
+    "NATIONALS": {
+        "stop_id": "NATIONALS",
+        "stop_name": "National St",
+        "stop_desc": "",
+        "stop_lat": 42.0263889,
+        "stop_lon": -88.2788889,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/NATIONALS",
+        "wheelchair_boarding": 1
+    },
+    "HANOVERP": {
+        "stop_id": "HANOVERP",
+        "stop_name": "Hanover Park",
+        "stop_desc": "",
+        "stop_lat": 41.9880556,
+        "stop_lon": -88.1491667,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/HANOVERP",
+        "wheelchair_boarding": 1
+    },
+    "SCHAUM": {
+        "stop_id": "SCHAUM",
+        "stop_name": "Schaumburg",
+        "stop_desc": "",
+        "stop_lat": 41.9891667,
+        "stop_lon": -88.1180556,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/SCHAUM",
+        "wheelchair_boarding": 1
+    },
+    "ROSELLE": {
+        "stop_id": "ROSELLE",
+        "stop_name": "Roselle",
+        "stop_desc": "",
+        "stop_lat": 41.9813889,
+        "stop_lon": -88.0672222,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/ROSELLE",
+        "wheelchair_boarding": 1
+    },
+    "MEDINAH": {
+        "stop_id": "MEDINAH",
+        "stop_name": "Medinah",
+        "stop_desc": "",
+        "stop_lat": 41.9780556,
+        "stop_lon": -88.0508333,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/MEDINAH",
+        "wheelchair_boarding": 1
+    },
+    "ITASCA": {
+        "stop_id": "ITASCA",
+        "stop_name": "Itasca",
+        "stop_desc": "",
+        "stop_lat": 41.9713889,
+        "stop_lon": -88.0141667,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/ITASCA",
+        "wheelchair_boarding": 1
+    },
+    "WOODDALE": {
+        "stop_id": "WOODDALE",
+        "stop_name": "Wood Dale",
+        "stop_desc": "",
+        "stop_lat": 41.9625,
+        "stop_lon": -87.9752778,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/WOODDALE",
+        "wheelchair_boarding": 1
+    },
+    "BENSENVIL": {
+        "stop_id": "BENSENVIL",
+        "stop_name": "Bensenville",
+        "stop_desc": "",
+        "stop_lat": 41.9569444,
+        "stop_lon": -87.9419444,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/BENSENVIL",
+        "wheelchair_boarding": 1
+    },
+    "MANNHEIM": {
+        "stop_id": "MANNHEIM",
+        "stop_name": "Mannheim",
+        "stop_desc": "",
+        "stop_lat": 41.9416667,
+        "stop_lon": -87.8833333,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/MANNHEIM",
+        "wheelchair_boarding": 0
+    },
+    "FRANKLIN": {
+        "stop_id": "FRANKLIN",
+        "stop_name": "Franklin Park",
+        "stop_desc": "",
+        "stop_lat": 41.9366667,
+        "stop_lon": -87.8663889,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/FRANKLIN",
+        "wheelchair_boarding": 1
+    },
+    "MONTCLARE": {
+        "stop_id": "MONTCLARE",
+        "stop_name": "Mont Clare",
+        "stop_desc": "",
+        "stop_lat": 41.9216667,
+        "stop_lon": -87.8016667,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/MONTCLARE",
+        "wheelchair_boarding": 1
+    },
+    "MARS": {
+        "stop_id": "MARS",
+        "stop_name": "Mars",
+        "stop_desc": "",
+        "stop_lat": 41.9191667,
+        "stop_lon": -87.7944444,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/MARS",
+        "wheelchair_boarding": 1
+    },
+    "GALEWOOD": {
+        "stop_id": "GALEWOOD",
+        "stop_name": "Galewood",
+        "stop_desc": "",
+        "stop_lat": 41.9163889,
+        "stop_lon": -87.7858333,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/GALEWOOD",
+        "wheelchair_boarding": 1
+    },
+    "HANSONPK": {
+        "stop_id": "HANSONPK",
+        "stop_name": "Hanson Park",
+        "stop_desc": "",
+        "stop_lat": 41.9166667,
+        "stop_lon": -87.7669444,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/HANSONPK",
+        "wheelchair_boarding": 0
+    },
+    "GRAND-CIC": {
+        "stop_id": "GRAND-CIC",
+        "stop_name": "Grand/Cicero",
+        "stop_desc": "",
+        "stop_lat": 41.9144444,
+        "stop_lon": -87.7461111,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/GRAND-CIC",
+        "wheelchair_boarding": 0
+    },
+    "OHARE": {
+        "stop_id": "OHARE",
+        "stop_name": "O'Hare Transfer",
+        "stop_desc": "",
+        "stop_lat": 41.995,
+        "stop_lon": -87.8805556,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/OHARE",
+        "wheelchair_boarding": 1
+    },
+    "PROSPECTHG": {
+        "stop_id": "PROSPECTHG",
+        "stop_name": "Prospect Hts",
+        "stop_desc": "",
+        "stop_lat": 42.0922222,
+        "stop_lon": -87.9080556,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/PROSPECTHG",
+        "wheelchair_boarding": 1
+    },
+    "WHEELING": {
+        "stop_id": "WHEELING",
+        "stop_name": "Wheeling",
+        "stop_desc": "",
+        "stop_lat": 42.1363889,
+        "stop_lon": -87.9272222,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/WHEELING",
+        "wheelchair_boarding": 1
+    },
+    "BUFFGROVE": {
+        "stop_id": "BUFFGROVE",
+        "stop_name": "Buffalo Grove",
+        "stop_desc": "",
+        "stop_lat": 42.1686111,
+        "stop_lon": -87.9413889,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/BUFFGROVE",
+        "wheelchair_boarding": 1
+    },
+    "PRAIRIEVW": {
+        "stop_id": "PRAIRIEVW",
+        "stop_name": "Prairie View",
+        "stop_desc": "",
+        "stop_lat": 42.1980556,
+        "stop_lon": -87.9558333,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/PRAIRIEVW",
+        "wheelchair_boarding": 1
+    },
+    "VERNON": {
+        "stop_id": "VERNON",
+        "stop_name": "Vernon Hills",
+        "stop_desc": "",
+        "stop_lat": 42.2155556,
+        "stop_lon": -87.9644444,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/VERNON",
+        "wheelchair_boarding": 1
+    },
+    "MUNDELEIN": {
+        "stop_id": "MUNDELEIN",
+        "stop_name": "Mundelein",
+        "stop_desc": "",
+        "stop_lat": 42.2669444,
+        "stop_lon": -87.9980556,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/MUNDELEIN",
+        "wheelchair_boarding": 1
+    },
+    "PRAIRCROSS": {
+        "stop_id": "PRAIRCROSS",
+        "stop_name": "Prairie Crossing.",
+        "stop_desc": "",
+        "stop_lat": 42.3180556,
+        "stop_lon": -88.0172222,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/PRAIRCROSS",
+        "wheelchair_boarding": 1
+    },
+    "ROUNDLKBCH": {
+        "stop_id": "ROUNDLKBCH",
+        "stop_name": "Round Lake Beach",
+        "stop_desc": "",
+        "stop_lat": 42.385,
+        "stop_lon": -88.0655556,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/ROUNDLKBCH",
+        "wheelchair_boarding": 1
+    },
+    "LAKEVILLA": {
+        "stop_id": "LAKEVILLA",
+        "stop_name": "Lake Villa",
+        "stop_desc": "",
+        "stop_lat": 42.4175,
+        "stop_lon": -88.0794444,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/LAKEVILLA",
+        "wheelchair_boarding": 1
+    },
+    "ANTIOCH": {
+        "stop_id": "ANTIOCH",
+        "stop_name": "Antioch",
+        "stop_desc": "",
+        "stop_lat": 42.4811111,
+        "stop_lon": -88.0925,
+        "zone_id": "J",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/ANTIOCH",
+        "wheelchair_boarding": 1
+    },
+    "NEWLENOX": {
+        "stop_id": "NEWLENOX",
+        "stop_name": "New Lenox",
+        "stop_desc": "",
+        "stop_lat": 41.5144444,
+        "stop_lon": -87.9652778,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/NEWLENOX",
+        "wheelchair_boarding": 1
+    },
+    "MOKENA": {
+        "stop_id": "MOKENA",
+        "stop_name": "Mokena",
+        "stop_desc": "",
+        "stop_lat": 41.5308333,
+        "stop_lon": -87.8866667,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/MOKENA",
+        "wheelchair_boarding": 1
+    },
+    "HICKORYCRK": {
+        "stop_id": "HICKORYCRK",
+        "stop_name": "Hickory Creek",
+        "stop_desc": "",
+        "stop_lat": 41.5486111,
+        "stop_lon": -87.8455556,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/HICKORYCRK",
+        "wheelchair_boarding": 1
+    },
+    "TINLEY80TH": {
+        "stop_id": "TINLEY80TH",
+        "stop_name": "Tinley-80th",
+        "stop_desc": "",
+        "stop_lat": 41.5644444,
+        "stop_lon": -87.8094444,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/TINLEY80TH",
+        "wheelchair_boarding": 1
+    },
+    "TINLEYPARK": {
+        "stop_id": "TINLEYPARK",
+        "stop_name": "Tinley Park",
+        "stop_desc": "",
+        "stop_lat": 41.5758333,
+        "stop_lon": -87.7827778,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/TINLEYPARK",
+        "wheelchair_boarding": 1
+    },
+    "OAKFOREST": {
+        "stop_id": "OAKFOREST",
+        "stop_name": "Oak Forest",
+        "stop_desc": "",
+        "stop_lat": 41.6044444,
+        "stop_lon": -87.7383333,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/OAKFOREST",
+        "wheelchair_boarding": 1
+    },
+    "MIDLOTHIAN": {
+        "stop_id": "MIDLOTHIAN",
+        "stop_name": "Midlothian",
+        "stop_desc": "",
+        "stop_lat": 41.6263889,
+        "stop_lon": -87.7116667,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/MIDLOTHIAN",
+        "wheelchair_boarding": 1
+    },
+    "ROBBINS": {
+        "stop_id": "ROBBINS",
+        "stop_name": "Robbins",
+        "stop_desc": "",
+        "stop_lat": 41.6408333,
+        "stop_lon": -87.6944444,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/ROBBINS",
+        "wheelchair_boarding": 1
+    },
+    "KENSINGTN": {
+        "stop_id": "KENSINGTN",
+        "stop_name": "Kensington",
+        "stop_desc": "",
+        "stop_lat": 41.6858333,
+        "stop_lon": -87.6122222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/KENSINGTN",
+        "wheelchair_boarding": 1
+    },
+    "59TH-UP": {
+        "stop_id": "59TH-UP",
+        "stop_name": "59th St. (U. of Chicago)",
+        "stop_desc": "",
+        "stop_lat": 41.7880556,
+        "stop_lon": -87.5886111,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/59TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "UNIVERSITY": {
+        "stop_id": "UNIVERSITY",
+        "stop_name": "University Park",
+        "stop_desc": "",
+        "stop_lat": 41.4594444,
+        "stop_lon": -87.7233333,
+        "zone_id": "G",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/UNIVERSITY",
+        "wheelchair_boarding": 1
+    },
+    "RICHTON": {
+        "stop_id": "RICHTON",
+        "stop_name": "Richton Park",
+        "stop_desc": "",
+        "stop_lat": 41.4855556,
+        "stop_lon": -87.7094444,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/RICHTON",
+        "wheelchair_boarding": 1
+    },
+    "MATTESON": {
+        "stop_id": "MATTESON",
+        "stop_name": "Matteson",
+        "stop_desc": "",
+        "stop_lat": 41.4986111,
+        "stop_lon": -87.7022222,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/MATTESON",
+        "wheelchair_boarding": 0
+    },
+    "211TH-UP": {
+        "stop_id": "211TH-UP",
+        "stop_name": "211th St.",
+        "stop_desc": "",
+        "stop_lat": 41.5061111,
+        "stop_lon": -87.6983333,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/211TH-UP",
+        "wheelchair_boarding": 1
+    },
+    "OLYMPIA": {
+        "stop_id": "OLYMPIA",
+        "stop_name": "Olympia Fields",
+        "stop_desc": "",
+        "stop_lat": 41.5213889,
+        "stop_lon": -87.69,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/OLYMPIA",
+        "wheelchair_boarding": 0
+    },
+    "FLOSSMOOR": {
+        "stop_id": "FLOSSMOOR",
+        "stop_name": "Flossmoor",
+        "stop_desc": "",
+        "stop_lat": 41.5430556,
+        "stop_lon": -87.6786111,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/FLOSSMOOR",
+        "wheelchair_boarding": 1
+    },
+    "HOMEWOOD": {
+        "stop_id": "HOMEWOOD",
+        "stop_name": "Homewood",
+        "stop_desc": "",
+        "stop_lat": 41.5622222,
+        "stop_lon": -87.6686111,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/HOMEWOOD",
+        "wheelchair_boarding": 1
+    },
+    "CALUMET": {
+        "stop_id": "CALUMET",
+        "stop_name": "Calumet",
+        "stop_desc": "",
+        "stop_lat": 41.5736111,
+        "stop_lon": -87.6625,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/CALUMET",
+        "wheelchair_boarding": 1
+    },
+    "EDISONPK": {
+        "stop_id": "EDISONPK",
+        "stop_name": "Edison Park",
+        "stop_desc": "",
+        "stop_lat": 42.0022222,
+        "stop_lon": -87.8175,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/EDISONPK",
+        "wheelchair_boarding": 1
+    },
+    "NORWOODP": {
+        "stop_id": "NORWOODP",
+        "stop_name": "Norwood Park",
+        "stop_desc": "",
+        "stop_lat": 41.9916667,
+        "stop_lon": -87.7988889,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/NORWOODP",
+        "wheelchair_boarding": 1
+    },
+    "GLADSTONEP": {
+        "stop_id": "GLADSTONEP",
+        "stop_name": "Gladstone Park",
+        "stop_desc": "",
+        "stop_lat": 41.9797222,
+        "stop_lon": -87.7780556,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/GLADSTONEP",
+        "wheelchair_boarding": 0
+    },
+    "JEFFERSONP": {
+        "stop_id": "JEFFERSONP",
+        "stop_name": "Jefferson Park",
+        "stop_desc": "",
+        "stop_lat": 41.9713889,
+        "stop_lon": -87.7633333,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/JEFFERSONP",
+        "wheelchair_boarding": 1
+    },
+    "BARTLETT": {
+        "stop_id": "BARTLETT",
+        "stop_name": "Bartlett",
+        "stop_desc": "",
+        "stop_lat": 41.9922222,
+        "stop_lon": -88.1838889,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/BARTLETT",
+        "wheelchair_boarding": 1
+    },
+    "47TH-UP": {
+        "stop_id": "47TH-UP",
+        "stop_name": "47th St. (Kenwood)",
+        "stop_desc": "",
+        "stop_lat": 41.8097222,
+        "stop_lon": -87.5913889,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/47TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "51ST-53RD": {
+        "stop_id": "51ST-53RD",
+        "stop_name": "51st/53rd St. (Hyde Park)",
+        "stop_desc": "",
+        "stop_lat": 41.8,
+        "stop_lon": -87.5869444,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/51ST-53RD",
+        "wheelchair_boarding": 1
+    },
+    "55-56-57TH": {
+        "stop_id": "55-56-57TH",
+        "stop_name": "55th - 56th - 57th St.",
+        "stop_desc": "",
+        "stop_lat": 41.7933333,
+        "stop_lon": -87.5875,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/55-56-57TH",
+        "wheelchair_boarding": 1
+    },
+    "63RD-UP": {
+        "stop_id": "63RD-UP",
+        "stop_name": "63rd St.",
+        "stop_desc": "",
+        "stop_lat": 41.7802778,
+        "stop_lon": -87.5905556,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/63RD-UP",
+        "wheelchair_boarding": 0
+    },
+    "PRAIRIEXNG": {
+        "stop_id": "PRAIRIEXNG",
+        "stop_name": "Prairie Crossing",
+        "stop_desc": "",
+        "stop_lat": 42.3208333,
+        "stop_lon": -88.0152778,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-N/stations/PRAIRIEXNG",
+        "wheelchair_boarding": 1
+    },
+    "RIVERGROVE": {
+        "stop_id": "RIVERGROVE",
+        "stop_name": "River Grove",
+        "stop_desc": "",
+        "stop_lat": 41.9311111,
+        "stop_lon": -87.8361111,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/RIVERGROVE",
+        "wheelchair_boarding": 1
+    },
+    "ELMWOODPK": {
+        "stop_id": "ELMWOODPK",
+        "stop_name": "Elmwood Park",
+        "stop_desc": "",
+        "stop_lat": 41.9247222,
+        "stop_lon": -87.8147222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/MD-W/stations/ELMWOODPK",
+        "wheelchair_boarding": 1
+    },
+    "RIVERDALE": {
+        "stop_id": "RIVERDALE",
+        "stop_name": "Riverdale",
+        "stop_desc": "",
+        "stop_lat": 41.6466667,
+        "stop_lon": -87.6233333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/RIVERDALE",
+        "wheelchair_boarding": 0
+    },
+    "IVANHOE": {
+        "stop_id": "IVANHOE",
+        "stop_name": "Ivanhoe",
+        "stop_desc": "",
+        "stop_lat": 41.6333333,
+        "stop_lon": -87.6302778,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/IVANHOE",
+        "wheelchair_boarding": 1
+    },
+    "147TH-UP": {
+        "stop_id": "147TH-UP",
+        "stop_name": "147th St.",
+        "stop_desc": "",
+        "stop_lat": 41.6227778,
+        "stop_lon": -87.6361111,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/147TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "HARVEY": {
+        "stop_id": "HARVEY",
+        "stop_name": "Harvey",
+        "stop_desc": "",
+        "stop_lat": 41.6083333,
+        "stop_lon": -87.6438889,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/HARVEY",
+        "wheelchair_boarding": 1
+    },
+    "HAZELCREST": {
+        "stop_id": "HAZELCREST",
+        "stop_name": "Hazel Crest",
+        "stop_desc": "",
+        "stop_lat": 41.5808333,
+        "stop_lon": -87.6586111,
+        "zone_id": "E",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/HAZELCREST",
+        "wheelchair_boarding": 0
+    },
+    "MILLENNIUM": {
+        "stop_id": "MILLENNIUM",
+        "stop_name": "Millennium Station",
+        "stop_desc": "",
+        "stop_lat": 41.8841667,
+        "stop_lon": -87.6230556,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/MILLENNIUM",
+        "wheelchair_boarding": 1
+    },
+    "VANBUREN": {
+        "stop_id": "VANBUREN",
+        "stop_name": "Van Buren St.",
+        "stop_desc": "",
+        "stop_lat": 41.8769444,
+        "stop_lon": -87.6230556,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/VANBUREN",
+        "wheelchair_boarding": 1
+    },
+    "MUSEUM": {
+        "stop_id": "MUSEUM",
+        "stop_name": "Museum Campus/11th St.",
+        "stop_desc": "",
+        "stop_lat": 41.8686111,
+        "stop_lon": -87.6213889,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/MUSEUM",
+        "wheelchair_boarding": 1
+    },
+    "18TH-UP": {
+        "stop_id": "18TH-UP",
+        "stop_name": "18th St.",
+        "stop_desc": "",
+        "stop_lat": 41.8583333,
+        "stop_lon": -87.6180556,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/18TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "MCCORMICK": {
+        "stop_id": "MCCORMICK",
+        "stop_name": "McCormick Place",
+        "stop_desc": "",
+        "stop_lat": 41.8513889,
+        "stop_lon": -87.6163889,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/MCCORMICK",
+        "wheelchair_boarding": 1
+    },
+    "27TH-UP": {
+        "stop_id": "27TH-UP",
+        "stop_name": "27th St.",
+        "stop_desc": "",
+        "stop_lat": 41.8441667,
+        "stop_lon": -87.6133333,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/27TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "75TH-UP": {
+        "stop_id": "75TH-UP",
+        "stop_name": "75th St. (Grand Crossing)",
+        "stop_desc": "",
+        "stop_lat": 41.7588889,
+        "stop_lon": -87.5952778,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/75TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "79TH-UP": {
+        "stop_id": "79TH-UP",
+        "stop_name": "79th St. (Chatham)",
+        "stop_desc": "",
+        "stop_lat": 41.7508333,
+        "stop_lon": -87.5972222,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/79TH-UP",
+        "wheelchair_boarding": 1
+    },
+    "83RD-UP": {
+        "stop_id": "83RD-UP",
+        "stop_name": "83rd St. (Avalon Park)",
+        "stop_desc": "",
+        "stop_lat": 41.7441667,
+        "stop_lon": -87.5986111,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/83RD-UP",
+        "wheelchair_boarding": 0
+    },
+    "87TH-UP": {
+        "stop_id": "87TH-UP",
+        "stop_name": "87th St. (Woodruff)",
+        "stop_desc": "",
+        "stop_lat": 41.7369444,
+        "stop_lon": -87.6002778,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/87TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "91ST-UP": {
+        "stop_id": "91ST-UP",
+        "stop_name": "91st St.",
+        "stop_desc": "",
+        "stop_lat": 41.7294444,
+        "stop_lon": -87.6019444,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/91ST-UP",
+        "wheelchair_boarding": 0
+    },
+    "95TH-UP": {
+        "stop_id": "95TH-UP",
+        "stop_name": "95th St.",
+        "stop_desc": "",
+        "stop_lat": 41.7219444,
+        "stop_lon": -87.6038889,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/95TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "103RD-UP": {
+        "stop_id": "103RD-UP",
+        "stop_name": "103rd St. (Rosemoor)",
+        "stop_desc": "",
+        "stop_lat": 41.7069444,
+        "stop_lon": -87.6072222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/103RD-UP",
+        "wheelchair_boarding": 0
+    },
+    "107TH-UP": {
+        "stop_id": "107TH-UP",
+        "stop_name": "107th St.",
+        "stop_desc": "",
+        "stop_lat": 41.6997222,
+        "stop_lon": -87.6088889,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/107TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "111TH-UP": {
+        "stop_id": "111TH-UP",
+        "stop_name": "111th St. (Pullman)",
+        "stop_desc": "",
+        "stop_lat": 41.6927778,
+        "stop_lon": -87.6105556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/111TH-UP",
+        "wheelchair_boarding": 0
+    },
+    "STONYISLND": {
+        "stop_id": "STONYISLND",
+        "stop_name": "Stony Island",
+        "stop_desc": "",
+        "stop_lat": 41.7661111,
+        "stop_lon": -87.5869444,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/STONYISLND",
+        "wheelchair_boarding": 1
+    },
+    "BRYNMAWR": {
+        "stop_id": "BRYNMAWR",
+        "stop_name": "Bryn Mawr",
+        "stop_desc": "",
+        "stop_lat": 41.7661111,
+        "stop_lon": -87.5766667,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/BRYNMAWR",
+        "wheelchair_boarding": 1
+    },
+    "SOUTHSHORE": {
+        "stop_id": "SOUTHSHORE",
+        "stop_name": "South Shore",
+        "stop_desc": "",
+        "stop_lat": 41.7652778,
+        "stop_lon": -87.5658333,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/SOUTHSHORE",
+        "wheelchair_boarding": 1
+    },
+    "WINDSORPK": {
+        "stop_id": "WINDSORPK",
+        "stop_name": "Windsor Park",
+        "stop_desc": "",
+        "stop_lat": 41.7586111,
+        "stop_lon": -87.5594444,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/WINDSORPK",
+        "wheelchair_boarding": 1
+    },
+    "79TH-SC": {
+        "stop_id": "79TH-SC",
+        "stop_name": "Cheltenham (79th St.)",
+        "stop_desc": "",
+        "stop_lat": 41.7522222,
+        "stop_lon": -87.5525,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/79TH-SC",
+        "wheelchair_boarding": 1
+    },
+    "83RD-SC": {
+        "stop_id": "83RD-SC",
+        "stop_name": "83rd St.",
+        "stop_desc": "",
+        "stop_lat": 41.745,
+        "stop_lon": -87.5516667,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/83RD-SC",
+        "wheelchair_boarding": 1
+    },
+    "87TH-SC": {
+        "stop_id": "87TH-SC",
+        "stop_name": "87th St.",
+        "stop_desc": "",
+        "stop_lat": 41.7377778,
+        "stop_lon": -87.5483333,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/87TH-SC",
+        "wheelchair_boarding": 1
+    },
+    "93RD-SC": {
+        "stop_id": "93RD-SC",
+        "stop_name": "South Chicago (93rd)",
+        "stop_desc": "",
+        "stop_lat": 41.7266667,
+        "stop_lon": -87.5477778,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/93RD-SC",
+        "wheelchair_boarding": 1
+    },
+    "LSS": {
+        "stop_id": "LSS",
+        "stop_name": "LaSalle Street",
+        "stop_desc": "",
+        "stop_lat": 41.8763889,
+        "stop_lon": -87.6322222,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/LSS",
+        "wheelchair_boarding": 1
+    },
+    "GRESHAM": {
+        "stop_id": "GRESHAM",
+        "stop_name": "Gresham",
+        "stop_desc": "",
+        "stop_lat": 41.7363889,
+        "stop_lon": -87.6447222,
+        "zone_id": "B",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/GRESHAM",
+        "wheelchair_boarding": 0
+    },
+    "VERMONT": {
+        "stop_id": "VERMONT",
+        "stop_name": "Blue Island-Vermont",
+        "stop_desc": "",
+        "stop_lat": 41.6547222,
+        "stop_lon": -87.6777778,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/VERMONT",
+        "wheelchair_boarding": 1
+    },
+    "LONGWOOD": {
+        "stop_id": "LONGWOOD",
+        "stop_name": "95th St.-Longwood",
+        "stop_desc": "",
+        "stop_lat": 41.7211111,
+        "stop_lon": -87.6502778,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/LONGWOOD",
+        "wheelchair_boarding": 1
+    },
+    "WASHHGTS": {
+        "stop_id": "WASHHGTS",
+        "stop_name": "103rd St.-Washington Hts.",
+        "stop_desc": "",
+        "stop_lat": 41.7055556,
+        "stop_lon": -87.6558333,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/WASHHGTS",
+        "wheelchair_boarding": 1
+    },
+    "BRAINERD": {
+        "stop_id": "BRAINERD",
+        "stop_name": "Brainerd",
+        "stop_desc": "",
+        "stop_lat": 41.7322222,
+        "stop_lon": -87.6588889,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/BRAINERD",
+        "wheelchair_boarding": 1
+    },
+    "91ST-BEV": {
+        "stop_id": "91ST-BEV",
+        "stop_name": "91st St. - Beverly Hills",
+        "stop_desc": "",
+        "stop_lat": 41.7280556,
+        "stop_lon": -87.6672222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/91ST-BEV",
+        "wheelchair_boarding": 1
+    },
+    "PRAIRIEST": {
+        "stop_id": "PRAIRIEST",
+        "stop_name": "Prairie St.",
+        "stop_desc": "",
+        "stop_lat": 41.6625,
+        "stop_lon": -87.675,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/PRAIRIEST",
+        "wheelchair_boarding": 0
+    },
+    "123RD-BEV": {
+        "stop_id": "123RD-BEV",
+        "stop_name": "123rd St.",
+        "stop_desc": "",
+        "stop_lat": 41.67,
+        "stop_lon": -87.6736111,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/123RD-BEV",
+        "wheelchair_boarding": 0
+    },
+    "119TH-BEV": {
+        "stop_id": "119TH-BEV",
+        "stop_name": "119th St.",
+        "stop_desc": "",
+        "stop_lat": 41.6763889,
+        "stop_lon": -87.6725,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/119TH-BEV",
+        "wheelchair_boarding": 1
+    },
+    "115TH-BEV": {
+        "stop_id": "115TH-BEV",
+        "stop_name": "115th St. - Morgan Park",
+        "stop_desc": "",
+        "stop_lat": 41.685,
+        "stop_lon": -87.6716667,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/115TH-BEV",
+        "wheelchair_boarding": 1
+    },
+    "111TH-BEV": {
+        "stop_id": "111TH-BEV",
+        "stop_name": "111th St. - Morgan Park",
+        "stop_desc": "",
+        "stop_lat": 41.6927778,
+        "stop_lon": -87.6705556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/111TH-BEV",
+        "wheelchair_boarding": 1
+    },
+    "107TH-BEV": {
+        "stop_id": "107TH-BEV",
+        "stop_name": "107th St. - Beverly Hills",
+        "stop_desc": "",
+        "stop_lat": 41.6988889,
+        "stop_lon": -87.67,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/107TH-BEV",
+        "wheelchair_boarding": 1
+    },
+    "103RD-BEV": {
+        "stop_id": "103RD-BEV",
+        "stop_name": "103rd St. - Beverly Hills",
+        "stop_desc": "",
+        "stop_lat": 41.7061111,
+        "stop_lon": -87.6688889,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/103RD-BEV",
+        "wheelchair_boarding": 1
+    },
+    "99TH-BEV": {
+        "stop_id": "99TH-BEV",
+        "stop_name": "99th St. - Beverly Hills",
+        "stop_desc": "",
+        "stop_lat": 41.7136111,
+        "stop_lon": -87.6675,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/99TH-BEV",
+        "wheelchair_boarding": 1
+    },
+    "95TH-BEV": {
+        "stop_id": "95TH-BEV",
+        "stop_name": "95th St. - Beverly Hills",
+        "stop_desc": "",
+        "stop_lat": 41.7213889,
+        "stop_lon": -87.6672222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/95TH-BEV",
+        "wheelchair_boarding": 1
+    },
+    "BLUEISLAND": {
+        "stop_id": "BLUEISLAND",
+        "stop_name": "Blue Island",
+        "stop_desc": "",
+        "stop_lat": 41.6561111,
+        "stop_lon": -87.6758333,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/BLUEISLAND",
+        "wheelchair_boarding": 1
+    },
+    "BURROAK": {
+        "stop_id": "BURROAK",
+        "stop_name": "Burr Oak",
+        "stop_desc": "",
+        "stop_lat": 41.6622222,
+        "stop_lon": -87.6688889,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/BURROAK",
+        "wheelchair_boarding": 0
+    },
+    "ASHLAND": {
+        "stop_id": "ASHLAND",
+        "stop_name": "Ashland",
+        "stop_desc": "",
+        "stop_lat": 41.6694444,
+        "stop_lon": -87.6605556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/ASHLAND",
+        "wheelchair_boarding": 0
+    },
+    "RACINE": {
+        "stop_id": "RACINE",
+        "stop_name": "Racine",
+        "stop_desc": "",
+        "stop_lat": 41.6741667,
+        "stop_lon": -87.6519444,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/RACINE",
+        "wheelchair_boarding": 0
+    },
+    "WPULLMAN": {
+        "stop_id": "WPULLMAN",
+        "stop_name": "West Pullman",
+        "stop_desc": "",
+        "stop_lat": 41.6741667,
+        "stop_lon": -87.6422222,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/WPULLMAN",
+        "wheelchair_boarding": 0
+    },
+    "STEWARTRID": {
+        "stop_id": "STEWARTRID",
+        "stop_name": "Stewart Ridge",
+        "stop_desc": "",
+        "stop_lat": 41.6744444,
+        "stop_lon": -87.6316667,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/STEWARTRID",
+        "wheelchair_boarding": 0
+    },
+    "STATEST": {
+        "stop_id": "STATEST",
+        "stop_name": "State St.",
+        "stop_desc": "",
+        "stop_lat": 41.6744444,
+        "stop_lon": -87.6219444,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/ME/stations/STATEST",
+        "wheelchair_boarding": 0
+    },
+    "SCHILLERPK": {
+        "stop_id": "SCHILLERPK",
+        "stop_name": "Schiller Park",
+        "stop_desc": "",
+        "stop_lat": 41.9627778,
+        "stop_lon": -87.8705556,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/SCHILLERPK",
+        "wheelchair_boarding": 1
+    },
+    "PALOSHTS": {
+        "stop_id": "PALOSHTS",
+        "stop_name": "Palos Heights",
+        "stop_desc": "",
+        "stop_lat": 41.6819444,
+        "stop_lon": -87.8069444,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/PALOSHTS",
+        "wheelchair_boarding": 1
+    },
+    "PINGREE": {
+        "stop_id": "PINGREE",
+        "stop_name": "Pingree Road",
+        "stop_desc": "",
+        "stop_lat": 42.2341667,
+        "stop_lon": -88.2980556,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-NW/stations/PINGREE",
+        "wheelchair_boarding": 1
+    },
+    "CUS": {
+        "stop_id": "CUS",
+        "stop_name": "Chicago Union Station",
+        "stop_desc": "",
+        "stop_lat": 41.8788889,
+        "stop_lon": -87.6388889,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/system-map",
+        "wheelchair_boarding": 1
+    },
+    "OTC": {
+        "stop_id": "OTC",
+        "stop_name": "Chicago OTC",
+        "stop_desc": "",
+        "stop_lat": 41.8822222,
+        "stop_lon": -87.6405556,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/system-map",
+        "wheelchair_boarding": 1
+    },
+    "LARAWAY": {
+        "stop_id": "LARAWAY",
+        "stop_name": "Laraway Road",
+        "stop_desc": "",
+        "stop_lat": 41.4847222,
+        "stop_lon": -87.9597222,
+        "zone_id": "H",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/LARAWAY",
+        "wheelchair_boarding": 1
+    },
+    "MANHATTAN": {
+        "stop_id": "MANHATTAN",
+        "stop_name": "Manhattan",
+        "stop_desc": "",
+        "stop_lat": 41.4183333,
+        "stop_lon": -87.9891667,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/SWS/stations/MANHATTAN",
+        "wheelchair_boarding": 1
+    },
+    "NCSGRAYSLK": {
+        "stop_id": "NCSGRAYSLK",
+        "stop_name": "Washington St (Grayslake)",
+        "stop_desc": "",
+        "stop_lat": 42.3591667,
+        "stop_lon": -88.0505556,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/NCSGRAYSLK",
+        "wheelchair_boarding": 1
+    },
+    "ROSEMONT": {
+        "stop_id": "ROSEMONT",
+        "stop_name": "Rosemont",
+        "stop_desc": "",
+        "stop_lat": 41.9761111,
+        "stop_lon": -87.8738889,
+        "zone_id": "D",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/ROSEMONT",
+        "wheelchair_boarding": 1
+    },
+    "FRANKLINPK": {
+        "stop_id": "FRANKLINPK",
+        "stop_name": "Franklin Pk",
+        "stop_desc": "",
+        "stop_lat": 41.9377778,
+        "stop_lon": -87.86,
+        "zone_id": "C",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/NCS/stations/FRANKLINPK",
+        "wheelchair_boarding": 1
+    },
+    "LAFOX": {
+        "stop_id": "LAFOX",
+        "stop_name": "La Fox",
+        "stop_desc": "",
+        "stop_lat": 41.8866667,
+        "stop_lon": -88.4122222,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/LAFOX",
+        "wheelchair_boarding": 1
+    },
+    "ELBURN": {
+        "stop_id": "ELBURN",
+        "stop_name": "Elburn",
+        "stop_desc": "",
+        "stop_lat": 41.8905556,
+        "stop_lon": -88.4638889,
+        "zone_id": "I",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/UP-W/stations/ELBURN",
+        "wheelchair_boarding": 1
+    },
+    "35TH": {
+        "stop_id": "35TH",
+        "stop_name": "35th St. - Lou Jones",
+        "stop_desc": "",
+        "stop_lat": 41.8313889,
+        "stop_lon": -87.6291667,
+        "zone_id": "A",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/RI/stations/35TH",
+        "wheelchair_boarding": 1
+    },
+    "ROMEOVILLE": {
+        "stop_id": "ROMEOVILLE",
+        "stop_name": "Romeoville",
+        "stop_desc": "",
+        "stop_lat": 41.6372222,
+        "stop_lon": -88.0494444,
+        "zone_id": "F",
+        "stop_url": "https://metrarail.com/maps-schedules/train-lines/HC/stations/ROMEOVILLE",
+        "wheelchair_boarding": 1
+    }
+}
