@@ -111,7 +111,7 @@ def find_CTA_holiday_train(response, run_number):
                 else:
                     line_name = "Red"
                     destination = marker["DestName"]
-                output_line = f'Run # {marker["RunNumber"]}, the CTA Holiday Train is active on the {line_name} line {marker["DirMod"]} {destination}\nNext Stops:'
+                output_line = f'Run # {marker["RunNumber"]}, the CTA Holiday Train is on the {line_name} line {marker["DirMod"]} {destination}\nNext Stops:'
                 for prediction in marker["Predictions"]:
                     if str(prediction[2]) == "<b>Due</b>":
                         eta = "Due"
