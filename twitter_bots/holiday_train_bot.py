@@ -136,7 +136,6 @@ def find_cta_holiday_train(response, run_number):
                         eta = f"{minutes} minutes"
                     output_line = f'{output_line}\n• {prediction[1]} - {eta}'
                 output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
-                print(output_line)
                 send_tweet(output_line)
     return output_line
 
@@ -174,9 +173,9 @@ def find_metra_holiday_train(response):
                     stop_name = metra_stops[train["trip_update"]["stop_time_update"][count]["stop_id"]]["stop_name"]
                     minutes_away = minutes_between(
                         train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
-                    output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
-                    count += 1
-                print(output_text)
+                    if minutes_away != "0":
+                        output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
+                        count += 1
                 send_tweet(output_text)
         except:  # pylint: disable=bare-except
             process = False
