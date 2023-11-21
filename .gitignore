@@ -189,3 +189,4 @@ gtfs/powerbi/export/calendar.txt
 gtfs/powerbi/export/stop_times.txt
 gtfs/powerbi/export/trips.txt
 powerbi/*
+train_arrivals/special/tweeted_metra_trains.json
