@@ -193,7 +193,7 @@ def send_tweet(tweet_text_input):
     first_tweet = status1.data["id"]
     print(
         f"sent new tweets https://twitter.com/ChiHolidayTrain/status/{first_tweet}")
-    sleep(30)
+    sleep(5)
 
 
 cta_tweet_text = find_cta_holiday_train(
