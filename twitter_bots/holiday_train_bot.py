@@ -49,6 +49,8 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%Y%m%d")
     elif date_type == "today":
         date = datetime.strftime(datetime.now(), "%Y-%m-%d")
+    elif date_type == "tweeted":
+        date = datetime.strftime(datetime.now(), "%Y-%m-%dT%H")
     elif date_type == "dayofweek":
         date = datetime.strftime(datetime.now(), "%w")
     return date
@@ -147,42 +149,62 @@ def find_metra_holiday_train(response):
         process = False
         trip_id = train["trip_update"]["vehicle"]["label"]
         route_id = train["trip_update"]["trip"]["route_id"]
-        try:
-            if route_id == "ME":
-                route_name = "Electric"
-                if get_date("dayofweek") == "0":
-                    if trip_id in metra_runs["Sunday"]:
-                        process = True
-                elif get_date("dayofweek") == "6":
-                    if trip_id in metra_runs["Saturday"]:
-                        process = True
-                else:
-                    if trip_id in metra_runs["Weekday"]:
-                        process = True
-            elif route_id == "RI":
-                route_name = "Rock Island"
-                if trip_id in metra_runs[get_date("today")]:
+        if route_id == "ME":
+            route_name = "Electric"
+            if get_date("dayofweek") == "0":
+                if trip_id in metra_runs["Sunday"] and has_been_tweeted(trip_id) is False:
+                    process = True
+            elif get_date("dayofweek") == "6":
+                if trip_id in metra_runs["Saturday"] and has_been_tweeted(trip_id) is False:
                     process = True
             else:
-                route_name = route_id
-                if trip_id in metra_runs[get_date("today")]:
+                if trip_id in metra_runs["Weekday"] and has_been_tweeted(trip_id) is False:
                     process = True
-            if process is True:
-                output_text = f"Holiday Themed Metra {route_name} train # {trip_id} is active!\nNext Stops:"
-                count = 0
-                while count in range(6):
-                    stop_name = metra_stops[train["trip_update"]["stop_time_update"][count]["stop_id"]]["stop_name"]
-                    minutes_away = minutes_between(
-                        train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
-                    if minutes_away != "0" and minutes_away != 0:
-                        output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
-                        count += 1
-                print(f"Sending Tweet with contents\n{output_text}")
-                send_tweet(output_text)
-        except:  # pylint: disable=bare-except
-            process = False
-            continue
+        elif route_id == "RI":
+            route_name = "Rock Island"
+            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id) is False:
+                process = True
+        else:
+            route_name = route_id
+            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id) is False:
+                process = True
+        if process is True:
+            output_text = f"Metra {route_name} train # {trip_id}:"
+            count = 0
+            if len(train["trip_update"]["stop_time_update"]) < 10:
+                stop_limit = len(train["trip_update"]["stop_time_update"])
+            else: 
+                stop_limit = 9
+            while count in range(stop_limit):
+                stop_name = metra_stops[train["trip_update"]["stop_time_update"][count]["stop_id"]]["stop_name"]
+                minutes_away = minutes_between(
+                    train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
+                if minutes_away != "0" and minutes_away != 0:
+                    output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
+                    count += 1
+            print(f"Sending Tweet with contents\n{output_text}")
+            send_tweet(output_text)
+        else:
+            output_text = ""
     return output_text
+
+def has_been_tweeted(run_number):
+    with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'r', encoding="utf-8") as fp:
+        json_file_loaded = json.load(fp)
+        if get_date("tweeted") in json_file_loaded:
+            if run_number in json_file_loaded[get_date("tweeted")]:
+                has_been_tweeted_result = True
+            else:
+                has_been_tweeted_result = False
+        else:
+            has_been_tweeted_result = False
+    if has_been_tweeted_result is False:
+        with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'w', encoding="utf-8") as fp2:
+            if get_date("tweeted") not in json_file_loaded:
+                json_file_loaded = {**json_file_loaded, **{get_date("tweeted"):[]}}
+            json_file_loaded[get_date("tweeted")].append(run_number)
+            json.dump(json_file_loaded, fp2, indent=4,  separators=(',',': '))
+    return has_been_tweeted_result
 
 
 def send_tweet(tweet_text_input):
