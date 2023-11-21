@@ -170,13 +170,14 @@ def find_metra_holiday_train(response):
             if process is True:
                 output_text = f"Holiday Themed Metra {route_name} train # {trip_id} is active!\nNext Stops:"
                 count = 0
-                while count in range(5):
+                while count in range(6):
                     stop_name = metra_stops[train["trip_update"]["stop_time_update"][count]["stop_id"]]["stop_name"]
                     minutes_away = minutes_between(
                         train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
                     if minutes_away != "0" and minutes_away != 0:
                         output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
                         count += 1
+                print(f"Sending Tweet with contents\n{output_text}")
                 send_tweet(output_text)
         except:  # pylint: disable=bare-except
             process = False
@@ -186,7 +187,7 @@ def find_metra_holiday_train(response):
 
 def send_tweet(tweet_text_input):
     """sends the tweet data if the right run is found!"""
-    print(f"Sending Tweet with contents\n{tweet_text_input}")
+    # print(f"Sending Tweet with contents\n{tweet_text_input}")
     api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
                         twitter_access_token, twitter_access_token_secret)
     status1 = api.create_tweet(text=tweet_text_input)
