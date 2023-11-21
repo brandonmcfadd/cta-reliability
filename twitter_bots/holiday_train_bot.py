@@ -209,15 +209,16 @@ def has_been_tweeted(run_number):
 
 def send_tweet(tweet_text_input):
     """sends the tweet data if the right run is found!"""
-    # print(f"Sending Tweet with contents\n{tweet_text_input}")
-    api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
-                        twitter_access_token, twitter_access_token_secret)
-    status1 = api.create_tweet(text=tweet_text_input)
-    first_tweet = status1.data["id"]
-    print(
-        f"sent new tweets https://twitter.com/ChiHolidayTrain/status/{first_tweet}")
-    sleep(5)
-
+    try:
+        api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
+                            twitter_access_token, twitter_access_token_secret)
+        status1 = api.create_tweet(text=tweet_text_input)
+        first_tweet = status1.data["id"]
+        print(
+            f"sent new tweets https://twitter.com/ChiHolidayTrain/status/{first_tweet}")
+        sleep(5)
+    except:
+        print("Twitter error :(")
 
 cta_tweet_text = find_cta_holiday_train(
     train_api_call_to_cta_map(), "1225")
