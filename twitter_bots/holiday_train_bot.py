@@ -174,7 +174,7 @@ def find_metra_holiday_train(response):
                     stop_name = metra_stops[train["trip_update"]["stop_time_update"][count]["stop_id"]]["stop_name"]
                     minutes_away = minutes_between(
                         train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
-                    if minutes_away != "0":
+                    if minutes_away != "0" and minutes_away != 0:
                         output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
                         count += 1
                 send_tweet(output_text)
