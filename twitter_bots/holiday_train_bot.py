@@ -167,7 +167,8 @@ def find_metra_holiday_train(response):
         else:
             route_name = route_id
             if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id) is False:
-                process = True
+                if route_id == metra_runs[get_date("today")][trip_id]:
+                    process = True
         if process is True:
             output_text = f"Metra {route_name} train # {trip_id}:"
             count = 0
