@@ -171,24 +171,29 @@ def find_metra_holiday_train(response):
         if process is True:
             output_text = f"Metra {route_name} train # {trip_id}:"
             count = 0
-            if len(train["trip_update"]["stop_time_update"]) < 10:
+            if len(train["trip_update"]["stop_time_update"]) < 3:
+                stop_limit = 0
+            elif len(train["trip_update"]["stop_time_update"]) < 10:
                 stop_limit = len(train["trip_update"]["stop_time_update"])
-            else: 
+            else:
                 stop_limit = 9
-            while count in range(stop_limit):
-                stop_name = metra_stops[train["trip_update"]["stop_time_update"][count]["stop_id"]]["stop_name"]
-                minutes_away = minutes_between(
-                    train["trip_update"]["stop_time_update"][count]["arrival"]["time"]["low"])
-                if minutes_away != "0" and minutes_away != 0:
-                    output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
-                    count += 1
-            print(f"Sending Tweet with contents\n{output_text}")
-            send_tweet(output_text)
+            for stop in train["trip_update"]["stop_time_update"]:
+                if count < stop_limit:
+                    stop_name = metra_stops[stop["stop_id"]]["stop_name"]
+                    minutes_away = minutes_between(stop["arrival"]["time"]["low"])
+                    if int(minutes_away) > 2:
+                        output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
+                        count += 1
+            if count > 3:
+                print(f"Sending Tweet with contents\n{output_text}")
+                send_tweet(output_text)
         else:
             output_text = ""
     return output_text
 
+
 def has_been_tweeted(run_number):
+    """checks if a metra run was tweeted already"""
     with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'r', encoding="utf-8") as fp:
         json_file_loaded = json.load(fp)
         if get_date("tweeted") in json_file_loaded:
@@ -201,9 +206,10 @@ def has_been_tweeted(run_number):
     if has_been_tweeted_result is False:
         with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'w', encoding="utf-8") as fp2:
             if get_date("tweeted") not in json_file_loaded:
-                json_file_loaded = {**json_file_loaded, **{get_date("tweeted"):[]}}
+                json_file_loaded = {**json_file_loaded,
+                                    **{get_date("tweeted"): []}}
             json_file_loaded[get_date("tweeted")].append(run_number)
-            json.dump(json_file_loaded, fp2, indent=4,  separators=(',',': '))
+            json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
     return has_been_tweeted_result
 
 
@@ -217,8 +223,9 @@ def send_tweet(tweet_text_input):
         print(
             f"sent new tweets https://twitter.com/ChiHolidayTrain/status/{first_tweet}")
         sleep(5)
-    except:
+    except:  # pylint: disable=bare-except
         print("Twitter error :(")
+
 
 cta_tweet_text = find_cta_holiday_train(
     train_api_call_to_cta_map(), "1225")
