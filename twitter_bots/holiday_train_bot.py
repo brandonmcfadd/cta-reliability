@@ -130,7 +130,8 @@ def find_cta_holiday_train(response, run_number):
                 else:
                     line_name = "Red"
                     destination = marker["DestName"]
-                output_line = f'The CTA Holiday Train, run # {marker["RunNumber"]} is on the {line_name} line {marker["DirMod"]} {destination}\nNext Stops:'
+                output_line = f'CTA Holiday Train #{marker["RunNumber"]} is on the {line_name} Line {marker["DirMod"]} {destination}\nNext Stops:'
+                prediction_count = 0
                 for prediction in marker["Predictions"]:
                     if str(prediction[2]) == "<b>Due</b>":
                         eta = "Due"
@@ -138,8 +139,11 @@ def find_cta_holiday_train(response, run_number):
                         minutes = re.sub('[^0-9]+', '', str(prediction[2]))
                         eta = f"{minutes} minutes"
                     output_line = f'{output_line}\n• {prediction[1]} - {eta}'
+                    prediction_count += 1
                 output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
-                send_tweet(output_line)
+                if prediction_count > 3:
+                    print(f"Sending Tweet with contents\n{output_line}")
+                    send_tweet(output_line)
     return output_line
 
 
