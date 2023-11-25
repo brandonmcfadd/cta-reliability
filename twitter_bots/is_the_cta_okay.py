@@ -49,8 +49,10 @@ def day_of_performance_stats(data):
         type_of_day = 1
     elif system_actual/system_scheduled >= 0.90 and system_actual/system_scheduled < 0.95:
         type_of_day = 2
-    else:
+    elif system_actual/system_scheduled >= 0.80 and system_actual/system_scheduled < 0.90:
         type_of_day = 3
+    else:
+        type_of_day = 4
     return type_of_day
 
 
@@ -75,8 +77,11 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     elif is_good_day_flag == 2:
         type_of_day = "🤷CTA Rail is having a so-so day even with a 24% cut of scheduled service."
         expression = "."
-    else:
+    elif is_good_day_flag == 3:
         type_of_day = "😡CTA Rail is not having a good day even after cutting 24% of scheduled service."
+        expression = "."
+    else:
+        type_of_day = "🤬CTA Rail is having a terrible day even after cutting 24% of scheduled service."
         expression = "."
     text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated on {last_updated_string_full}{last_updated_string_ending}{expression} {consistent_arrivals_perc}% arrived at consistent intervals.\nFor more on service cuts: ctaction.org/service-cuts.\nTo explore historical data: brandonmcfadden.com/cta-reliability."
     return text_output_part_1
