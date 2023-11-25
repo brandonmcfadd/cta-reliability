@@ -320,3 +320,14 @@ async def get_sort_information(token: str = Depends(get_current_username)):
     except:  # pylint: disable=bare-except
         endpoint = "http://rta-api.brandonmcfadden.com/api/sorting_information/get"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
+@app.get("/api/v2/metra/holiday_trains/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_holiday_trains_metra(token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        json_file = main_file_path + "train_arrivals/special/tweeted_metra_trains.json"
+        results = open(json_file, 'r', encoding="utf-8")
+        return Response(content=results.read(), media_type="application/json")
+    except:  # pylint: disable=bare-except
+        endpoint = "http://rta-api.brandonmcfadden.com/api/v2/metra/holiday_trains/"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
