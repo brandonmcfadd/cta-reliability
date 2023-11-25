@@ -153,24 +153,25 @@ def find_metra_holiday_train(response):
         process = False
         trip_id = train["trip_update"]["vehicle"]["label"]
         route_id = train["trip_update"]["trip"]["route_id"]
+        vehicle = train["trip_update"]["vehicle"]["id"]
         if route_id == "ME":
             route_name = "Electric"
             if get_date("dayofweek") == "0":
-                if trip_id in metra_runs["Sunday"] and has_been_tweeted(trip_id) is False:
+                if trip_id in metra_runs["Sunday"] and has_been_tweeted(trip_id, vehicle) is False:
                     process = True
             elif get_date("dayofweek") == "6":
-                if trip_id in metra_runs["Saturday"] and has_been_tweeted(trip_id) is False:
+                if trip_id in metra_runs["Saturday"] and has_been_tweeted(trip_id, vehicle) is False:
                     process = True
             else:
-                if trip_id in metra_runs["Weekday"] and has_been_tweeted(trip_id) is False:
+                if trip_id in metra_runs["Weekday"] and has_been_tweeted(trip_id, vehicle) is False:
                     process = True
         elif route_id == "RI":
             route_name = "Rock Island"
-            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id) is False:
+            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id, vehicle) is False:
                 process = True
         else:
             route_name = route_id
-            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id) is False:
+            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id, vehicle) is False:
                 if route_id == metra_runs[get_date("today")][trip_id]:
                     process = True
         if process is True:
@@ -197,7 +198,7 @@ def find_metra_holiday_train(response):
     return output_text
 
 
-def has_been_tweeted(run_number):
+def has_been_tweeted(run_number, vehicle_id):
     """checks if a metra run was tweeted already"""
     with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'r', encoding="utf-8") as fp:
         json_file_loaded = json.load(fp)
@@ -212,8 +213,9 @@ def has_been_tweeted(run_number):
         with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'w', encoding="utf-8") as fp2:
             if get_date("tweeted") not in json_file_loaded:
                 json_file_loaded = {**json_file_loaded,
-                                    **{get_date("tweeted"): []}}
-            json_file_loaded[get_date("tweeted")].append(run_number)
+                                    **{get_date("tweeted"): {}}}
+            vehicle_to_add = {"vehicle":vehicle_id}
+            json_file_loaded[get_date("tweeted")][run_number] = vehicle_to_add
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
     return has_been_tweeted_result
 
