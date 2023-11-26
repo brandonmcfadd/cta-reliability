@@ -187,6 +187,8 @@ def find_metra_holiday_train(response):
                 if count < stop_limit:
                     stop_name = metra_stops[stop["stop_id"]]["stop_name"]
                     minutes_away = minutes_between(stop["arrival"]["time"]["low"])
+                    minutes_away = minutes_between(
+                        stop["arrival"]["time"]["low"])
                     if int(minutes_away) > 2:
                         output_text = f"{output_text}\n• {stop_name} - {minutes_away} min"
                         count += 1
@@ -214,7 +216,7 @@ def has_been_tweeted(run_number, vehicle_id):
             if get_date("tweeted") not in json_file_loaded:
                 json_file_loaded = {**json_file_loaded,
                                     **{get_date("tweeted"): {}}}
-            vehicle_to_add = {"vehicle":vehicle_id}
+            vehicle_to_add = {"vehicle": vehicle_id}
             json_file_loaded[get_date("tweeted")][run_number] = vehicle_to_add
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
     return has_been_tweeted_result
