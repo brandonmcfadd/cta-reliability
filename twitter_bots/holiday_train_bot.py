@@ -186,7 +186,6 @@ def find_metra_holiday_train(response):
             for stop in train["trip_update"]["stop_time_update"]:
                 if count < stop_limit:
                     stop_name = metra_stops[stop["stop_id"]]["stop_name"]
-                    minutes_away = minutes_between(stop["arrival"]["time"]["low"])
                     minutes_away = minutes_between(
                         stop["arrival"]["time"]["low"])
                     if int(minutes_away) > 2:
