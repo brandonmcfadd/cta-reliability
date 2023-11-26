@@ -159,7 +159,7 @@ def find_metra_holiday_train(response):
             if get_date("dayofweek") == "0":
                 if trip_id in metra_runs["Sunday"] and has_been_tweeted(trip_id, vehicle) is False:
                     process = True
-            elif get_date("dayofweek") == "6":
+            elif get_date("dayofweek") == "6" and get_date("today") not in metra_runs["Saturday"]["not-on-these-days"]:
                 if trip_id in metra_runs["Saturday"] and has_been_tweeted(trip_id, vehicle) is False:
                     process = True
             else:
