@@ -149,7 +149,7 @@ while True:  # Where the magic happens
         response1 = train_api_call_to_metra()
 
     # Wait and do it again
-    SLEEP_AMOUNT = 30
+    SLEEP_AMOUNT = 300
     SLEEP_STRING = "Sleeping " + str(SLEEP_AMOUNT) + " Seconds"
     logging.info(SLEEP_STRING)
     time.sleep(SLEEP_AMOUNT)
