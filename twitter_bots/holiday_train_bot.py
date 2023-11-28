@@ -83,7 +83,7 @@ def train_api_call_to_cta_map():
 
 
 def train_api_call_to_metra():
-    """Gotta talk to Metra and get vehicle positions!"""
+    """Gotta talk to Metra and get vehicle_id positions!"""
     print("Making Metra API Call...")
     try:
         api_response = requests.get(
@@ -151,31 +151,32 @@ def find_metra_holiday_train(response):
     """takes output from the API and looks for the holiday train"""
     for train in response:
         process = False
-        trip_id = train["trip_update"]["vehicle"]["label"]
+        run_number = train["trip_update"]["vehicle"]["label"]
         route_id = train["trip_update"]["trip"]["route_id"]
-        vehicle = train["trip_update"]["vehicle"]["id"]
+        trip_id = train["trip_update"]["trip"]["trip_id"]
+        vehicle_id = train["trip_update"]["vehicle"]["id"]
         if route_id == "ME":
             route_name = "Electric"
             if get_date("dayofweek") == "0":
-                if trip_id in metra_runs["Sunday"] and has_been_tweeted(trip_id, vehicle) is False:
+                if run_number in metra_runs["Sunday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id) is False:
                     process = True
             elif get_date("dayofweek") == "6" and get_date("today") not in metra_runs["Saturday"]["not-on-these-days"]:
-                if trip_id in metra_runs["Saturday"] and has_been_tweeted(trip_id, vehicle) is False:
+                if run_number in metra_runs["Saturday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id) is False:
                     process = True
             else:
-                if trip_id in metra_runs["Weekday"] and has_been_tweeted(trip_id, vehicle) is False:
+                if run_number in metra_runs["Weekday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id) is False:
                     process = True
         elif route_id == "RI":
             route_name = "Rock Island"
-            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id, vehicle) is False:
+            if run_number in metra_runs[get_date("today")] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id) is False:
                 process = True
         else:
             route_name = route_id
-            if trip_id in metra_runs[get_date("today")] and has_been_tweeted(trip_id, vehicle) is False:
-                if route_id == metra_runs[get_date("today")][trip_id]:
+            if run_number in metra_runs[get_date("today")] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id) is False:
+                if route_id == metra_runs[get_date("today")][run_number]:
                     process = True
         if process is True:
-            output_text = f"Metra {route_name} train # {trip_id}:"
+            output_text = f"Metra {route_name} train # {run_number}:"
             count = 0
             if len(train["trip_update"]["stop_time_update"]) < 3:
                 stop_limit = 0
@@ -199,12 +200,12 @@ def find_metra_holiday_train(response):
     return output_text
 
 
-def has_been_tweeted(run_number, vehicle_id):
+def has_been_tweeted(run_number_in, vehicle_id_in, route_id_in, trip_id_in):
     """checks if a metra run was tweeted already"""
     with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'r', encoding="utf-8") as fp:
         json_file_loaded = json.load(fp)
         if get_date("tweeted") in json_file_loaded["hourly"]:
-            if run_number in json_file_loaded["hourly"][get_date("tweeted")]:
+            if run_number_in in json_file_loaded["hourly"][get_date("tweeted")]:
                 has_been_tweeted_result = True
             else:
                 has_been_tweeted_result = False
@@ -217,9 +218,9 @@ def has_been_tweeted(run_number, vehicle_id):
                                     **{get_date("tweeted"): {}}}
                 json_file_loaded["daily"] = {**json_file_loaded["daily"],
                                     **{get_date("today"): {}}}
-            vehicle_to_add = {"vehicle": vehicle_id}
-            json_file_loaded["hourly"][get_date("tweeted")][run_number] = vehicle_to_add
-            json_file_loaded["daily"][get_date("today")][run_number] = vehicle_to_add
+            vehicle_to_add = {"vehicle_id": vehicle_id_in,"route": route_id_in,"trip":trip_id_in}
+            json_file_loaded["hourly"][get_date("tweeted")][run_number_in] = vehicle_to_add
+            json_file_loaded["daily"][get_date("today")][run_number_in] = vehicle_to_add
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
     return has_been_tweeted_result
 
