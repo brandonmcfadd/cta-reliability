@@ -203,7 +203,7 @@ def has_been_tweeted(run_number, vehicle_id):
     """checks if a metra run was tweeted already"""
     with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'r', encoding="utf-8") as fp:
         json_file_loaded = json.load(fp)
-        if get_date("tweeted") in json_file_loaded:
+        if get_date("tweeted") in json_file_loaded["hourly"]:
             if run_number in json_file_loaded["hourly"][get_date("tweeted")]:
                 has_been_tweeted_result = True
             else:
