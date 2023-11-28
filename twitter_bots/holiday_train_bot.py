@@ -143,7 +143,7 @@ def find_cta_holiday_train(response, run_number):
                 output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
                 if prediction_count > 3:
                     print(f"Sending Tweet with contents\n{output_line}")
-                    send_tweet(output_line)
+                    # send_tweet(output_line)
     return output_line
 
 
@@ -193,7 +193,7 @@ def find_metra_holiday_train(response):
                         count += 1
             if count > 3:
                 print(f"Sending Tweet with contents\n{output_text}")
-                send_tweet(output_text)
+                # send_tweet(output_text)
         else:
             output_text = ""
     return output_text
@@ -204,7 +204,7 @@ def has_been_tweeted(run_number, vehicle_id):
     with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'r', encoding="utf-8") as fp:
         json_file_loaded = json.load(fp)
         if get_date("tweeted") in json_file_loaded:
-            if run_number in json_file_loaded[get_date("tweeted")]:
+            if run_number in json_file_loaded["hourly"][get_date("tweeted")]:
                 has_been_tweeted_result = True
             else:
                 has_been_tweeted_result = False
@@ -213,10 +213,13 @@ def has_been_tweeted(run_number, vehicle_id):
     if has_been_tweeted_result is False:
         with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'w', encoding="utf-8") as fp2:
             if get_date("tweeted") not in json_file_loaded:
-                json_file_loaded = {**json_file_loaded,
+                json_file_loaded["hourly"] = {**json_file_loaded["hourly"],
                                     **{get_date("tweeted"): {}}}
+                json_file_loaded["daily"] = {**json_file_loaded["daily"],
+                                    **{get_date("today"): {}}}
             vehicle_to_add = {"vehicle": vehicle_id}
-            json_file_loaded[get_date("tweeted")][run_number] = vehicle_to_add
+            json_file_loaded["hourly"][get_date("tweeted")][run_number] = vehicle_to_add
+            json_file_loaded["daily"][get_date("today")][run_number] = vehicle_to_add
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
     return has_been_tweeted_result
 
