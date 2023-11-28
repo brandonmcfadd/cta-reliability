@@ -218,7 +218,7 @@ def has_been_tweeted(run_number_in, vehicle_id_in, route_id_in, trip_id_in):
                                     **{get_date("tweeted"): {}}}
                 json_file_loaded["daily"] = {**json_file_loaded["daily"],
                                     **{get_date("today"): {}}}
-            vehicle_to_add = {"vehicle_id": vehicle_id_in,"route": route_id_in,"trip":trip_id_in}
+            vehicle_to_add = {"vehicle": vehicle_id_in,"route": route_id_in,"trip":trip_id_in}
             json_file_loaded["hourly"][get_date("tweeted")][run_number_in] = vehicle_to_add
             json_file_loaded["daily"][get_date("today")][run_number_in] = vehicle_to_add
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
