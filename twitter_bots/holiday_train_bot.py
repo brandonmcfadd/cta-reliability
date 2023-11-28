@@ -157,7 +157,7 @@ def find_cta_holiday_train(response, run_number):
                 output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
                 if prediction_count > 3:
                     print(f"Sending Tweet with contents\n{output_line}")
-                    # send_tweet(output_line)
+                    send_tweet(output_line)
     return output_line
 
 
@@ -216,10 +216,11 @@ def find_metra_holiday_train(response):
                         count += 1
             if count > 3:
                 print(f"Sending Tweet with contents\n{output_text}")
-                # send_tweet(output_text)
+                send_tweet(output_text)
         else:
             output_text = ""
     return output_text
+
 
 def find_cta_holiday_bus(response):
     """find the bus - tweet the bus!"""
@@ -229,18 +230,21 @@ def find_cta_holiday_bus(response):
         total_count = 0
         route_id = response["bustime-response"]["prd"][0]["rt"]
         route_dir = response["bustime-response"]["prd"][0]["rtdir"]
-        route_des = response["bustime-response"]["prd"][0]["des"]
         output_line = f'CTA Holiday Bus is {route_dir} on Route #{route_id}\nNext Stops:'
         for prediction in response["bustime-response"]["prd"]:
             if prediction['prdctdn'] != "DUE" and int(prediction['prdctdn']) > 5:
                 if (count % 3) == 0 and total_count <= 5:
-                    output_line = (f"{output_line}\n{prediction['stpnm']} - {prediction['prdctdn']}")
+                    output_line = (
+                        f"{output_line}\n{prediction['stpnm']} - {prediction['prdctdn']}")
                     total_count += 1
             count += 1
-        print(output_line)
-    except: # pylint: disable=bare-except
+        if total_count > 3:
+            print(f"Sending Tweet with contents\n{output_line}")
+            send_tweet(output_line)
+    except:  # pylint: disable=bare-except
         print("bus must not be active")
     return output_line
+
 
 def has_been_tweeted(run_number_in, vehicle_id_in, route_id_in, trip_id_in, type_in):
     """checks if a metra run was tweeted already"""
@@ -257,13 +261,16 @@ def has_been_tweeted(run_number_in, vehicle_id_in, route_id_in, trip_id_in, type
         with open(main_file_path + "train_arrivals/special/tweeted_metra_trains.json", 'w', encoding="utf-8") as fp2:
             if get_date("tweeted") not in json_file_loaded["hourly"]:
                 json_file_loaded["hourly"] = {**json_file_loaded["hourly"],
-                                    **{get_date("tweeted"): {}}}
+                                              **{get_date("tweeted"): {}}}
             if get_date("today") not in json_file_loaded["daily"]:
                 json_file_loaded["daily"] = {**json_file_loaded["daily"],
-                                    **{get_date("today"): {}}}
-            vehicle_to_add = {"vehicle": vehicle_id_in,"route": route_id_in,"trip":trip_id_in,"type":type_in}
-            json_file_loaded["hourly"][get_date("tweeted")][run_number_in] = vehicle_to_add
-            json_file_loaded["daily"][get_date("today")][run_number_in] = vehicle_to_add
+                                             **{get_date("today"): {}}}
+            vehicle_to_add = {"vehicle": vehicle_id_in,
+                              "route": route_id_in, "trip": trip_id_in, "type": type_in}
+            json_file_loaded["hourly"][get_date(
+                "tweeted")][run_number_in] = vehicle_to_add
+            json_file_loaded["daily"][get_date(
+                "today")][run_number_in] = vehicle_to_add
             json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
     return has_been_tweeted_result
 
@@ -282,7 +289,7 @@ def send_tweet(tweet_text_input):
         print("Twitter error :(")
 
 
-# cta_tweet_text = find_cta_holiday_train(
-#     train_api_call_to_cta_map(), "1225")
-# metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
+cta_tweet_text = find_cta_holiday_train(
+    train_api_call_to_cta_map(), "1225")
+metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
 bus_tweet_text = find_cta_holiday_bus(bus_api_call_to_cta())
