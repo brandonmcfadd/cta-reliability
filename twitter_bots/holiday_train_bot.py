@@ -143,7 +143,7 @@ def find_cta_holiday_train(response, run_number):
                 output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
                 if prediction_count > 3:
                     print(f"Sending Tweet with contents\n{output_line}")
-                    # send_tweet(output_line)
+                    send_tweet(output_line)
     return output_line
 
 
@@ -193,7 +193,7 @@ def find_metra_holiday_train(response):
                         count += 1
             if count > 3:
                 print(f"Sending Tweet with contents\n{output_text}")
-                # send_tweet(output_text)
+                send_tweet(output_text)
         else:
             output_text = ""
     return output_text
