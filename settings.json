@@ -32,5 +32,9 @@
         "api-enabled": "True",
         "api-url": "https://gtfsapi.metrarail.com/gtfs/positions",
         "trips-api-url": "https://gtfsapi.metrarail.com/gtfs/tripUpdates"
+    },
+    "bus-tracker-api": {
+        "api-enabled": "True",
+        "api-url": "http://www.ctabustracker.com/bustime/api/v2/getpredictions?key={}&vid=4374&format=json&top=100"
     }
 }

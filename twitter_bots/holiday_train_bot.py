@@ -20,6 +20,7 @@ twitter_bearer_key = os.getenv('HOLIDAY_TRAIN_BEARER_TOKEN')
 main_file_path = os.getenv('FILE_PATH')
 metra_username = os.getenv('METRA_USERNAME')
 metra_password = os.getenv('METRA_PASSWORD')
+bus_tracker_key = os.getenv('BUS_API_KEY')
 
 # Settings
 file = open(file=main_file_path + 'settings.json',
@@ -41,6 +42,7 @@ metra_stops = json.load(file)
 
 train_tracker_url_map = settings["train-tracker"]["map-url"]
 metra_tracker_url = settings["metra-api"]["trips-api-url"]
+bus_tracker_url = settings["bus-tracker-api"]["api-url"]
 
 
 def get_date(date_type):
@@ -88,6 +90,18 @@ def train_api_call_to_metra():
     try:
         api_response = requests.get(
             metra_tracker_url, auth=(metra_username, metra_password), timeout=240)
+        api_response_json = api_response.json()
+    except:  # pylint: disable=bare-except
+        print("Error in API Call to Metra Train Tracker")
+    return api_response_json
+
+
+def bus_api_call_to_cta():
+    """Gotta talk to Metra and get vehicle_id positions!"""
+    print("Making CTA Bus API Call...")
+    try:
+        api_response = requests.get(
+            bus_tracker_url.format(bus_tracker_key), timeout=240)
         api_response_json = api_response.json()
     except:  # pylint: disable=bare-except
         print("Error in API Call to Metra Train Tracker")
@@ -207,6 +221,26 @@ def find_metra_holiday_train(response):
             output_text = ""
     return output_text
 
+def find_cta_holiday_bus(response):
+    """find the bus - tweet the bus!"""
+    output_line = ""
+    try:
+        count = 0
+        total_count = 0
+        route_id = response["bustime-response"]["prd"][0]["rt"]
+        route_dir = response["bustime-response"]["prd"][0]["rtdir"]
+        route_des = response["bustime-response"]["prd"][0]["des"]
+        output_line = f'CTA Holiday Bus is {route_dir} on Route #{route_id}\nNext Stops:'
+        for prediction in response["bustime-response"]["prd"]:
+            if prediction['prdctdn'] != "DUE" and int(prediction['prdctdn']) > 5:
+                if (count % 3) == 0 and total_count <= 5:
+                    output_line = (f"{output_line}\n{prediction['stpnm']} - {prediction['prdctdn']}")
+                    total_count += 1
+            count += 1
+        print(output_line)
+    except: # pylint: disable=bare-except
+        print("bus must not be active")
+    return output_line
 
 def has_been_tweeted(run_number_in, vehicle_id_in, route_id_in, trip_id_in, type_in):
     """checks if a metra run was tweeted already"""
@@ -248,6 +282,7 @@ def send_tweet(tweet_text_input):
         print("Twitter error :(")
 
 
-cta_tweet_text = find_cta_holiday_train(
-    train_api_call_to_cta_map(), "1225")
-metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
+# cta_tweet_text = find_cta_holiday_train(
+#     train_api_call_to_cta_map(), "1225")
+# metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
+bus_tweet_text = find_cta_holiday_bus(bus_api_call_to_cta())
