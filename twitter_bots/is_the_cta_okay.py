@@ -64,7 +64,7 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     last_updated = data["LastUpdated"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
-    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %d')
+    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %e')
     last_updated_string_int = datetime.datetime.strftime(last_updated_datetime, '%d')
     last_updated_string_ending = get_ordinal_suffix(int(last_updated_string_int))
     for line in data["routes"]:
