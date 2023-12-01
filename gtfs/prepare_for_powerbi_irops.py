@@ -48,7 +48,7 @@ irops = ["Red","30169","30170"]
 calendar_line_input = input("Enter the Desired Schedule Period from selection: ")
 schedule_date = input("Enter the Schedule Effective Date (mm-dd-yyyy): ")
 calendar_regex = re.compile(unique_date_options[int(calendar_line_input)-1] + "|service_id", re.MULTILINE)
-stop_times_regex_input = f',30072,|,30073,|,30070,|,30071,|,30381,|,30382,|,30215,|,30216,|,30040,|,30041,|,30164,|,30241,|,30064,|,30065,|,{irops[1]},|,{irops[2]},|trip_id'
+stop_times_regex_input = f',30072,|,30073,|,30070,|,30071,|,30381,|,30382,|,30215,|,30216,|,30040,|,30041,|,30164,|,30241,|,30064,|,30065,|,{irops[1]},|,{irops[2]},|,30297,|,30298,|trip_id'
 stop_times_regex = re.compile(stop_times_regex_input, re.MULTILINE)
 trips_regex = re.compile(
     r'Red|Blue|Brn|G|Org|P|Pink|Y|service_id', re.MULTILINE)
@@ -92,13 +92,11 @@ def regex_runner(pattern, filename, runtype="None"):
                         modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
                     elif split_line[3] == "30297": # Yellow - Outbound
-                        do_nothing = True
-                        # modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
-                        # print(f"{modified_line}", end='')
+                        modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
+                        print(f"{modified_line}", end='')
                     elif split_line[3] == "30298": # Yellow - Inbound
-                        do_nothing = True
-                        # modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
-                        # print(f"{modified_line}", end='')
+                        modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
+                        print(f"{modified_line}", end='')
                     elif split_line[3] == irops[1]: # Irops 1
                         modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
@@ -130,11 +128,10 @@ def regex_runner(pattern, filename, runtype="None"):
                         print(f"{modified_line_1}", end='')
                         print(f"{modified_line_2}", end='')
                     elif split_line[0] == "Y": # Yellow
-                        do_nothing = True
-                        # modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
-                        # modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
-                        # print(f"{modified_line_1}", end='')
-                        # print(f"{modified_line_2}", end='')
+                        modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
+                        modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
+                        print(f"{modified_line_1}", end='')
+                        print(f"{modified_line_2}", end='')
                     elif split_line[0] == irops[0]: # Red
                         modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
                         modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
