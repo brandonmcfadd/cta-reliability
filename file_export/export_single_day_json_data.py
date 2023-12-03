@@ -21,6 +21,7 @@ metra_dataset_id = os.getenv('METRA_DATASET_ID')
 
 main_file_path_json = main_file_path + "train_arrivals/json/"
 
+
 def get_date(date_type):
     """formatted date shortcut"""
     if date_type == "short":
@@ -66,7 +67,7 @@ def get_report_data(dataset, days_old):
     response_json = json.loads(response.text)
 
     try:
-        return(response_json['results'][0].get('tables')[0].get('rows'))
+        return (response_json['results'][0].get('tables')[0].get('rows'))
     except:  # pylint: disable=bare-except
         print("error in:", response_json)
 
@@ -108,9 +109,9 @@ def parse_response_cta(data, last_refresh, days_old):
             system_scheduled += item["date_range[Scheduled Arrivals]"]
         if item["date_range[Remaining Scheduled]"] is not None:
             system_scheduled_remaining += item["date_range[Remaining Scheduled]"]
-        if item["date_range[Arrivals Percentage]"] is None: 
-            arrival_percentage = 0 
-        else: 
+        if item["date_range[Arrivals Percentage]"] is None:
+            arrival_percentage = 0
+        else:
             arrival_percentage = item["date_range[Arrivals Percentage]"]
         single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], arrival_percentage,
                                     item["date_range[Remaining Scheduled]"], item["date_range[Consistent Headways]"], item["date_range[Longest Wait]"],
