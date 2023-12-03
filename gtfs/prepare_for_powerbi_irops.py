@@ -2,10 +2,9 @@
 import fileinput
 import re
 import os
+from datetime import datetime
 import shutil
-import zipfile
-import io
-import requests
+import requests, zipfile, io
 
 directory_path = os.getcwd() + "/gtfs"
 stop_times_path = directory_path + "/powerbi/export/stop_times.txt"
@@ -18,7 +17,7 @@ target = directory_path + "/powerbi/export/"
 
 # Download new package
 print("Downloading Updated GTFS Package")
-r = requests.get("https://www.transitchicago.com/downloads/sch_data/google_transit.zip", timeout=300)
+r = requests.get("https://www.transitchicago.com/downloads/sch_data/google_transit.zip")
 z = zipfile.ZipFile(io.BytesIO(r.content))
 z.extractall(origin)
 
@@ -28,8 +27,8 @@ files = os.listdir(origin)
 # Fetching all the files to directory
 file_names = ["calendar.txt", "stop_times.txt", "trips.txt"]
 for file_name in files:
-    if file_name in file_names:
-        shutil.copy(origin+file_name, target+file_name)
+   if file_name in file_names:
+       shutil.copy(origin+file_name, target+file_name)
 print("Files are copied successfully")
 
 count = 1
@@ -43,15 +42,13 @@ for option in unique_date_options:
     print(f"#{count} - {option}")
     count += 1
 
-irops = ["Red","30169","30170"]
-
 calendar_line_input = input("Enter the Desired Schedule Period from selection: ")
 schedule_date = input("Enter the Schedule Effective Date (mm-dd-yyyy): ")
 calendar_regex = re.compile(unique_date_options[int(calendar_line_input)-1] + "|service_id", re.MULTILINE)
-stop_times_regex_input = f',30072,|,30073,|,30070,|,30071,|,30381,|,30382,|,30215,|,30216,|,30040,|,30041,|,30164,|,30241,|,30064,|,30065,|,{irops[1]},|,{irops[2]},|,30297,|,30298,|trip_id'
-stop_times_regex = re.compile(stop_times_regex_input, re.MULTILINE)
+stop_times_regex = re.compile(
+    r',30072,|,30073,|,30070,|,30071,|,30381,|,30382,|,30215,|,30216,|,30040,|,30041,|,30164,|,30241,|,30064,|,30065,|,30169,|,30170,|trip_id', re.MULTILINE)
 trips_regex = re.compile(
-    r'Red|Blue|Brn|G|Org|P|Pink|Y|service_id', re.MULTILINE)
+    r'Red|Blue|Brn|G|Org|P|Pink|service_id', re.MULTILINE)
 
 calendar_ids = []
 weekday_trip_ids = []
@@ -62,9 +59,9 @@ sunday_trip_ids = []
 def regex_runner(pattern, filename, runtype="None"):
     """Takes a regex pattern and only keeps matching lines"""
     matched = re.compile(pattern).search
-    with fileinput.FileInput(filename, inplace=True) as file_input:
-        for single_line in file_input:
-            if matched(single_line):  # save lines that match
+    with fileinput.FileInput(filename, inplace=True) as file:
+        for line in file:
+            if matched(line):  # save lines that match
                 split_line = line.split(',')
                 if runtype=="stop_times":
                     if split_line[3] == "30070": # Brown - Kimball
@@ -91,16 +88,10 @@ def regex_runner(pattern, filename, runtype="None"):
                     elif split_line[3] == "30241": # Purple - Northbound
                         modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
-                    elif split_line[3] == "30297": # Yellow - Outbound
+                    elif split_line[3] == "30169": # Yellow - Outbound
                         modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
-                    elif split_line[3] == "30298": # Yellow - Inbound
-                        modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
-                        print(f"{modified_line}", end='')
-                    elif split_line[3] == irops[1]: # Irops 1
-                        modified_line = f"{split_line[0]}1,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
-                        print(f"{modified_line}", end='')
-                    elif split_line[3] == irops[2]: # Irops 2
+                    elif split_line[3] == "30170": # Yellow - Inbound
                         modified_line = f"{split_line[0]}2,{split_line[1]},{split_line[2]},{split_line[3]},{split_line[4]},{split_line[5]},{split_line[6]},{split_line[7]}"
                         print(f"{modified_line}", end='')
                     else:
@@ -127,15 +118,10 @@ def regex_runner(pattern, filename, runtype="None"):
                         modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
                         print(f"{modified_line_1}", end='')
                         print(f"{modified_line_2}", end='')
-                    elif split_line[0] == "Y": # Yellow
-                        modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
-                        modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
-                        print(f"{modified_line_1}", end='')
-                        print(f"{modified_line_2}", end='')
-                    elif split_line[0] == irops[0]: # Red
-                        modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
-                        modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
+                    elif split_line[0] == "Red": # Yellow
                         print(line, end='')
+                        modified_line_1 = f"{split_line[0]},{split_line[1]},{split_line[2]}1,0,{split_line[4]},{split_line[5]},0,{split_line[7]},{split_line[8]}"
+                        modified_line_2 = f"{split_line[0]},{split_line[1]},{split_line[2]}2,1,{split_line[4]},{split_line[5]},1,{split_line[7]},{split_line[8]}"
                         print(f"{modified_line_1}", end='')
                         print(f"{modified_line_2}", end='')
                     else:
@@ -149,22 +135,21 @@ def regex_runner(pattern, filename, runtype="None"):
 def get_ids(path, column):
     """extracts items from columns that match"""
     # Using readlines()
-    file1 = open(path, 'r', encoding="utf-8")
+    file1 = open(path, 'r')
     lines = file1.readlines()
     ids = ''
-    current_count = 0
+    count = 0
     # Strips the newline character
-    for single_line in lines:
-        split_line = single_line.split(',')
-        if current_count == 0:
+    for line in lines:
+        split_line = line.split(',')
+        if count == 0:
             ids += (split_line[column])
         else:
             ids += ",|," + (split_line[column])
-        current_count += 1
+        count += 1
     return ids
 
 def file_rename(path, date):
-    """renames inbound file"""
     os.rename(path,f"{path[:-4]}_{date}.txt")
 
 print("Performing Regex Cleanup on 'calendar.txt'")
