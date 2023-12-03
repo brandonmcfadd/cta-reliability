@@ -127,7 +127,10 @@ def prepare_tweet_text_3(data):
         on_time_arrivals += int(data["routes"][line]["Trains_On_Time"])
         on_time_runs = data["routes"][line]["Trains_On_Time"]
         scheduled_runs = data["routes"][line]["ScheduledRuns"]
-        percent_on_time = int(float(data["routes"][line]["Trains_On_Time"]/data["routes"][line]["ScheduledRuns"]) * 100)
+        try:
+            percent_on_time = int(float(data["routes"][line]["Trains_On_Time"]/data["routes"][line]["ScheduledRuns"]) * 100)
+        except:
+            percent_on_time = 0
         text_output_part_3 = f"{text_output_part_3}\n{line}: {percent_on_time}% - {on_time_runs:,}/{scheduled_runs:,}"
     system_perc = int(float(on_time_arrivals/system_sched) * 100)
     text_output_part_3 = f"System On-Time Performance as of {last_updated_string} (# on-time/scheduled):\nSystem: {system_perc}% - {on_time_arrivals:,}/{system_sched:,}{text_output_part_3}"
