@@ -29,7 +29,8 @@ def get_ordinal_suffix(day: int) -> str:
 
 def get_run_data_from_api():
     """hits the api and returns the current days data"""
-    todays_stats_api_url = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/today"
+    # todays_stats_api_url = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/today"
+    todays_stats_api_url = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/yesterday"
 
     my_api_call_headers = {
         'Authorization': my_api_key
@@ -100,10 +101,8 @@ def prepare_tweet_text_2(data):
         scheduled_runs_remaining_text = f"{scheduled_runs_remaining:,}"
     except:
         scheduled_runs_remaining_text = "🤷"
-    consistent_arrivals = 0
     text_output_part_2 = f"System Stats as of {last_updated_string} (actual/scheduled):\nSystem: {system_perc}% - {system_actual:,}/{system_sched:,}"
     for line in data["routes"]:
-        consistent_arrivals += int(data["routes"][line]["Consistent_Headways"])
         actual_runs = data["routes"][line]["ActualRuns"]
         scheduled_runs = data["routes"][line]["ScheduledRuns"]
         percent_run = int(float(data["routes"][line]["PercentRun"]) * 100)
@@ -117,7 +116,6 @@ def prepare_tweet_text_2(data):
 def prepare_tweet_text_3(data):
     "prepares the reply tweet for tweet 1"
     system_actual = data["system"]["ActualRuns"]
-    system_sched = data["system"]["ScheduledRuns"]
     last_updated = data["LastUpdated"]
     last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
     last_updated_string = datetime.datetime.strftime(last_updated_datetime, '%-l%p').lower()
@@ -126,14 +124,13 @@ def prepare_tweet_text_3(data):
     for line in data["routes"]:
         on_time_arrivals += int(data["routes"][line]["Trains_On_Time"])
         on_time_runs = data["routes"][line]["Trains_On_Time"]
-        scheduled_runs = data["routes"][line]["ScheduledRuns"]
         try:
-            percent_on_time = int(float(data["routes"][line]["Trains_On_Time"]/data["routes"][line]["ScheduledRuns"]) * 100)
-        except:
+            percent_on_time = int(float(data["routes"][line]["Trains_On_Time"]/data["routes"][line]["ActualRuns"]) * 100)
+        except: # pylint: disable=bare-except
             percent_on_time = 0
-        text_output_part_3 = f"{text_output_part_3}\n{line}: {percent_on_time}% - {on_time_runs:,}/{scheduled_runs:,}"
-    system_perc = int(float(on_time_arrivals/system_sched) * 100)
-    text_output_part_3 = f"System On-Time Performance as of {last_updated_string} (# on-time/scheduled):\nSystem: {system_perc}% - {on_time_arrivals:,}/{system_sched:,}{text_output_part_3}"
+        text_output_part_3 = f"{text_output_part_3}\n{line}: {percent_on_time}% - {on_time_runs:,}/{data['routes'][line]['ActualRuns']:,}"
+    system_perc = int(float(on_time_arrivals/system_actual) * 100)
+    text_output_part_3 = f"On-Time Performance as of {last_updated_string} (on-time/actual):\nSystem: {system_perc}% - {on_time_arrivals:,}/{system_actual:,}{text_output_part_3}"
     return text_output_part_3
 
 
