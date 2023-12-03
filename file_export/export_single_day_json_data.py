@@ -228,22 +228,22 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ScheduledRunsMorningPeak": routes_information["Red"][8],
                 "ScheduledRunsEveningPeak": routes_information["Red"][9],
                 "TrainsOnSchedule": routes_information["Red"][10]
+            },
+            "Yellow": {
+                "ActualRuns": routes_information["Yellow"][0],
+                "ScheduledRuns": routes_information["Yellow"][1],
+                "PercentRun": routes_information["Yellow"][2],
+                "RemainingScheduled": routes_information["Yellow"][3],
+                "Consistent_Headways": routes_information["Yellow"][4],
+                "LongestWait": routes_information["Yellow"][5],
+                "ActualRunsMorningPeak": routes_information["Yellow"][6],
+                "ActualRunsEveningPeak": routes_information["Yellow"][7],
+                "ScheduledRunsMorningPeak": routes_information["Yellow"][8],
+                "ScheduledRunsEveningPeak": routes_information["Yellow"][9],
+                "TrainsOnSchedule": routes_information["Yellow"][10]
             }
         }
     }
-            # },
-            # "Yellow": {
-            #     "ActualRuns": routes_information["Yellow"][0],
-            #     "ScheduledRuns": routes_information["Yellow"][1],
-            #     "PercentRun": routes_information["Yellow"][2],
-            #     "RemainingScheduled": routes_information["Yellow"][3],
-            #     "Consistent_Headways": routes_information["Yellow"][4],
-            #     "LongestWait": routes_information["Yellow"][5],
-            #     "ActualRunsMorningPeak": routes_information["Yellow"][6],
-            #     "ActualRunsEveningPeak": routes_information["Yellow"][7],
-            #     "ScheduledRunsMorningPeak": routes_information["Yellow"][8],
-            #     "ScheduledRunsEveningPeak": routes_information["Yellow"][9],
-            #     "TrainsOnSchedule": routes_information["Yellow"][10]
 
     with open(json_file, 'w', encoding="utf-8") as f:
         print(f"Remaining: {days_old} | Saving Data In: {json_file}")
