@@ -99,13 +99,13 @@ def prepare_tweet_text_2(data):
         scheduled_runs_remaining_text = f"{scheduled_runs_remaining:,}"
     except:
         scheduled_runs_remaining_text = "🤷"
-    text_output_part_2 = f"System Stats as of {last_updated_string} (actual/scheduled):\nSystem: {system_perc}% - {system_actual:,}/{system_sched:,}"
+    text_output_part_2 = f"System Stats as of {last_updated_string} (actual/scheduled):\nSystem: {system_perc}% • {system_actual:,}/{system_sched:,}"
     for line in data["routes"]:
         actual_runs = data["routes"][line]["ActualRuns"]
         scheduled_runs = data["routes"][line]["ScheduledRuns"]
         percent_run = int(float(data["routes"][line]["PercentRun"]) * 100)
         text_output_part_2 = text_output_part_2 + \
-            f"\n{line}: {percent_run}% - {actual_runs:,}/{scheduled_runs:,}"
+            f"\n{line}: {percent_run}% • {actual_runs:,}/{scheduled_runs:,}"
     text_output_part_2 = text_output_part_2 + \
         f"\nScheduled Runs Remaining: {scheduled_runs_remaining_text}"
     return text_output_part_2
@@ -126,9 +126,9 @@ def prepare_tweet_text_3(data):
             percent_on_time = int(float(data["routes"][line]["Trains_On_Time"]/data["routes"][line]["ActualRuns"]) * 100)
         except: # pylint: disable=bare-except
             percent_on_time = 0
-        text_output_part_3 = f"{text_output_part_3}\n{line}: {percent_on_time}% - {on_time_runs:,}/{data['routes'][line]['ActualRuns']:,}"
+        text_output_part_3 = f"{text_output_part_3}\n{line}: {percent_on_time}% • {on_time_runs:,}/{data['routes'][line]['ActualRuns']:,}"
     system_perc = int(float(on_time_arrivals/system_actual) * 100)
-    text_output_part_3 = f"On-Time Performance as of {last_updated_string} (on-time/actual):\nSystem: {system_perc}% - {on_time_arrivals:,}/{system_actual:,}{text_output_part_3}"
+    text_output_part_3 = f"On-Time Performance as of {last_updated_string} (# on-time/actual):\nSystem: {system_perc}% • {on_time_arrivals:,}/{system_actual:,}{text_output_part_3}"
     return text_output_part_3
 
 
