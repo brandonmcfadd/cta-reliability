@@ -108,7 +108,11 @@ def parse_response_cta(data, last_refresh, days_old):
             system_scheduled += item["date_range[Scheduled Arrivals]"]
         if item["date_range[Remaining Scheduled]"] is not None:
             system_scheduled_remaining += item["date_range[Remaining Scheduled]"]
-        single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], item["date_range[Arrivals Percentage]"],
+        if item["date_range[Arrivals Percentage]"] is None: 
+            arrival_percentage = 0 
+        else: 
+            arrival_percentage = item["date_range[Arrivals Percentage]"]
+        single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], arrival_percentage,
                                     item["date_range[Remaining Scheduled]"], item["date_range[Consistent Headways]"], item["date_range[Longest Wait]"],
                                     item["date_range[Actual Arrivals - Morning Peak]"], item["date_range[Actual Arrivals - Evening Peak]"],
                                     item["date_range[Scheduled Arrivals - Morning Peak]"], item["date_range[Scheduled Arrivals - Evening Peak]"],
