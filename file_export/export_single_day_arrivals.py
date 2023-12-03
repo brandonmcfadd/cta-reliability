@@ -102,24 +102,16 @@ def parse_response_cta(data, delay):
     for item in data:
         shortened_date = get_date("file", delay)
         csv_file_path = main_file_path_csv + "cta/" + shortened_date + ".csv"
-        try:
-            headway = int(item["train_arrivals[Headway]"])
-        except: # pylint: disable=bare-except
-            headway = item["train_arrivals[Headway]"]
-        try:
-            scheduled_headway = int(item["train_arrivals[Scheduled Headway]"])
-        except: # pylint: disable=bare-except
-            scheduled_headway = item["train_arrivals[Scheduled Headway]"]
         with open(csv_file_path, 'a', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
                 csvfile, fieldnames=train_arrivals_csv_headers)
             writer_object.writerow({'Station_ID': item["train_arrivals[Station_ID]"], 'Stop_ID': item["train_arrivals[Stop_ID]"],
                                     'Station_Name': item["train_arrivals[Station_Name]"], 'Destination': item["train_arrivals[Destination]"], 'Route': item["train_arrivals[Route]"],
                                     'Run_Number': item["train_arrivals[Run_Number]"], 'Prediction_Time': item["train_arrivals[Prediction_Time]"],
-                                    'Arrival_Time': item["train_arrivals[Arrival_Time_Combined]"], 'Headway': headway, 
+                                    'Arrival_Time': item["train_arrivals[Arrival_Time_Combined]"], 'Headway': item["train_arrivals[Headway]"], 
                                     'Time_Of_Week': item["train_arrivals[Time of Week]"], 'Time_Of_Day': item["train_arrivals[Time Of Day]"], 
                                     'Consistent_Interval': item["train_arrivals[Headway Consistency]"], 
-                                    'Scheduled_Headway': scheduled_headway, 
+                                    'Scheduled_Headway': item["train_arrivals[Scheduled Headway]"], 
                                     'Scheduled_Headway_Check': item["train_arrivals[Scheduled Headway Check]"]})
     data_frame = pd.read_csv(csv_file_path)
     sorted_data_frame = data_frame.sort_values(
