@@ -29,9 +29,7 @@ def get_ordinal_suffix(day: int) -> str:
 
 def get_run_data_from_api():
     """hits the api and returns the current days data"""
-    # todays_stats_api_url = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/today"
-    todays_stats_api_url = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/yesterday"
-
+    todays_stats_api_url = "http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/today"
     my_api_call_headers = {
         'Authorization': my_api_key
     }
