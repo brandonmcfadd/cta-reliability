@@ -149,7 +149,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Blue"][7],
                 "ScheduledRunsMorningPeak": routes_information["Blue"][8],
                 "ScheduledRunsEveningPeak": routes_information["Blue"][9],
-                "TrainsOnSchedule": routes_information["Blue"][10]
+                "Trains_On_Time": routes_information["Blue"][10]
             },
             "Brown": {
                 "ActualRuns": routes_information["Brown"][0],
@@ -162,7 +162,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Brown"][7],
                 "ScheduledRunsMorningPeak": routes_information["Brown"][8],
                 "ScheduledRunsEveningPeak": routes_information["Brown"][9],
-                "TrainsOnSchedule": routes_information["Brown"][10]
+                "Trains_On_Time": routes_information["Brown"][10]
             },
             "Green": {
                 "ActualRuns": routes_information["Green"][0],
@@ -175,7 +175,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Green"][7],
                 "ScheduledRunsMorningPeak": routes_information["Green"][8],
                 "ScheduledRunsEveningPeak": routes_information["Green"][9],
-                "TrainsOnSchedule": routes_information["Green"][10]
+                "Trains_On_Time": routes_information["Green"][10]
             },
             "Orange": {
                 "ActualRuns": routes_information["Orange"][0],
@@ -188,7 +188,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Orange"][7],
                 "ScheduledRunsMorningPeak": routes_information["Orange"][8],
                 "ScheduledRunsEveningPeak": routes_information["Orange"][9],
-                "TrainsOnSchedule": routes_information["Green"][10]
+                "Trains_On_Time": routes_information["Green"][10]
             },
             "Pink": {
                 "ActualRuns": routes_information["Pink"][0],
@@ -201,7 +201,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Pink"][7],
                 "ScheduledRunsMorningPeak": routes_information["Pink"][8],
                 "ScheduledRunsEveningPeak": routes_information["Pink"][9],
-                "TrainsOnSchedule": routes_information["Pink"][10]
+                "Trains_On_Time": routes_information["Pink"][10]
             },
             "Purple": {
                 "ActualRuns": routes_information["Purple"][0],
@@ -214,7 +214,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Purple"][7],
                 "ScheduledRunsMorningPeak": routes_information["Purple"][8],
                 "ScheduledRunsEveningPeak": routes_information["Purple"][9],
-                "TrainsOnSchedule": routes_information["Purple"][10]
+                "Trains_On_Time": routes_information["Purple"][10]
             },
             "Red": {
                 "ActualRuns": routes_information["Red"][0],
@@ -227,7 +227,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Red"][7],
                 "ScheduledRunsMorningPeak": routes_information["Red"][8],
                 "ScheduledRunsEveningPeak": routes_information["Red"][9],
-                "TrainsOnSchedule": routes_information["Red"][10]
+                "Trains_On_Time": routes_information["Red"][10]
             },
             "Yellow": {
                 "ActualRuns": routes_information["Yellow"][0],
@@ -240,7 +240,7 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Yellow"][7],
                 "ScheduledRunsMorningPeak": routes_information["Yellow"][8],
                 "ScheduledRunsEveningPeak": routes_information["Yellow"][9],
-                "TrainsOnSchedule": routes_information["Yellow"][10]
+                "Trains_On_Time": routes_information["Yellow"][10]
             }
         }
     }
