@@ -94,12 +94,16 @@ def prepare_tweet_text_2(data):
     last_updated = data["LastUpdated"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %-e')
+    last_updated_string_int = datetime.datetime.strftime(last_updated_datetime, '%e')
+    last_updated_string_ending = get_ordinal_suffix(int(last_updated_string_int))
+    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
     last_updated_string = datetime.datetime.strftime(last_updated_datetime, '%-l%p').lower()
     try:
         scheduled_runs_remaining_text = f"{scheduled_runs_remaining:,}"
     except:
         scheduled_runs_remaining_text = "🤷"
-    text_output_part_2 = f"System Stats as of {last_updated_string} (actual/scheduled):\nSystem: {system_perc}% • {system_actual:,}/{system_sched:,}"
+    text_output_part_2 = f"System Stats as of {last_updated_string_full}{last_updated_string_ending} at {last_updated_string} (actual/scheduled):\nSystem: {system_perc}% • {system_actual:,}/{system_sched:,}"
     for line in data["routes"]:
         actual_runs = data["routes"][line]["ActualRuns"]
         scheduled_runs = data["routes"][line]["ScheduledRuns"]
@@ -115,6 +119,11 @@ def prepare_tweet_text_3(data):
     "prepares the reply tweet for tweet 1"
     system_actual = data["system"]["ActualRuns"]
     last_updated = data["LastUpdated"]
+    system_perc = int(float(data["system"]["PercentRun"]) * 100)
+    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %-e')
+    last_updated_string_int = datetime.datetime.strftime(last_updated_datetime, '%e')
+    last_updated_string_ending = get_ordinal_suffix(int(last_updated_string_int))
     last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
     last_updated_string = datetime.datetime.strftime(last_updated_datetime, '%-l%p').lower()
     on_time_arrivals = 0
@@ -128,7 +137,7 @@ def prepare_tweet_text_3(data):
             percent_on_time = 0
         text_output_part_3 = f"{text_output_part_3}\n{line}: {percent_on_time}% • {on_time_runs:,}/{data['routes'][line]['ActualRuns']:,}"
     system_perc = int(float(on_time_arrivals/system_actual) * 100)
-    text_output_part_3 = f"On-Time Performance as of {last_updated_string} (# on-time/actual):\nSystem: {system_perc}% • {on_time_arrivals:,}/{system_actual:,}{text_output_part_3}"
+    text_output_part_3 = f"On-Time Performance as of {last_updated_string_full}{last_updated_string_ending} at {last_updated_string} (# on-time/actual):\nSystem: {system_perc}% • {on_time_arrivals:,}/{system_actual:,}{text_output_part_3}"
     return text_output_part_3
 
 
