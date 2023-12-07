@@ -3,9 +3,9 @@ MAIN_PAGE = """
     <html>
     <head>
     <title>
-    RTA (CTA/Metra) Reliability API</title>
+    Brandon McFaddens API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="API Available to gather Actual, Scheduled and Percent Completed for runs on the CTA/Metra System.">
+    <meta name="description" content="API Available to gather Actual, Scheduled and Percent Completed for runs on the CTA/Metra/WMATA System.">
     <style>
     body {background-color:#ffffff;background-repeat:no-repeat;background-position:top left;background-attachment:fixed;}
     h1{font-family:Arial, sans-serif;color:#000000;background-color:#ffffff;}
@@ -20,29 +20,31 @@ MAIN_PAGE = """
     </style>
     </head>
     <body>
-    <h1>Welcome to the RTA Reliability API</h1>
+    <h1>Welcome to the Brandon's Transit API</h1>
     <p>You can use this API to query by date and return the number of runs that were observed on the system vs the number scheduled and calculated percentage of those completed runs.
     <br>Additionally, you can obtain a copy of the raw data being used by my PowerBi reports for your own analysis.</p>
     <p><b>Authentication is required to use this API:</b> Please fill out the contact form at https://brandonmcfadden.com/contact to request an API key.</p>
     <p><b>Rate Limit:</b> All API Endpoints have a 2 requests per second limit - please keep this in mind and be gentle :)</p>
     <p></p>
-    <h2>V2 (Supports CTA & Metra)</h2>
+    <h2>V2 (Supports CTA, Metra and WMATA)</h2>
     <h3>Daily Results</h3>
     <h4>Returns back combined value calculations for each of the available lines comparing scheduled service values to actual service values.</h4>
-    <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/{yyyy-mm-dd}
-    <br>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/2023-01-20</p>
-    <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/metra/get_daily_results/{yyyy-mm-dd}
-    <br>Example: http://rta-api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-20</p>
+    <p>Endpoint: http://api.brandonmcfadden.com/api/v2/cta/get_daily_results/{yyyy-mm-dd}
+    <br>Example: http://api.brandonmcfadden.com/api/v2/cta/get_daily_results/2023-01-20</p>
+    <p>Endpoint: http://api.brandonmcfadden.com/api/v2/metra/get_daily_results/{yyyy-mm-dd}
+    <br>Example: http://api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-20</p>
+    <p>Endpoint: http://api.brandonmcfadden.com/api/v2/wmata/get_daily_results/{yyyy-mm-dd}
+    <br>Example: http://api.brandonmcfadden.com/api/v2/wmata/get_daily_results/2023-12-06</p>
     <h3>Train Arrivals (by day)</h3>
     <h4>Returns back the raw arrival data as a csv file. This file contains all of the arrivals being used in the <a href="https://brandonmcfadden.com/cta-reliability">PowerBi Reports</a>.<br>
     Arrival data for the previous day is loaded at ~01:00 CST.</h4>
-    <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/{yyyy-mm-dd}
-    <br>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/2023-01-20</p>
+    <p>Endpoint: http://api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/{yyyy-mm-dd}
+    <br>Example: http://api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/2023-01-20</p>
     <h3>Train Arrivals (by month)</h3>
     <h4>Returns back the raw arrival data as a csv file. This file contains all of the arrivals being used in the <a href="https://brandonmcfadden.com/cta-reliability">PowerBi Reports</a>.<br>
     Arrival data for the previous month is loaded at ~01:00 CST on the first day of the following month.</h4>
-    <p>Endpoint: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/{yyyy-mm}
-    <br>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/2023-01</p>
+    <p>Endpoint: http://api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/{yyyy-mm}
+    <br>Example: http://api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_month/2023-01</p>
     <p><b>Note:</b> All Endpoints also allow the options /today and /yesterday in lieu of the date (with the exception of 'get_train_arrivals_by_day', which does not include data for the current day)</p>
     <h2>Data Availability:</h2>
     <p>CTA: June 20, 2022 through Current Day
@@ -52,12 +54,12 @@ MAIN_PAGE = """
     <pre>
     <code>
     curl --location --request GET 
-        'http://rta-api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-25'
+        'http://api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-25'
         --header 'Authorization: Basic {base64 encoded username:password}'
 
     Example:
     curl --location --request GET 
-        'http://rta-api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-25'
+        'http://api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-25'
         --header 'Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ='
     </code>
     </pre>
@@ -65,9 +67,9 @@ MAIN_PAGE = """
     <pre>
     <code>
     {
-        "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
+        "Data Provided By": "Brandon McFadden - http://api.brandonmcfadden.com",
         "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
-        "V2 API Information At": "http://rta-api.brandonmcfadden.com",
+        "V2 API Information At": "http://api.brandonmcfadden.com",
         "Entity": "cta",
         "Date": "2023-01-24",
         "IntegrityChecksPerformed": 1439,
@@ -126,9 +128,9 @@ MAIN_PAGE = """
     <pre>
     <code>
     {
-        "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
+        "Data Provided By": "Brandon McFadden - http://api.brandonmcfadden.com",
         "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
-        "V2 API Information At": "http://rta-api.brandonmcfadden.com",
+        "V2 API Information At": "http://api.brandonmcfadden.com",
         "Entity": "metra",
         "Date": "2023-01-24",
         "IntegrityChecksPerformed": 96,
@@ -228,12 +230,12 @@ ERROR_PAGE = """
     <p>You can use this API to query by date and return the number of runs that were observed on the system vs the number scheduled and calculated percentage of those completed runs. </p>
     <p></p>
     <h2>V1 (Only CTA):</h2>
-    <p>To Retrieve the data use http://rta-api.brandonmcfadden.com/api/v1/get_daily_results/{date}</p>
-    <p>Example: http://rta-api.brandonmcfadden.com/api/v1/get_daily_results/2023-01-20</p>
+    <p>To Retrieve the data use http://api.brandonmcfadden.com/api/v1/get_daily_results/{date}</p>
+    <p>Example: http://api.brandonmcfadden.com/api/v1/get_daily_results/2023-01-20</p>
     <p></p>
     <h2>V2 (Supports CTA & Metra)</h2>
-    <p>Example: http://rta-api.brandonmcfadden.com/api/v2/cta/get_daily_results/2023-01-20</p>
-    <p>Example: http://rta-api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-20</p>
+    <p>Example: http://api.brandonmcfadden.com/api/v2/cta/get_daily_results/2023-01-20</p>
+    <p>Example: http://api.brandonmcfadden.com/api/v2/metra/get_daily_results/2023-01-20</p>
     <p></p>
     <p>Data Availability:</p>
     <p>CTA: June 20, 2022 through Current Day</p>
