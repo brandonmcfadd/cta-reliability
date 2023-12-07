@@ -216,7 +216,7 @@ ERROR_PAGE = """
     <html>
     <head>
     <title>
-    RTA (CTA/Metra) Reliability API</title>
+    Transit Reliability API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="API Available to gather Actual, Scheduled and Percent Completed for runs on the CTA/Metra System.">
     <style>
