@@ -347,7 +347,7 @@ async def return_results_for_date_wmata_v2(date: str, token: str = Depends(get_c
         return files_available
     else:
         try:
-            json_file = main_file_path_json + date + ".json"
+            json_file = wmata_main_file_path_json + date + ".json"
             results = open(json_file, 'r', encoding="utf-8")
             return Response(content=results.read(), media_type="application/json")
         except:  # pylint: disable=bare-except
