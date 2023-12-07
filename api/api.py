@@ -43,6 +43,10 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%Y-%m-%d")
     elif date_type == "api-yesterday":
         date = datetime.strftime(datetime.now()-timedelta(days=1), "%Y-%m-%d")
+    elif date_type == "api-today-est":
+        date = datetime.strftime(datetime.now()+timedelta(hours=1), "%Y-%m-%d")
+    elif date_type == "api-yesterday-est":
+        date = datetime.strftime(datetime.now()-timedelta(days=1)+timedelta(hours=1), "%Y-%m-%d")
     elif date_type == "api-last-month":
         date = datetime.strftime(datetime.now()-relativedelta(months=1), "%Y-%m")
     elif date_type == "current":
@@ -339,9 +343,9 @@ async def return_holiday_trains_metra(token: str = Depends(get_current_username)
 async def return_results_for_date_wmata_v2(date: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     if date == "today":
-        date = get_date("api-today")
+        date = get_date("api-today-est")
     elif date == "yesterday":
-        date = get_date("api-yesterday")
+        date = get_date("api-yesterday-est")
     if date == "availability":
         files_available = sorted((f for f in os.listdir(wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
         return files_available
