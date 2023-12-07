@@ -3,7 +3,7 @@ MAIN_PAGE = """
     <html>
     <head>
     <title>
-    Brandon McFaddens API</title>
+    Transit Reliability API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="API Available to gather Actual, Scheduled and Percent Completed for runs on the CTA/Metra/WMATA System.">
     <style>
@@ -20,7 +20,7 @@ MAIN_PAGE = """
     </style>
     </head>
     <body>
-    <h1>Welcome to the Brandon's Transit API</h1>
+    <h1>Welcome to the Transit Reliability API</h1>
     <p>You can use this API to query by date and return the number of runs that were observed on the system vs the number scheduled and calculated percentage of those completed runs.
     <br>Additionally, you can obtain a copy of the raw data being used by my PowerBi reports for your own analysis.</p>
     <p><b>Authentication is required to use this API:</b> Please fill out the contact form at https://brandonmcfadden.com/contact to request an API key.</p>
