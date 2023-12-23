@@ -370,17 +370,17 @@ while last_refresh_time is None:
         sleep(60)
 
 while remaining >= 0:
-    # try:
-    parse_response_cta(get_report_data(
-        cta_dataset_id, remaining), last_refresh_time, remaining)
-    # except:  # pylint: disable=bare-except
-    #     print("Failed to grab CTA #", remaining)
+    try:
+        parse_response_cta(get_report_data(
+            cta_dataset_id, remaining), last_refresh_time, remaining)
+    except:  # pylint: disable=bare-except
+        print("Failed to grab CTA #", remaining)
 
-    # try:
-    #     parse_response_metra(get_report_data(
-    #         metra_dataset_id, remaining), remaining)
-    # except:  # pylint: disable=bare-except
-    #     print("Failed to grab Metra #", remaining)
+    try:
+        parse_response_metra(get_report_data(
+            metra_dataset_id, remaining), remaining)
+    except:  # pylint: disable=bare-except
+        print("Failed to grab Metra #", remaining)
 
     remaining -= 1
     sleep(1)
