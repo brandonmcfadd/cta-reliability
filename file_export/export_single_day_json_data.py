@@ -22,7 +22,7 @@ metra_dataset_id = os.getenv('METRA_DATASET_ID')
 main_file_path_json = main_file_path + "train_arrivals/json/"
 
 
-def get_date(date_type):
+def get_date(date_type, current_date=""):
     """formatted date shortcut"""
     if date_type == "short":
         date = datetime.strftime(datetime.now(), "%Y%m%d")
@@ -30,6 +30,8 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%H")
     elif date_type == "long":
         date = datetime.strftime(datetime.now(), "%Y-%m-%dT%k:%M:%SZ")
+    elif date_type == "day-of-week":
+        date = datetime.strftime(datetime.strptime(current_date, "%Y-%m-%d"), "%w")
     return date
 
 
@@ -101,6 +103,12 @@ def parse_response_cta(data, last_refresh, days_old):
     system_total, system_scheduled, system_scheduled_remaining = 0, 0, 0
     routes_information = {}
     for item in data:
+        if get_date("day-of-week", item["date_range[Dates]"][:10]) == "0":
+            pre_pandemic_scheduled = [316, 214, 218, 196, 180, 174, 305, 136, 1739] 
+        elif get_date("day-of-week", item["date_range[Dates]"][:10]) == "6":
+            pre_pandemic_scheduled = [374, 280, 204, 240, 192, 186, 361, 136, 1973]
+        else:
+            pre_pandemic_scheduled = [390, 362, 252, 288, 236, 234, 414, 184, 2360]
         shortened_date = item["date_range[Dates]"][:10]
         integrity_actual = item["date_range[Integrity - Actual]"]
         integrity_percent = item["date_range[Integrity - Percentage]"]
@@ -134,7 +142,9 @@ def parse_response_cta(data, last_refresh, days_old):
             "ActualRuns": system_total,
             "ScheduledRuns": system_scheduled,
             "ScheduledRunsRemaining": system_scheduled_remaining,
-            "PercentRun": system_total/system_scheduled
+            "PercentRun": system_total/system_scheduled,
+            "PrePandemicScheduled": pre_pandemic_scheduled[8],
+            "PrePandemicScheduledPercChange": ((system_scheduled+system_scheduled_remaining)-pre_pandemic_scheduled[8])/pre_pandemic_scheduled[8]
         },
         "routes": {
             "Blue": {
@@ -154,7 +164,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Blue"][7],
                 "ScheduledRunsMorningPeak": routes_information["Blue"][8],
                 "ScheduledRunsEveningPeak": routes_information["Blue"][9],
-                "Trains_On_Time": routes_information["Blue"][10]
+                "Trains_On_Time": routes_information["Blue"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[0],
+                "PrePandemicScheduledPercChange": ((routes_information["Blue"][1]+routes_information["Blue"][3])-pre_pandemic_scheduled[0])/pre_pandemic_scheduled[0]
             },
             "Brown": {
                 "ActualRuns": routes_information["Brown"][0],
@@ -167,7 +179,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Brown"][7],
                 "ScheduledRunsMorningPeak": routes_information["Brown"][8],
                 "ScheduledRunsEveningPeak": routes_information["Brown"][9],
-                "Trains_On_Time": routes_information["Brown"][10]
+                "Trains_On_Time": routes_information["Brown"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[1],
+                "PrePandemicScheduledPercChange": ((routes_information["Brown"][1]+routes_information["Brown"][3])-pre_pandemic_scheduled[1])/pre_pandemic_scheduled[1]
             },
             "Green": {
                 "ActualRuns": routes_information["Green"][0],
@@ -180,7 +194,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Green"][7],
                 "ScheduledRunsMorningPeak": routes_information["Green"][8],
                 "ScheduledRunsEveningPeak": routes_information["Green"][9],
-                "Trains_On_Time": routes_information["Green"][10]
+                "Trains_On_Time": routes_information["Green"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[2],
+                "PrePandemicScheduledPercChange": ((routes_information["Green"][1]+routes_information["Green"][3])-pre_pandemic_scheduled[2])/pre_pandemic_scheduled[2]
             },
             "Orange": {
                 "ActualRuns": routes_information["Orange"][0],
@@ -193,7 +209,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Orange"][7],
                 "ScheduledRunsMorningPeak": routes_information["Orange"][8],
                 "ScheduledRunsEveningPeak": routes_information["Orange"][9],
-                "Trains_On_Time": routes_information["Green"][10]
+                "Trains_On_Time": routes_information["Green"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[3],
+                "PrePandemicScheduledPercChange": ((routes_information["Orange"][1]+routes_information["Orange"][3])-pre_pandemic_scheduled[3])/pre_pandemic_scheduled[3]
             },
             "Pink": {
                 "ActualRuns": routes_information["Pink"][0],
@@ -206,7 +224,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Pink"][7],
                 "ScheduledRunsMorningPeak": routes_information["Pink"][8],
                 "ScheduledRunsEveningPeak": routes_information["Pink"][9],
-                "Trains_On_Time": routes_information["Pink"][10]
+                "Trains_On_Time": routes_information["Pink"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[4],
+                "PrePandemicScheduledPercChange": ((routes_information["Pink"][1]+routes_information["Pink"][3])-pre_pandemic_scheduled[4])/pre_pandemic_scheduled[4]
             },
             "Purple": {
                 "ActualRuns": routes_information["Purple"][0],
@@ -219,7 +239,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Purple"][7],
                 "ScheduledRunsMorningPeak": routes_information["Purple"][8],
                 "ScheduledRunsEveningPeak": routes_information["Purple"][9],
-                "Trains_On_Time": routes_information["Purple"][10]
+                "Trains_On_Time": routes_information["Purple"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[5],
+                "PrePandemicScheduledPercChange": ((routes_information["Purple"][1]+routes_information["Purple"][3])-pre_pandemic_scheduled[5])/pre_pandemic_scheduled[5]
             },
             "Red": {
                 "ActualRuns": routes_information["Red"][0],
@@ -232,7 +254,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Red"][7],
                 "ScheduledRunsMorningPeak": routes_information["Red"][8],
                 "ScheduledRunsEveningPeak": routes_information["Red"][9],
-                "Trains_On_Time": routes_information["Red"][10]
+                "Trains_On_Time": routes_information["Red"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[6],
+                "PrePandemicScheduledPercChange": ((routes_information["Red"][1]+routes_information["Red"][3])-pre_pandemic_scheduled[6])/pre_pandemic_scheduled[6]
             },
             "Yellow": {
                 "ActualRuns": routes_information["Yellow"][0],
@@ -245,7 +269,9 @@ def parse_response_cta(data, last_refresh, days_old):
                 "ActualRunsEveningPeak": routes_information["Yellow"][7],
                 "ScheduledRunsMorningPeak": routes_information["Yellow"][8],
                 "ScheduledRunsEveningPeak": routes_information["Yellow"][9],
-                "Trains_On_Time": routes_information["Yellow"][10]
+                "Trains_On_Time": routes_information["Yellow"][10],
+                "PrePandemicScheduled": pre_pandemic_scheduled[7],
+                "PrePandemicScheduledPercChange": ((routes_information["Yellow"][1]+routes_information["Yellow"][3])-pre_pandemic_scheduled[7])/pre_pandemic_scheduled[7]
             }
         }
     }
@@ -344,17 +370,17 @@ while last_refresh_time is None:
         sleep(60)
 
 while remaining >= 0:
-    try:
-        parse_response_cta(get_report_data(
-            cta_dataset_id, remaining), last_refresh_time, remaining)
-    except:  # pylint: disable=bare-except
-        print("Failed to grab CTA #", remaining)
+    # try:
+    parse_response_cta(get_report_data(
+        cta_dataset_id, remaining), last_refresh_time, remaining)
+    # except:  # pylint: disable=bare-except
+    #     print("Failed to grab CTA #", remaining)
 
-    try:
-        parse_response_metra(get_report_data(
-            metra_dataset_id, remaining), remaining)
-    except:  # pylint: disable=bare-except
-        print("Failed to grab Metra #", remaining)
+    # try:
+    #     parse_response_metra(get_report_data(
+    #         metra_dataset_id, remaining), remaining)
+    # except:  # pylint: disable=bare-except
+    #     print("Failed to grab Metra #", remaining)
 
     remaining -= 1
     sleep(1)

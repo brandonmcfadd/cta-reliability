@@ -1,7 +1,7 @@
 """grabs data from the api and sends it off to the isCTAokay twitter account"""
 import os
 import json
-import datetime
+from datetime import datetime
 import tweepy
 import requests  # Used for API Calls
 from dotenv import load_dotenv  # Used to Load Env Var
@@ -62,25 +62,26 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     on_time_trains = 0
     last_updated = data["LastUpdated"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
-    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
-    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %-e')
-    last_updated_string_int = datetime.datetime.strftime(last_updated_datetime, '%e')
+    system_perc_reduced = int(float(data["system"]["PrePandemicScheduledPercChange"]) * 100)
+    last_updated_datetime = datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string_full = datetime.strftime(last_updated_datetime, '%b %-e')
+    last_updated_string_int = datetime.strftime(last_updated_datetime, '%e')
     last_updated_string_ending = get_ordinal_suffix(int(last_updated_string_int))
     for line in data["routes"]:
         on_time_trains += int(data["routes"][line]["Trains_On_Time"])
     if on_time_trains > 0:
         on_time_trains_perc = int((on_time_trains/system_actual)*100)
     if is_good_day_flag == 1:
-        type_of_day = "😎CTA Rail is having a good day! To do this, the CTA cut 21% of scheduled service."
+        type_of_day = f"😎CTA Rail is having a good day! To do this, the CTA cut {system_perc_reduced}% of scheduled service."
         expression = "!"
     elif is_good_day_flag == 2:
-        type_of_day = "🤷CTA Rail is having a so-so day even with a 21% cut of scheduled service."
+        type_of_day = f"🤷CTA Rail is having a so-so day even with a {system_perc_reduced}% cut of scheduled service."
         expression = "."
     elif is_good_day_flag == 3:
-        type_of_day = "😡CTA Rail is not having a good day even after cutting 21% of scheduled service."
+        type_of_day = f"😡CTA Rail is not having a good day even after cutting {system_perc_reduced}% of scheduled service."
         expression = "."
     else:
-        type_of_day = "🤬CTA Rail is having a terrible day even after cutting 21% of scheduled service."
+        type_of_day = f"🤬CTA Rail is having a terrible day even after cutting {system_perc_reduced}% of scheduled service."
         expression = "."
     text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains have operated on {last_updated_string_full}{last_updated_string_ending}{expression} {on_time_trains_perc}% arrived at their scheduled intervals.\nFor more on service cuts: ctaction.org/service-cuts.\nTo explore historical data: brandonmcfadden.com/cta-reliability."
     return text_output_part_1
@@ -93,12 +94,12 @@ def prepare_tweet_text_2(data):
     scheduled_runs_remaining = data["system"]["ScheduledRunsRemaining"]
     last_updated = data["LastUpdated"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
-    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
-    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %-e')
-    last_updated_string_int = datetime.datetime.strftime(last_updated_datetime, '%e')
+    last_updated_datetime = datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string_full = datetime.strftime(last_updated_datetime, '%b %-e')
+    last_updated_string_int = datetime.strftime(last_updated_datetime, '%e')
     last_updated_string_ending = get_ordinal_suffix(int(last_updated_string_int))
-    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
-    last_updated_string = datetime.datetime.strftime(last_updated_datetime, '%-l%p').lower()
+    last_updated_datetime = datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string = datetime.strftime(last_updated_datetime, '%-l%p').lower()
     try:
         scheduled_runs_remaining_text = f"{scheduled_runs_remaining:,}"
     except:
@@ -120,12 +121,12 @@ def prepare_tweet_text_3(data):
     system_actual = data["system"]["ActualRuns"]
     last_updated = data["LastUpdated"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
-    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
-    last_updated_string_full = datetime.datetime.strftime(last_updated_datetime, '%b %-e')
-    last_updated_string_int = datetime.datetime.strftime(last_updated_datetime, '%e')
+    last_updated_datetime = datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string_full = datetime.strftime(last_updated_datetime, '%b %-e')
+    last_updated_string_int = datetime.strftime(last_updated_datetime, '%e')
     last_updated_string_ending = get_ordinal_suffix(int(last_updated_string_int))
-    last_updated_datetime = datetime.datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
-    last_updated_string = datetime.datetime.strftime(last_updated_datetime, '%-l%p').lower()
+    last_updated_datetime = datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
+    last_updated_string = datetime.strftime(last_updated_datetime, '%-l%p').lower()
     on_time_arrivals = 0
     text_output_part_3 = ""
     for line in data["routes"]:
