@@ -62,7 +62,7 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     on_time_trains = 0
     last_updated = data["LastUpdated"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
-    system_perc_reduced = int(float(data["system"]["PrePandemicScheduledPercChange"]) * 100)
+    system_perc_reduced = int(float(data["system"]["PrePandemicScheduledPercChange"]) * 100) * -1
     last_updated_datetime = datetime.strptime(last_updated, '%Y-%m-%dT%H:%M:%S%z')
     last_updated_string_full = datetime.strftime(last_updated_datetime, '%b %-e')
     last_updated_string_int = datetime.strftime(last_updated_datetime, '%e')
