@@ -355,7 +355,7 @@ def parse_response_metra(data, days_old):
 
 bearer_token = get_token()
 
-remaining = 20
+remaining = 2
 last_refresh_time = None
 
 while last_refresh_time is None:
