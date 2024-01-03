@@ -148,6 +148,7 @@ async def startup():
 async def check_for_header(request: Request, call_next):
     try:
         proxy_header = request.headers.get('x-api-proxy')
+        forwarded_ip = request.headers.get('x-forwarded-for')
         if proxy_header == api_auth_key:
             start_time = time.time()
             response = await call_next(request)
