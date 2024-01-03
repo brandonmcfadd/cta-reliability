@@ -7,6 +7,7 @@ import time  # Used to Get Current Time
 from datetime import datetime, timedelta
 from csv import DictWriter
 from dotenv import load_dotenv  # Used to Load Env Var
+from google.cloud import bigquery
 import requests  # Used for API Calls
 import urllib3
 urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
@@ -19,6 +20,10 @@ load_dotenv()  # Load .env variables
 
 train_api_key = os.getenv('TRAIN_API_KEY')  # API Key Provided by CTA
 main_file_path = os.getenv('FILE_PATH')  # File Path to App Directory
+train_arrivals_table = os.getenv(
+    'CTA_TRAIN_ARRIVALS_TABLE')  # File Path to App Directory
+integrity_check_table = os.getenv(
+    'CTA_INTEGRITY_CHECK_TABLE')  # File Path to App Directory
 
 LOG_FILENAME = main_file_path + 'logs/cta-reliability.log'  # Logging Information
 logging.basicConfig(level=logging.INFO)
@@ -82,15 +87,23 @@ def calc_tt_eta(date_1, date_2):
 
 def parse_tt_response(train_api_response):
     """Takes each Train ETA (if exists) and appends to list"""
-    for eta in train_api_response["ctatt"]["eta"]:
-        prediction = eta["prdt"]
-        arrival = eta["arrT"]
+    for train in train_api_response["ctatt"]["eta"]:
+        prediction = train["prdt"]
+        arrival = train["arrT"]
         estimated_time = int(calc_tt_eta(prediction, arrival))
-        if eta["isSch"] == "0" and eta["isApp"] == "1" and estimated_time <= 1:
-            add_train_arrival_file(current_month, eta)
+        if train["isSch"] == "0" and train["isApp"] == "1" and estimated_time <= 1:
+            add_trains_to_table(train, current_month)
+            row_to_insert = [
+                {'Station_ID': train["staId"], 'Stop_ID': train["stpId"],
+                 'Station_Name': train["staNm"], 'Destination': train["destNm"],
+                 'Route': train["rt"], 'Run_Number': train["rn"],
+                 'Prediction_Time': train["prdt"],
+                 'Arrival_Time': train["arrT"]}
+            ]
+            add_row_to_bigquery(row_to_insert, train_arrivals_table)
 
 
-def add_train_arrival_file(month, train):
+def add_trains_to_table(train, month=""):
     """Parses API Result from Train Tracker API and adds ETA's to a list"""
     file_path = main_file_path + "train_arrivals/train_arrivals-" + \
         str(month) + ".csv"
@@ -132,6 +145,20 @@ def add_time_integrity_file(status):
         row_data = {'Full_Date_Time': long_time,
                     'Simple_Date_Time': simple_time, 'Status': status}
         writer_object.writerow(row_data)
+    row_data = [{'Full_Date_Time': long_time,
+                 'Simple_Date_Time': simple_time, 'Status': status}]
+    add_row_to_bigquery(row_data, integrity_check_table)
+
+
+def add_row_to_bigquery(row, table_id):
+    """Takes a Row as Input and inserts it to the specified Google Big Query Table"""
+    client = bigquery.Client()
+
+    errors = client.insert_rows_json(table_id, row)  # Make an API request.
+    if errors:
+        logging.error("Encountered errors while inserting rows: %s", errors)
+    else:
+        logging.info("Successfully Inserted Row Into Table %s: %s", table_id, row) 
 
 
 while True:  # Always open while loop to continue checking for trains
