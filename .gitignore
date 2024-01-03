@@ -191,3 +191,4 @@ gtfs/powerbi/export/trips.txt
 powerbi/*
 train_arrivals/special/tweeted_metra_trains.json
 credentials/cta-utilities-410023-73a50f35625b.json
+apps/test.py

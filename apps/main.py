@@ -145,9 +145,9 @@ def add_time_integrity_file(status):
         row_data = {'Full_Date_Time': long_time,
                     'Simple_Date_Time': simple_time, 'Status': status}
         writer_object.writerow(row_data)
-    row_data = [{'Full_Date_Time': long_time,
+    row_to_insert = [{'Full_Date_Time': long_time,
                  'Simple_Date_Time': simple_time, 'Status': status}]
-    add_row_to_bigquery(row_data, integrity_check_table)
+    add_row_to_bigquery(row_to_insert, integrity_check_table)
 
 
 def add_row_to_bigquery(row, table_id):
