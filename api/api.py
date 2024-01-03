@@ -1,13 +1,13 @@
 """cta-reliability API by Brandon McFadden"""
 from datetime import datetime, timedelta
 import os  # Used to retrieve secrets in .env file
+import time
 import json
 import logging
-import subprocess
 from subprocess import run, PIPE
 from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv  # Used to Load Env Var
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi import Response
@@ -31,6 +31,7 @@ wmata_main_file_path_json = wmata_main_file_path + "train_arrivals/json/"
 main_file_path_csv = main_file_path + "train_arrivals/csv/"
 main_file_path_csv_month = main_file_path + "train_arrivals/csv_month/"
 deploy_secret = os.getenv('DEPLOY_SECRET')
+api_auth_key = os.getenv('API_AUTH_KEY')
 
 
 def get_date(date_type):
@@ -127,7 +128,6 @@ def generate_html_response_error(date, endpoint, current_time):
     """
     return HTMLResponse(content=html_content, status_code=200)
 
-
 @app.on_event("startup")
 async def startup():
     """Tells API to Prep redis for Rate Limit"""
@@ -144,6 +144,20 @@ async def startup():
     logger.addHandler(handler)
     await FastAPILimiter.init(redis_value)
 
+@app.middleware("http")
+async def check_for_header(request: Request, call_next):
+    try:
+        proxy_header = request.headers.get('x-api-proxy')
+        if proxy_header == api_auth_key:
+            start_time = time.time()
+            response = await call_next(request)
+            process_time = time.time() - start_time
+            response.headers["X-Process-Time"] = str(process_time)
+            return response
+        else:
+            return HTMLResponse(status_code=403, content="Missing Required Header. Are you using the right Address?")
+    except:
+        return HTMLResponse(status_code=403, content="Missing Required Header. Are you using the right Address?")
 
 @app.get("/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def read_root():
