@@ -20,10 +20,9 @@ load_dotenv()  # Load .env variables
 
 train_api_key = os.getenv('TRAIN_API_KEY')  # API Key Provided by CTA
 main_file_path = os.getenv('FILE_PATH')  # File Path to App Directory
-train_arrivals_table = os.getenv(
-    'CTA_TRAIN_ARRIVALS_TABLE')  # File Path to App Directory
-integrity_check_table = os.getenv(
-    'CTA_INTEGRITY_CHECK_TABLE')  # File Path to App Directory
+train_arrivals_table = os.getenv('CTA_TRAIN_ARRIVALS_TABLE')
+integrity_check_table = os.getenv('CTA_INTEGRITY_CHECK_TABLE')
+google_credentials_file = main_file_path + os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
 LOG_FILENAME = main_file_path + 'logs/cta-reliability.log'  # Logging Information
 logging.basicConfig(level=logging.INFO)
@@ -146,7 +145,7 @@ def add_time_integrity_file(status):
                     'Simple_Date_Time': simple_time, 'Status': status}
         writer_object.writerow(row_data)
     row_to_insert = [{'Full_Date_Time': long_time,
-                 'Simple_Date_Time': simple_time, 'Status': status}]
+                      'Simple_Date_Time': simple_time, 'Status': status}]
     add_row_to_bigquery(row_to_insert, integrity_check_table)
 
 
@@ -158,7 +157,8 @@ def add_row_to_bigquery(row, table_id):
     if errors:
         logging.error("Encountered errors while inserting rows: %s", errors)
     else:
-        logging.info("Successfully Inserted Row Into Table %s: %s", table_id, row) 
+        logging.info(
+            "Successfully Inserted Row Into Table %s: %s", table_id, row)
 
 
 while True:  # Always open while loop to continue checking for trains
