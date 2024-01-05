@@ -87,20 +87,21 @@ def calc_tt_eta(date_1, date_2):
 
 def parse_tt_response(train_api_response):
     """Takes each Train ETA (if exists) and appends to list"""
+    
     for train in train_api_response["ctatt"]["eta"]:
         prediction = train["prdt"]
         arrival = train["arrT"]
         estimated_time = int(calc_tt_eta(prediction, arrival))
         if train["isSch"] == "0" and train["isApp"] == "1" and estimated_time <= 1:
             add_trains_to_table(train, current_month)
-            row_to_insert = [
+            rows_to_insert.append(
                 {'Station_ID': train["staId"], 'Stop_ID': train["stpId"],
                  'Station_Name': train["staNm"], 'Destination': train["destNm"],
                  'Route': train["rt"], 'Run_Number': train["rn"],
                  'Prediction_Time': train["prdt"],
                  'Arrival_Time': train["arrT"]}
-            ]
-            add_row_to_bigquery(row_to_insert, train_arrivals_table)
+            )
+    
 
 
 def add_trains_to_table(train, month=""):
@@ -147,10 +148,10 @@ def add_time_integrity_file(status):
         writer_object.writerow(row_data)
     row_to_insert = [{'Full_Date_Time': long_time,
                       'Simple_Date_Time': simple_time, 'Status': status}]
-    add_row_to_bigquery(row_to_insert, integrity_check_table)
+    add_rows_to_bigquery(row_to_insert, integrity_check_table)
 
 
-def add_row_to_bigquery(row, table_id):
+def add_rows_to_bigquery(row, table_id):
     """Takes a Row as Input and inserts it to the specified Google Big Query Table"""
     credentials = service_account.Credentials.from_service_account_file(
         google_credentials_file, scopes=["https://www.googleapis.com/auth/cloud-platform"],
@@ -191,6 +192,8 @@ while True:  # Always open while loop to continue checking for trains
     file_validation(current_month, "train_arrivals", tt_headers)
     file_validation(current_month, "integrity-check", integrity_headers)
 
+    rows_to_insert = []
+
     if (current_time >= temp_tt_start_time and
             current_time <= temp_tt_end_time):  # Checks if app should run in IROPs mode
         logging.warning("Currently Operating Under Temporary Map IDs")
@@ -216,6 +219,9 @@ while True:  # Always open while loop to continue checking for trains
                         map_id, "Backup Insecure URL", tt_backup_api_url)
             except:  # pylint: disable=bare-except
                 logging.critical("Ultimate Failure :(  - Map ID: %s", map_id)
+
+    if rows_to_insert:
+        add_rows_to_bigquery(rows_to_insert, train_arrivals_table)
 
     add_time_integrity_file("Success")
 
