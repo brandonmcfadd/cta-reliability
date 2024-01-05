@@ -87,7 +87,6 @@ def calc_tt_eta(date_1, date_2):
 
 def parse_tt_response(train_api_response):
     """Takes each Train ETA (if exists) and appends to list"""
-    
     for train in train_api_response["ctatt"]["eta"]:
         prediction = train["prdt"]
         arrival = train["arrT"]
@@ -101,7 +100,6 @@ def parse_tt_response(train_api_response):
                  'Prediction_Time': train["prdt"],
                  'Arrival_Time': train["arrT"]}
             )
-    
 
 
 def add_trains_to_table(train, month=""):
