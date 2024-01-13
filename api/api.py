@@ -9,7 +9,7 @@ from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv  # Used to Load Env Var
 from fastapi import FastAPI, HTTPException, Depends, status, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse, RedirectResponse
 from fastapi import Response
 import redis.asyncio as redis
 from fastapi_limiter import FastAPILimiter
@@ -160,16 +160,16 @@ async def check_for_header(request: Request, call_next):
     except:
         return HTMLResponse(status_code=403, content="Missing Required Header. Are you using the right Address?")
 
-@app.get("/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+@app.get("/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], response_class=RedirectResponse, status_code=302)
 async def read_root():
     """Tells API to Display Root"""
-    return generate_html_response_intro()
+    return "https://brandonmcfadden.com/transit-api"
 
 
-@app.get("/api/", response_class=HTMLResponse, dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+@app.get("/api/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], response_class=RedirectResponse, status_code=302)
 async def documentation():
     """Tells API to Display Root"""
-    return generate_html_response_intro()
+    return "https://brandonmcfadden.com/transit-api"
 
 
 @app.get("/api/v1/get_daily_results/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
