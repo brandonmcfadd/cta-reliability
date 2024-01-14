@@ -155,13 +155,20 @@ print()
 print(tweet_text_3)
 print()
 
+first_tweet, second_tweet, third_tweet = None, None, None
+
 api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
                     twitter_access_token, twitter_access_token_secret)
-status1 = api.create_tweet(text=tweet_text_1, )
-first_tweet = status1.data["id"]
-status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
-second_tweet = status2.data["id"]
-status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
-third_tweet = status3.data["id"]
+while first_tweet is None:
+    status1 = api.create_tweet(text=tweet_text_1, )
+    first_tweet = status1.data["id"]
+
+while second_tweet is None:
+    status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
+    second_tweet = status2.data["id"]
+
+while third_tweet is None:
+    status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
+    third_tweet = status3.data["id"]
 print(
     f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet} and https://twitter.com/isCTAokay/status/{third_tweet}")
