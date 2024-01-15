@@ -1,6 +1,7 @@
 """grabs data from the api and sends it off to the isCTAokay twitter account"""
 import os
 from datetime import datetime, timedelta
+from time import sleep
 import tweepy
 import requests  # Used for API Calls
 from dotenv import load_dotenv  # Used to Load Env Var
@@ -192,10 +193,12 @@ print()
 
 api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
                     twitter_access_token, twitter_access_token_secret)
-status1 = api.create_tweet(text=tweet_text_1, )
+status1 = api.create_tweet(text=tweet_text_1)
 first_tweet = status1.data["id"]
+sleep(1)
 status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
 second_tweet = status2.data["id"]
+sleep(1)
 status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
 third_tweet = status3.data["id"]
 print(
