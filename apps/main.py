@@ -7,8 +7,6 @@ import time  # Used to Get Current Time
 from datetime import datetime, timedelta
 from csv import DictWriter
 from dotenv import load_dotenv  # Used to Load Env Var
-from google.cloud import bigquery
-from google.oauth2 import service_account
 import requests  # Used for API Calls
 import urllib3
 urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
@@ -23,7 +21,6 @@ train_api_key = os.getenv('TRAIN_API_KEY')  # API Key Provided by CTA
 main_file_path = os.getenv('FILE_PATH')  # File Path to App Directory
 train_arrivals_table = os.getenv('CTA_TRAIN_ARRIVALS_TABLE')
 integrity_check_table = os.getenv('CTA_INTEGRITY_CHECK_TABLE')
-google_credentials_file = main_file_path + "credentials/cta-utilities-410023-73a50f35625b.json"
 
 LOG_FILENAME = main_file_path + 'logs/cta-reliability.log'  # Logging Information
 logging.basicConfig(level=logging.INFO)
