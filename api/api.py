@@ -374,21 +374,36 @@ async def return_results_for_date_wmata_v2(date: str, token: str = Depends(get_c
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 
-@app.get("/api/v3/cta/get_daily_results/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
-async def return_results_for_date_cta_v3(date: str, token: str = Depends(get_current_username)):
+@app.get("/api/v3/get_daily_results/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_results_for_date_cta_v3(date: str, agency: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
-    if date == "today":
+    if date == "today" and agency == "cta":
         date = get_date("api-today")
-    elif date == "yesterday":
+    elif date == "yesterday" and agency == "cta":
         date = get_date("api-yesterday")
-    if date == "availability":
+    if date == "today" and agency == "wmata":
+        date = get_date("api-today-est")
+    elif date == "yesterday" and agency == "wmata":
+        date = get_date("api-yesterday-est")
+    if date == "availability" and agency == "wmata":
         files_available = sorted((f for f in os.listdir(main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
+        return files_available
+    if date == "availability" and agency == "cta":
+        files_available = sorted((f for f in os.listdir(wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
-            json_file = main_file_path_json + "cta/" + date + ".json"
-            results = open(json_file, 'r', encoding="utf-8")
-            return Response(content=results.read(), media_type="application/json")
+            if agency == "cta":
+                json_file = main_file_path_json + "cta/" + date + ".json"
+                results = open(json_file, 'r', encoding="utf-8")
+                return Response(content=results.read(), media_type="application/json")
+            elif agency == "wmata":
+                json_file = wmata_main_file_path_json + date + ".json"
+                results = open(json_file, 'r', encoding="utf-8")
+                return Response(content=results.read(), media_type="application/json")
+            else:
+                endpoint = "http://api.brandonmcfadden.com/api/v3/get_daily_results/"
+                return generate_html_response_error(date, endpoint, get_date("current"))
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/v2/cta/get_daily_results/"
+            endpoint = "http://api.brandonmcfadden.com/api/v3/get_daily_results/"
             return generate_html_response_error(date, endpoint, get_date("current"))
