@@ -409,8 +409,49 @@ async def return_results_for_date_transit(date: str, agency: str, availability: 
                 results = open(json_file, 'r', encoding="utf-8")
                 return Response(content=results.read(), media_type="application/json")
             else:
-                endpoint = "http://api.brandonmcfadden.com/api/v3/get_daily_results/"
+                endpoint = "http://api.brandonmcfadden.com/api/transit/get_daily_results/"
                 return generate_html_response_error(date, endpoint, get_date("current"))
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/v3/get_daily_results/"
+            endpoint = "http://api.brandonmcfadden.com/api/transit/get_daily_results/"
+            return generate_html_response_error(date, endpoint, get_date("current"))
+
+@app.get("/api/transit/get_train_arrivals_by_day/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_arrivals_for_date_cta_v2(date: str, agency: str, availability: bool = False, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    if date == "today" and (agency == "cta" or agency == "metra"):
+        date = get_date("api-today")
+    elif date == "yesterday" and (agency == "cta" or agency == "metra"):
+        date = get_date("api-yesterday")
+    if date == "today" and agency == "wmata":
+        date = get_date("api-today-est")
+    elif date == "yesterday" and agency == "wmata":
+        date = get_date("api-yesterday-est")
+    if availability is True and agency == "wmata":
+        return "Currently Unavailable"
+    elif availability is True and agency == "cta":
+        files_available = sorted((f for f in os.listdir(main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
+        return files_available
+    elif availability is True and agency == "metra":
+        return "Currently Unavailable"
+    else:
+        try:
+            if agency == "cta":
+                csv_file = main_file_path_csv + "cta/" + date + ".csv"
+                print(csv_file)
+                results = open(csv_file, 'r', encoding="utf-8")
+                return StreamingResponse(
+                    results,
+                    media_type="text/csv",
+                    headers={
+                        "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
+                )
+            if agency == "metra":
+                return "Currently Unavailable"
+            elif agency == "wmata":
+                return "Currently Unavailable"
+            else:
+                endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
+                return generate_html_response_error(date, endpoint, get_date("current"))
+        except:  # pylint: disable=bare-except
+            endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
             return generate_html_response_error(date, endpoint, get_date("current"))
