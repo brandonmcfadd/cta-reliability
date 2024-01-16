@@ -50,6 +50,8 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now()-timedelta(days=1)+timedelta(hours=1), "%Y-%m-%d")
     elif date_type == "api-last-month":
         date = datetime.strftime(datetime.now()-relativedelta(months=1), "%Y-%m")
+    elif date_type == "api-last-month-est":
+        date = datetime.strftime(datetime.now()-relativedelta(months=1)+timedelta(hours=1), "%Y-%m")
     elif date_type == "current":
         date = datetime.strftime(datetime.now(), "%d %b %Y %H:%M:%S")
     elif date_type == "code-time":
@@ -313,24 +315,6 @@ async def save_7000_series_information(Name: str, RunNumber: int, token: str = D
         endpoint = "http://api.brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
 
-@app.post("/api/cta-reliability/production-upgrade/{secret}", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
-async def production_upgrade(secret: str, token: str = Depends(get_current_username)):
-    """Used to trigger upgrade of cta-reliability"""
-    try:
-        if str(secret) == str(deploy_secret):
-            # output = subprocess.call('production-upgrade', shell=True, env=dict(ENV='/home/brandon_brandonmcfadden_com/.bash_aliases'))
-            cmd = f"{main_file_path}/production-upgrade.sh"
-            command = run(cmd, shell=True, stdout=PIPE)
-            output = [i for i in command.stdout.decode().split('\n') if i]
-            print("Script Ran Successfully")
-            return output
-        else:
-            output = "Invalid Secret"
-        return output
-    except:  # pylint: disable=bare-except
-        endpoint = "http://api.brandonmcfadden.com/api/cta-reliability/production-upgrade/"
-        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
-
 @app.get("/api/sorting_information/get", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
 async def get_sort_information(token: str = Depends(get_current_username)):
     """Used to retrieve results"""
@@ -427,12 +411,12 @@ async def return_arrivals_for_date(agency: str, date: str = None, availability: 
     elif date == "yesterday" and agency == "wmata":
         date = get_date("api-yesterday-est")
     if availability is True and agency == "wmata":
-        return "Currently Unavailable"
+        return "Unavailable"
     elif availability is True and agency == "cta":
         files_available = sorted((f for f in os.listdir(main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     elif availability is True and agency == "metra":
-        return "Currently Unavailable"
+        return "Unavailable"
     else:
         try:
             if agency == "cta":
@@ -446,12 +430,53 @@ async def return_arrivals_for_date(agency: str, date: str = None, availability: 
                         "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
                 )
             if agency == "metra":
-                return "Currently Unavailable"
+                return "Unavailable"
             elif agency == "wmata":
-                return "Currently Unavailable"
+                return "Unavailable"
             else:
                 endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
                 return generate_html_response_error(date, endpoint, get_date("current"))
         except:  # pylint: disable=bare-except
             endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
+            return generate_html_response_error(date, endpoint, get_date("current"))
+
+@app.get("/api/transit/get_train_arrivals_by_month/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_arrivals_for_date_month(agency: str, date: str = None, availability: bool = False, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    if date == "today" and (agency == "cta" or agency == "metra"):
+        date = get_date("api-today")
+    elif date == "yesterday" and (agency == "cta" or agency == "metra"):
+        date = get_date("api-last-month")
+    if date == "today" and agency == "wmata":
+        date = get_date("api-today-est")
+    elif date == "yesterday" and agency == "wmata":
+        date = get_date("api-last-month-est")
+    if availability is True and agency == "wmata":
+        return "Unavailable"
+    elif availability is True and agency == "cta":
+        files_available = sorted((f for f in os.listdir(main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
+        return files_available
+    elif availability is True and agency == "metra":
+        return "Unavailable"
+    else:
+        try:
+            if agency == "cta":
+                csv_file = main_file_path_csv_month + "cta/" + date + ".csv"
+                print(csv_file)
+                results = open(csv_file, 'r', encoding="utf-8")
+                return StreamingResponse(
+                    results,
+                    media_type="text/csv",
+                    headers={
+                        "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
+                )
+            if agency == "metra":
+                return "Unavailable"
+            elif agency == "wmata":
+                return "Unavailable"
+            else:
+                endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_month/"
+                return generate_html_response_error(date, endpoint, get_date("current"))
+        except:  # pylint: disable=bare-except
+            endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_month/"
             return generate_html_response_error(date, endpoint, get_date("current"))
