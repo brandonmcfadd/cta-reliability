@@ -388,13 +388,20 @@ async def return_results_for_date_cta_v3(date: str, agency: str, token: str = De
     if date == "availability" and agency == "wmata":
         files_available = sorted((f for f in os.listdir(main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
-    if date == "availability" and agency == "cta":
+    elif date == "availability" and agency == "cta":
         files_available = sorted((f for f in os.listdir(wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
+        return files_available
+    elif date == "availability" and agency == "metra":
+        files_available = sorted((f for f in os.listdir(main_file_path_json + "metra/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
             if agency == "cta":
                 json_file = main_file_path_json + "cta/" + date + ".json"
+                results = open(json_file, 'r', encoding="utf-8")
+                return Response(content=results.read(), media_type="application/json")
+            if agency == "metra":
+                json_file = main_file_path_json + "metra/" + date + ".json"
                 results = open(json_file, 'r', encoding="utf-8")
                 return Response(content=results.read(), media_type="application/json")
             elif agency == "wmata":

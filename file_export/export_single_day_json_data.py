@@ -123,6 +123,10 @@ def parse_response_cta(data, last_refresh, days_old):
                                     item["date_range[On-Time Trains]"], item["date_range[Scheduled Arrivals - Pre-Pandemic]"]]
         routes_information[item["date_range[Route]"]
                            ] = single_route_information
+    try:
+        pre_pandemic_scheduled_change = ((system_scheduled+system_scheduled_remaining)-pre_pandemic_scheduled)/pre_pandemic_scheduled
+    except: # pylint: disable=bare-except
+        pre_pandemic_scheduled_change = None
     json_file = main_file_path_json + "cta/" + shortened_date + ".json"
     file_data = {
         "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
@@ -139,7 +143,7 @@ def parse_response_cta(data, last_refresh, days_old):
             "ScheduledRunsRemaining": system_scheduled_remaining,
             "PercentRun": system_total/system_scheduled,
             "PrePandemicScheduled": pre_pandemic_scheduled,
-            "PrePandemicScheduledPercChange": ((system_scheduled+system_scheduled_remaining)-pre_pandemic_scheduled)/pre_pandemic_scheduled
+            "PrePandemicScheduledPercChange": pre_pandemic_scheduled_change
         },
         "routes": {
             "Blue": {
