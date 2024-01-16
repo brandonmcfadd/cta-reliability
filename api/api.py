@@ -375,7 +375,7 @@ async def return_results_for_date_wmata_v2(date: str, token: str = Depends(get_c
 
 
 @app.get("/api/transit/get_daily_results/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
-async def return_results_for_date_transit(date: str, agency: str, availability: bool = False, token: str = Depends(get_current_username)):
+async def return_results_for_date_transit(agency: str, date: str = None, availability: bool = False, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     if date == "today" and (agency == "cta" or agency == "metra"):
         date = get_date("api-today")
@@ -416,7 +416,7 @@ async def return_results_for_date_transit(date: str, agency: str, availability: 
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 @app.get("/api/transit/get_train_arrivals_by_day/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
-async def return_arrivals_for_date_cta_v2(date: str, agency: str, availability: bool = False, token: str = Depends(get_current_username)):
+async def return_arrivals_for_date(agency: str, date: str = None, availability: bool = False, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     if date == "today" and (agency == "cta" or agency == "metra"):
         date = get_date("api-today")
