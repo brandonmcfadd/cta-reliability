@@ -374,24 +374,24 @@ async def return_results_for_date_wmata_v2(date: str, token: str = Depends(get_c
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 
-@app.get("/api/v3/get_daily_results/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
-async def return_results_for_date_cta_v3(date: str, agency: str, token: str = Depends(get_current_username)):
+@app.get("/api/tranit/get_daily_results/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
+async def return_results_for_date_transit(date: str, agency: str, availability: bool = False, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
-    if date == "today" and agency == "cta":
+    if date == "today" and (agency == "cta" or agency == "metra"):
         date = get_date("api-today")
-    elif date == "yesterday" and agency == "cta":
+    elif date == "yesterday" and (agency == "cta" or agency == "metra"):
         date = get_date("api-yesterday")
     if date == "today" and agency == "wmata":
         date = get_date("api-today-est")
     elif date == "yesterday" and agency == "wmata":
         date = get_date("api-yesterday-est")
-    if date == "availability" and agency == "wmata":
+    if availability is True and agency == "wmata":
         files_available = sorted((f for f in os.listdir(main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
-    elif date == "availability" and agency == "cta":
+    elif availability is True and agency == "cta":
         files_available = sorted((f for f in os.listdir(wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
         return files_available
-    elif date == "availability" and agency == "metra":
+    elif availability is True and agency == "metra":
         files_available = sorted((f for f in os.listdir(main_file_path_json + "metra/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
