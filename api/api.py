@@ -369,10 +369,10 @@ async def return_results_for_date_transit(agency: str, date: str = None, availab
         date = get_date("api-today-est")
     elif date == "yesterday" and agency == "wmata":
         date = get_date("api-yesterday-est")
-    if availability is True and agency == "wmata":
+    if availability is True and agency == "cta":
         files_available = sorted((f for f in os.listdir(main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
-    elif availability is True and agency == "cta":
+    elif availability is True and agency == "wmata":
         files_available = sorted((f for f in os.listdir(wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
         return files_available
     elif availability is True and agency == "metra":
