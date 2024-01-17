@@ -4,8 +4,8 @@ import os  # Used to retrieve secrets in .env file
 import time
 import json
 import logging
-from subprocess import run, PIPE
 from logging.handlers import RotatingFileHandler
+import secrets
 from dotenv import load_dotenv  # Used to Load Env Var
 from fastapi import FastAPI, HTTPException, Depends, status, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -47,11 +47,14 @@ def get_date(date_type):
     elif date_type == "api-today-est":
         date = datetime.strftime(datetime.now()+timedelta(hours=1), "%Y-%m-%d")
     elif date_type == "api-yesterday-est":
-        date = datetime.strftime(datetime.now()-timedelta(days=1)+timedelta(hours=1), "%Y-%m-%d")
+        date = datetime.strftime(
+            datetime.now()-timedelta(days=1)+timedelta(hours=1), "%Y-%m-%d")
     elif date_type == "api-last-month":
-        date = datetime.strftime(datetime.now()-relativedelta(months=1), "%Y-%m")
+        date = datetime.strftime(
+            datetime.now()-relativedelta(months=1), "%Y-%m")
     elif date_type == "api-last-month-est":
-        date = datetime.strftime(datetime.now()-relativedelta(months=1)+timedelta(hours=1), "%Y-%m")
+        date = datetime.strftime(
+            datetime.now()-relativedelta(months=1)+timedelta(hours=1), "%Y-%m")
     elif date_type == "current":
         date = datetime.strftime(datetime.now(), "%d %b %Y %H:%M:%S")
     elif date_type == "code-time":
@@ -124,11 +127,12 @@ def generate_html_response_error(date, endpoint, current_time):
             Unable to retrieve results for the date {date}<br><br>
             If you are using the 'get_train_arrivals_by_day' endpoint, please note that data for the previous day is not loaded until ~01:00 CST.</p>
             <p></p>
-            <p>Please refer to the documentation for assistance: <a href="http://api.brandonmcfadden.com">RTA API Documentation</a></p>
+            <p>Please refer to the documentation for assistance: <a href="https://brandonmcfadden.com">RTA API Documentation</a></p>
         </body>
     </html>
     """
     return HTMLResponse(content=html_content, status_code=200)
+
 
 @app.on_event("startup")
 async def startup():
@@ -146,11 +150,12 @@ async def startup():
     logger.addHandler(handler)
     await FastAPILimiter.init(redis_value)
 
+
 @app.middleware("http")
 async def check_for_header(request: Request, call_next):
+    """makes sure the request came through the Express Proxy"""
     try:
         proxy_header = request.headers.get('x-api-proxy')
-        forwarded_ip = request.headers.get('x-forwarded-for')
         if proxy_header == api_auth_key:
             start_time = time.time()
             response = await call_next(request)
@@ -159,8 +164,9 @@ async def check_for_header(request: Request, call_next):
             return response
         else:
             return HTMLResponse(status_code=403, content="Missing Required Header. Are you using the right Address?")
-    except:
+    except:  # pylint: disable=bare-except
         return HTMLResponse(status_code=403, content="Missing Required Header. Are you using the right Address?")
+
 
 @app.get("/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], response_class=RedirectResponse, status_code=302)
 async def read_root():
@@ -182,7 +188,7 @@ async def return_results_for_date(date: str, token: str = Depends(get_current_us
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
-        endpoint = "http://api.brandonmcfadden.com/api/v1/get_daily_results/"
+        endpoint = "https://brandonmcfadden.com/api/v1/get_daily_results/"
         return generate_html_response_error(date, endpoint, get_date("current"))
 
 
@@ -194,7 +200,8 @@ async def return_results_for_date_cta_v2(date: str, token: str = Depends(get_cur
     elif date == "yesterday":
         date = get_date("api-yesterday")
     if date == "availability":
-        files_available = sorted((f for f in os.listdir(main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
@@ -202,7 +209,7 @@ async def return_results_for_date_cta_v2(date: str, token: str = Depends(get_cur
             results = open(json_file, 'r', encoding="utf-8")
             return Response(content=results.read(), media_type="application/json")
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/v2/cta/get_daily_results/"
+            endpoint = "https://brandonmcfadden.com/api/v2/cta/get_daily_results/"
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 
@@ -214,7 +221,8 @@ async def return_results_for_date_metra_v2(date: str, token: str = Depends(get_c
     elif date == "yesterday":
         date = get_date("api-yesterday")
     if date == "availability":
-        files_available = sorted((f for f in os.listdir(main_file_path_json + "metra/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_json + "metra/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
@@ -222,7 +230,7 @@ async def return_results_for_date_metra_v2(date: str, token: str = Depends(get_c
             results = open(json_file, 'r', encoding="utf-8")
             return Response(content=results.read(), media_type="application/json")
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/v2/metra/get_daily_results/"
+            endpoint = "https://brandonmcfadden.com/api/v2/metra/get_daily_results/"
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 
@@ -232,7 +240,8 @@ async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_cu
     if date == "yesterday":
         date = get_date("api-yesterday")
     if date == "availability":
-        files_available = sorted((f for f in os.listdir(main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
@@ -246,8 +255,9 @@ async def return_arrivals_for_date_cta_v2(date: str, token: str = Depends(get_cu
                     "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
             )
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
+            endpoint = "https://brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
             return generate_html_response_error(date, endpoint, get_date("current"))
+
 
 @app.get("/api/v2/cta/get_train_arrivals_by_month/{date}", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_arrivals_for_date_month_cta_v2(date: str, token: str = Depends(get_current_username)):
@@ -255,7 +265,8 @@ async def return_arrivals_for_date_month_cta_v2(date: str, token: str = Depends(
     if date == "yesterday":
         date = get_date("api-last-month")
     if date == "availability":
-        files_available = sorted((f for f in os.listdir(main_file_path_csv_month + "cta/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_csv_month + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
@@ -269,8 +280,9 @@ async def return_arrivals_for_date_month_cta_v2(date: str, token: str = Depends(
                     "Content-Disposition": f"attachment; filename=cta-arrivals-{date}.csv"}
             )
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
+            endpoint = "https://brandonmcfadden.com/api/v2/cta/get_train_arrivals_by_day/"
             return generate_html_response_error(date, endpoint, get_date("current"))
+
 
 @app.get("/api/v2/cta/headways", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_special_station_json(token: str = Depends(get_current_username)):
@@ -281,8 +293,9 @@ async def return_special_station_json(token: str = Depends(get_current_username)
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
-        endpoint = "http://api.brandonmcfadden.com/api/v2/cta/headways"
+        endpoint = "https://brandonmcfadden.com/api/v2/cta/headways"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
 
 @app.get("/api/7000-series-tracker/get", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
 async def get_7000_series_information(token: str = Depends(get_current_username)):
@@ -292,28 +305,32 @@ async def get_7000_series_information(token: str = Depends(get_current_username)
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
-        endpoint = "http://api.brandonmcfadden.com/api/7000-series-tracker"
+        endpoint = "https://brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
 
 @app.post("/api/7000-series-tracker/{Name}/{RunNumber}", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
 async def save_7000_series_information(Name: str, RunNumber: int, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
         json_file = main_file_path_7000 + "7000-series.json"
-        input_data = {"DateTime": get_date("code-time"),"Submitter": Name, "RunNumber": RunNumber}
+        input_data = {"DateTime": get_date(
+            "code-time"), "Submitter": Name, "RunNumber": RunNumber}
         with open(json_file, 'r', encoding="utf-8") as fp:
             json_file_loaded = json.load(fp)
             if get_date("api-today") in json_file_loaded:
                 json_file_loaded[get_date("api-today")].append(input_data)
             else:
-                json_file_loaded = {**json_file_loaded, **{get_date("api-today"):[]}}
+                json_file_loaded = {**json_file_loaded,
+                                    **{get_date("api-today"): []}}
                 json_file_loaded[get_date("api-today")].append(input_data)
         with open(json_file, 'w', encoding="utf-8") as fp2:
-            json.dump(json_file_loaded, fp2, indent=4,  separators=(',',': '))
+            json.dump(json_file_loaded, fp2, indent=4,  separators=(',', ': '))
         return input_data
     except:  # pylint: disable=bare-except
-        endpoint = "http://api.brandonmcfadden.com/api/7000-series-tracker"
+        endpoint = "https://brandonmcfadden.com/api/7000-series-tracker"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
 
 @app.get("/api/sorting_information/get", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
 async def get_sort_information(token: str = Depends(get_current_username)):
@@ -323,8 +340,9 @@ async def get_sort_information(token: str = Depends(get_current_username)):
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
-        endpoint = "http://api.brandonmcfadden.com/api/sorting_information/get"
+        endpoint = "https://brandonmcfadden.com/api/sorting_information/get"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
 
 @app.get("/api/v2/metra/holiday_trains/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_holiday_trains_metra(token: str = Depends(get_current_username)):
@@ -334,7 +352,7 @@ async def return_holiday_trains_metra(token: str = Depends(get_current_username)
         results = open(json_file, 'r', encoding="utf-8")
         return Response(content=results.read(), media_type="application/json")
     except:  # pylint: disable=bare-except
-        endpoint = "http://api.brandonmcfadden.com/api/v2/metra/holiday_trains/"
+        endpoint = "https://brandonmcfadden.com/api/v2/metra/holiday_trains/"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
 
 
@@ -346,7 +364,8 @@ async def return_results_for_date_wmata_v2(date: str, token: str = Depends(get_c
     elif date == "yesterday":
         date = get_date("api-yesterday-est")
     if date == "availability":
-        files_available = sorted((f for f in os.listdir(wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
@@ -354,7 +373,7 @@ async def return_results_for_date_wmata_v2(date: str, token: str = Depends(get_c
             results = open(json_file, 'r', encoding="utf-8")
             return Response(content=results.read(), media_type="application/json")
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/v2/wmata/get_daily_results/"
+            endpoint = "https://brandonmcfadden.com/api/v2/wmata/get_daily_results/"
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 
@@ -370,13 +389,16 @@ async def return_results_for_date_transit(agency: str, date: str = None, availab
     elif date == "yesterday" and agency == "wmata":
         date = get_date("api-yesterday-est")
     if availability is True and agency == "cta":
-        files_available = sorted((f for f in os.listdir(main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_json + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     elif availability is True and agency == "wmata":
-        files_available = sorted((f for f in os.listdir(wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            wmata_main_file_path_json) if not f.startswith(".")), key=str.lower)
         return files_available
     elif availability is True and agency == "metra":
-        files_available = sorted((f for f in os.listdir(main_file_path_json + "metra/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_json + "metra/") if not f.startswith(".")), key=str.lower)
         return files_available
     else:
         try:
@@ -393,11 +415,12 @@ async def return_results_for_date_transit(agency: str, date: str = None, availab
                 results = open(json_file, 'r', encoding="utf-8")
                 return Response(content=results.read(), media_type="application/json")
             else:
-                endpoint = "http://api.brandonmcfadden.com/api/transit/get_daily_results/"
+                endpoint = "https://brandonmcfadden.com/api/transit/get_daily_results/"
                 return generate_html_response_error(date, endpoint, get_date("current"))
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/transit/get_daily_results/"
+            endpoint = "https://brandonmcfadden.com/api/transit/get_daily_results/"
             return generate_html_response_error(date, endpoint, get_date("current"))
+
 
 @app.get("/api/transit/get_train_arrivals_by_day/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_arrivals_for_date(agency: str, date: str = None, availability: bool = False, token: str = Depends(get_current_username)):
@@ -413,7 +436,8 @@ async def return_arrivals_for_date(agency: str, date: str = None, availability: 
     if availability is True and agency == "wmata":
         return "Unavailable"
     elif availability is True and agency == "cta":
-        files_available = sorted((f for f in os.listdir(main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     elif availability is True and agency == "metra":
         return "Unavailable"
@@ -434,11 +458,12 @@ async def return_arrivals_for_date(agency: str, date: str = None, availability: 
             elif agency == "wmata":
                 return "Unavailable"
             else:
-                endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
+                endpoint = "https://brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
                 return generate_html_response_error(date, endpoint, get_date("current"))
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
+            endpoint = "https://brandonmcfadden.com/api/transit/get_train_arrivals_by_day/"
             return generate_html_response_error(date, endpoint, get_date("current"))
+
 
 @app.get("/api/transit/get_train_arrivals_by_month/", dependencies=[Depends(RateLimiter(times=2, seconds=1))])
 async def return_arrivals_for_date_month(agency: str, date: str = None, availability: bool = False, token: str = Depends(get_current_username)):
@@ -454,7 +479,8 @@ async def return_arrivals_for_date_month(agency: str, date: str = None, availabi
     if availability is True and agency == "wmata":
         return "Unavailable"
     elif availability is True and agency == "cta":
-        files_available = sorted((f for f in os.listdir(main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
+        files_available = sorted((f for f in os.listdir(
+            main_file_path_csv + "cta/") if not f.startswith(".")), key=str.lower)
         return files_available
     elif availability is True and agency == "metra":
         return "Unavailable"
@@ -475,8 +501,44 @@ async def return_arrivals_for_date_month(agency: str, date: str = None, availabi
             elif agency == "wmata":
                 return "Unavailable"
             else:
-                endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_month/"
+                endpoint = "https://brandonmcfadden.com/api/transit/get_train_arrivals_by_month/"
                 return generate_html_response_error(date, endpoint, get_date("current"))
         except:  # pylint: disable=bare-except
-            endpoint = "http://api.brandonmcfadden.com/api/transit/get_train_arrivals_by_month/"
+            endpoint = "https://brandonmcfadden.com/api/transit/get_train_arrivals_by_month/"
             return generate_html_response_error(date, endpoint, get_date("current"))
+
+
+@app.post("/api/add_user/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def add_user_to_api(Name: str, Auth_Token: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        if Auth_Token == deploy_secret:
+            json_file = main_file_path + ".tokens"
+            password = secrets.token_urlsafe(32)
+            input_data = {"password": password, "disabled": "False"}
+            output_data = {"DateTime": get_date(
+                "code-time"), "Status": "", "Username": "", "Password": "", "Disabled": ""}
+            with open(json_file, 'r', encoding="utf-8") as fp:
+                json_file_loaded = json.load(fp)
+                if Name in json_file_loaded:
+                    output_data["Username"] = Name
+                    output_data["Status"] = "Exists"
+                    output_data["Password"] = json_file_loaded[Name]["password"]
+                    output_data["Disabled"] = json_file_loaded[Name]["disabled"]
+                    json_file_loaded[Name]["disabled"] = "False"
+                else:
+                    output_data["Username"] = Name
+                    output_data["Password"] = password
+                    output_data["Disabled"] = "False"
+                    output_data["Status"] = "Added"
+                    json_file_loaded[Name] = input_data
+            with open(json_file, 'w', encoding="utf-8") as fp2:
+                json.dump(json_file_loaded, fp2, indent=4,
+                          separators=(',', ': '))
+            return output_data
+        else:
+            endpoint = "https://brandonmcfadden.com/api/add_user"
+            return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+    except:  # pylint: disable=bare-except
+        endpoint = "https://brandonmcfadden.com/api/add_user"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
