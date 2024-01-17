@@ -509,10 +509,10 @@ async def return_arrivals_for_date_month(agency: str, date: str = None, availabi
 
 
 @app.post("/api/add_user/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
-async def add_user_to_api(Name: str, Auth_Token: str, token: str = Depends(get_current_username)):
+async def add_user_to_api(username_input: str, auth_token: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
-        if Auth_Token == deploy_secret:
+        if auth_token == deploy_secret:
             json_file = main_file_path + ".tokens"
             password = secrets.token_urlsafe(32)
             input_data = {"password": password, "disabled": "False"}
@@ -520,18 +520,18 @@ async def add_user_to_api(Name: str, Auth_Token: str, token: str = Depends(get_c
                 "code-time"), "Status": "", "Username": "", "Password": "", "Disabled": ""}
             with open(json_file, 'r', encoding="utf-8") as fp:
                 json_file_loaded = json.load(fp)
-                if Name in json_file_loaded:
-                    output_data["Username"] = Name
+                if username_input in json_file_loaded:
+                    output_data["Username"] = username_input
                     output_data["Status"] = "Exists"
-                    output_data["Password"] = json_file_loaded[Name]["password"]
-                    output_data["Disabled"] = json_file_loaded[Name]["disabled"]
-                    json_file_loaded[Name]["disabled"] = "False"
+                    output_data["Password"] = json_file_loaded[username_input]["password"]
+                    output_data["Disabled"] = json_file_loaded[username_input]["disabled"]
+                    json_file_loaded[username_input]["disabled"] = "False"
                 else:
-                    output_data["Username"] = Name
+                    output_data["Username"] = username_input
                     output_data["Password"] = password
                     output_data["Disabled"] = "False"
                     output_data["Status"] = "Added"
-                    json_file_loaded[Name] = input_data
+                    json_file_loaded[username_input] = input_data
             with open(json_file, 'w', encoding="utf-8") as fp2:
                 json.dump(json_file_loaded, fp2, indent=4,
                           separators=(',', ': '))
