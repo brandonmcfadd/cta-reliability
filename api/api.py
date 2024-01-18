@@ -508,7 +508,7 @@ async def return_arrivals_for_date_month(agency: str, date: str = None, availabi
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 
-@app.get("/api/add_user/", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+@app.post("/api/add_user", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
 async def add_user_to_api(username_input: str, auth_token: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
