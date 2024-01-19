@@ -508,60 +508,44 @@ async def return_arrivals_for_date_month(agency: str, date: str = None, availabi
             return generate_html_response_error(date, endpoint, get_date("current"))
 
 
-@app.post("/api/add_user", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
-async def add_user_to_api(username_input: str, auth_token: str, token: str = Depends(get_current_username)):
+@app.post("/api/user_management", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def add_user_to_api(type: str, username: str, auth_token: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
         if auth_token == deploy_secret:
             json_file = main_file_path + ".tokens"
-            password = secrets.token_urlsafe(32)
-            input_data = {"password": password, "disabled": "False"}
-            output_data = {"DateTime": get_date(
-                "code-time"), "Status": "", "Username": "", "Password": "", "Disabled": ""}
             with open(json_file, 'r', encoding="utf-8") as fp:
                 json_file_loaded = json.load(fp)
-                if username_input in json_file_loaded:
-                    output_data["Username"] = username_input
-                    output_data["Status"] = "Exists"
-                    output_data["Password"] = json_file_loaded[username_input]["password"]
-                    output_data["Disabled"] = json_file_loaded[username_input]["disabled"]
-                    json_file_loaded[username_input]["disabled"] = "False"
+            if type == "add":
+                password = secrets.token_urlsafe(32)
+                input_data = {"password": password, "disabled": "False"}
+                return_text = {"DateTime": get_date(
+                    "code-time"), "Status": "", "Username": "", "Password": "", "Disabled": ""}
+                if username in json_file_loaded:
+                    return_text["Username"] = username
+                    return_text["Status"] = "Exists"
+                    return_text["Password"] = json_file_loaded[username]["password"]
+                    return_text["Disabled"] = json_file_loaded[username]["disabled"]
+                    json_file_loaded[username]["disabled"] = "False"
                 else:
-                    output_data["Username"] = username_input
-                    output_data["Password"] = password
-                    output_data["Disabled"] = "False"
-                    output_data["Status"] = "Added"
-                    json_file_loaded[username_input] = input_data
+                    return_text["Username"] = username
+                    return_text["Password"] = password
+                    return_text["Disabled"] = "False"
+                    return_text["Status"] = "Added"
+                    json_file_loaded[username] = input_data
+            elif type == "remove":
+                if username in json_file_loaded:
+                    json_file_loaded.pop(username, None)
+                else:
+                    return {"username":username,"Status": "Failed to Remove User. User Does Not Exist."}
+                return_text = {"username":username,"Status": "Removed User."}
             with open(json_file, 'w', encoding="utf-8") as fp2:
                 json.dump(json_file_loaded, fp2, indent=4,
                           separators=(',', ': '))
-            return output_data
+            return return_text
         else:
             endpoint = "https://brandonmcfadden.com/api/add_user"
             return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
     except:  # pylint: disable=bare-except
         endpoint = "https://brandonmcfadden.com/api/add_user"
-        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
-
-@app.post("/api/remove_user", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
-async def remove_user_from_api(username_input: str, auth_token: str, token: str = Depends(get_current_username)):
-    """Used to retrieve results"""
-    try:
-        if auth_token == deploy_secret:
-            json_file = main_file_path + ".tokens"
-            with open(json_file, 'r', encoding="utf-8") as fp:
-                json_file_loaded = json.load(fp)
-                if username_input in json_file_loaded:
-                    json_file_loaded.pop(username_input, None)
-                else:
-                    return {"username":username_input,"Status": "Failed to Remove User. User Does Not Exist."}
-            with open(json_file, 'w', encoding="utf-8") as fp2:
-                json.dump(json_file_loaded, fp2, indent=4,
-                          separators=(',', ': '))
-            return {"username":username_input,"Status": "Removed User."}
-        else:
-            endpoint = "https://brandonmcfadden.com/api/remove_user"
-            return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
-    except:  # pylint: disable=bare-except
-        endpoint = "https://brandonmcfadden.com/api/remove_user"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
