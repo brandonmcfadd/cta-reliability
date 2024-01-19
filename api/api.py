@@ -542,3 +542,26 @@ async def add_user_to_api(username_input: str, auth_token: str, token: str = Dep
     except:  # pylint: disable=bare-except
         endpoint = "https://brandonmcfadden.com/api/add_user"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
+@app.post("/api/remove_user", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def remove_user_from_api(username_input: str, auth_token: str, token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        if auth_token == deploy_secret:
+            json_file = main_file_path + ".tokens"
+            with open(json_file, 'r', encoding="utf-8") as fp:
+                json_file_loaded = json.load(fp)
+                if username_input in json_file_loaded:
+                    json_file_loaded.pop(username_input, None)
+                else:
+                    return {"username":username_input,"Status": "Failed to Remove User. User Does Not Exist."}
+            with open(json_file, 'w', encoding="utf-8") as fp2:
+                json.dump(json_file_loaded, fp2, indent=4,
+                          separators=(',', ': '))
+            return {"username":username_input,"Status": "Removed User."}
+        else:
+            endpoint = "https://brandonmcfadden.com/api/remove_user"
+            return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+    except:  # pylint: disable=bare-except
+        endpoint = "https://brandonmcfadden.com/api/remove_user"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
