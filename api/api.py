@@ -564,11 +564,11 @@ async def amtrak_trips(type:str, date: str, train: str, origin :str, destination
                 if train_id in json_file_loaded:
                     return_text = {"Status":"Train Already Present","TrainDetails":json_file_loaded[train_id]}
                 else:
-                    train_input = {"Date":date,"Train":train,"Origin":origin,"Destination":destination}
+                    train_input = {"Date":date,"Train":train,"Origin":origin.upper(),"Destination":destination.upper()}
                     json_file_loaded[train_id] = train_input
                     return_text = {"Status":"Train Added","TrainDetails":train_input}
             elif type == "remove":
-                train_input = {"Date":date,"Train":train,"Origin":origin,"Destination":destination}
+                train_input = {"Date":date,"Train":train,"Origin":origin.upper(),"Destination":destination.upper()}
                 if train_id in json_file_loaded:
                     json_file_loaded.pop(train_id, None)
                 else:
