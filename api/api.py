@@ -552,7 +552,7 @@ async def add_user_to_api(type: str, username: str, auth_token: str, token: str 
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
 
 @app.post("/api/amtrak/post", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
-async def amtrak_trips(type:str, date: str, train: str, origin :str, destination:str, auth_token: str, token: str = Depends(get_current_username)):
+async def amtrak_trips(auth_token: str, type:str, date: str, train: str, origin :str = None, destination:str = None, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
         if auth_token == deploy_secret:
@@ -568,8 +568,8 @@ async def amtrak_trips(type:str, date: str, train: str, origin :str, destination
                     json_file_loaded[train_id] = train_input
                     return_text = {"Status":"Train Added","TrainDetails":train_input}
             elif type == "remove":
-                train_input = {"Date":date,"Train":train,"Origin":origin.upper(),"Destination":destination.upper()}
                 if train_id in json_file_loaded:
+                    train_input = json_file_loaded[train_id]
                     json_file_loaded.pop(train_id, None)
                 else:
                     return {"Status": "Failed to Remove Train. Train does not exist.","TrainDetails":train_input}
