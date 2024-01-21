@@ -551,7 +551,7 @@ async def add_user_to_api(type: str, username: str, auth_token: str, token: str 
         endpoint = "https://brandonmcfadden.com/api/add_user"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
 
-@app.post("/api/amtrak", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+@app.post("/api/amtrak/post", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
 async def amtrak_trips(type:str, date: str, train: str, origin :str, destination:str, auth_token: str, token: str = Depends(get_current_username)):
     """Used to retrieve results"""
     try:
@@ -579,8 +579,19 @@ async def amtrak_trips(type:str, date: str, train: str, origin :str, destination
                           separators=(',', ': '))
             return return_text
         else:
-            endpoint = "https://brandonmcfadden.com/api/amtrak"
+            endpoint = "https://brandonmcfadden.com/api/amtrak/post"
             return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
     except:  # pylint: disable=bare-except
-        endpoint = "https://brandonmcfadden.com/api/amtrak"
+        endpoint = "https://brandonmcfadden.com/api/amtrak/post"
+        return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
+
+@app.get("/api/amtrak/get", dependencies=[Depends(RateLimiter(times=2, seconds=1))], status_code=200)
+async def get_amtrak_trips(token: str = Depends(get_current_username)):
+    """Used to retrieve results"""
+    try:
+        json_file = main_file_path_amtrak + "amtrak.json"
+        results = open(json_file, 'r', encoding="utf-8")
+        return Response(content=results.read(), media_type="application/json")
+    except:  # pylint: disable=bare-except
+        endpoint = "https://brandonmcfadden.com/api/amtrak/get"
         return generate_html_response_error(get_date("current"), endpoint, get_date("current"))
