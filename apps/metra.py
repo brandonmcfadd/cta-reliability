@@ -32,7 +32,7 @@ logging.getLogger().addHandler(handler)
 # Constants
 integrity_file_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Status']
 metra_vehicles_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Vehicle_Trip_TripID',
-                              'Vehicle_Trip_RouteID', 'Vehicle_Trip_StartTime', 'Vehicle_Trip_StartDate', 'Vehicle_Vehicle_ID', 'Stop_Name', 'Stop_Arrival_Time']
+                              'Vehicle_Trip_RouteID', 'Vehicle_Trip_StartTime', 'Vehicle_Trip_StartDate', 'Vehicle_Vehicle_ID', 'Stop_Name', 'Stop_Arrival_Time', 'Stop_Sequence']
 
 def get_date(date_type):
     """formatted date shortcut"""
@@ -94,15 +94,16 @@ def add_train_to_file_api(response):
             stop_time = vehicle['trip_update']['stop_time_update'][-1]['arrival']['time']['low']
             stop_time_converted = datetime.strftime(convert_from_utc(stop_time),"%Y-%m-%dT%H:%M:%S")
             diff_in_minutes = minutes_between(get_date('zulu-time'),stop_time)
+            stop_sequence = vehicle['trip_update']['stop_time_update'][-1]['stop_sequence']
             log_vehicle = True
         except: # pylint: disable=bare-except
             diff_in_minutes = 99
             log_vehicle = False
-        if stops_remaining <= 1 and (diff_in_minutes >= 0 and diff_in_minutes <= 2) and log_vehicle is True:
+        if stops_remaining <= 1 and (diff_in_minutes >= 0 and diff_in_minutes <= 2) and log_vehicle is True and stop_sequence > 1:
             with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
                 writer_object = DictWriter(
                     csvfile, fieldnames=metra_vehicles_csv_headers)
-                writer_object.writerow({'Full_Date_Time': current_long_time, 'Simple_Date_Time': current_simple_time, 'Vehicle_Trip_TripID': vehicle['trip_update']["trip"]["trip_id"], 'Vehicle_Trip_RouteID': vehicle['trip_update']["trip"]["route_id"], 'Vehicle_Trip_StartTime': vehicle['trip_update']["trip"]["start_time"], 'Vehicle_Trip_StartDate': vehicle['trip_update']["trip"]["start_date"], 'Vehicle_Vehicle_ID': vehicle['trip_update']["vehicle"]["id"], 'Stop_Name': vehicle['trip_update']['stop_time_update'][-1]['stop_id'], 'Stop_Arrival_Time': stop_time_converted})
+                writer_object.writerow({'Full_Date_Time': current_long_time, 'Simple_Date_Time': current_simple_time, 'Vehicle_Trip_TripID': vehicle['trip_update']["trip"]["trip_id"], 'Vehicle_Trip_RouteID': vehicle['trip_update']["trip"]["route_id"], 'Vehicle_Trip_StartTime': vehicle['trip_update']["trip"]["start_time"], 'Vehicle_Trip_StartDate': vehicle['trip_update']["trip"]["start_date"], 'Vehicle_Vehicle_ID': vehicle['trip_update']["vehicle"]["id"], 'Stop_Name': vehicle['trip_update']['stop_time_update'][-1]['stop_id'], 'Stop_Arrival_Time': stop_time_converted, 'Stop_Sequence': stop_sequence})
 
 
 def check_main_train_file_exists():
