@@ -80,7 +80,7 @@ if current_day == "01" or current_day == "1":
 
     logging.info("Uploading file from path: %s", file_path_3_last_month)
     upload_to_blob_storage(
-        file_path_3_last_month, f'train_arrivals/metra_train_positions-{last_month}.csv')
+        file_path_3_last_month, f'train_arrivals/metra_train_updates-{last_month}.csv')
 
     logging.info("Uploading file from path: %s", file_path_4_last_month)
     upload_to_blob_storage(
@@ -96,7 +96,7 @@ if current_day == "01" or current_day == "1":
 
     logging.info("Uploading file from path: %s",file_path_3)
     upload_to_blob_storage(
-        file_path_3, f'train_arrivals/metra_train_positions-{current_month}.csv')
+        file_path_3, f'train_arrivals/metra_train_updates-{current_month}.csv')
 
     logging.info("Uploading file from path: %s",file_path_4)
     upload_to_blob_storage(
@@ -120,7 +120,7 @@ else:
 
     logging.info("Uploading file from path: %s",file_path_3)
     upload_to_blob_storage(
-        file_path_3, f'train_arrivals/metra_train_positions-{current_month}.csv')
+        file_path_3, f'train_arrivals/metra_train_updates-{current_month}.csv')
 
     logging.info("Uploading file from path: %s",file_path_4)
     upload_to_blob_storage(
