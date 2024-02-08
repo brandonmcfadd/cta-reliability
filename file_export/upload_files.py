@@ -30,7 +30,7 @@ logging.getLogger().addHandler(handler)
 # Constants
 MAIN_FILE_PATH_1 = "train_arrivals/train_arrivals-"
 MAIN_FILE_PATH_2 = "train_arrivals/integrity-check-"
-MAIN_FILE_PATH_3 = "train_arrivals/metra_train_positions-"
+MAIN_FILE_PATH_3 = "train_arrivals/metra_train_updates-"
 MAIN_FILE_PATH_4 = "train_arrivals/metra-integrity-check-"
 
 # Dates
