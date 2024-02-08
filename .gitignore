@@ -174,7 +174,7 @@ creds.json
 gtfs/google_transit*
 gtfs/GTFS Data*
 gtfs/powerbi_import/import/
-gtfs/powerbi/import/*
+gtfs/powerbi/*
 archive/*
 *station_tweeting.py
 *send_tweet.py
@@ -192,3 +192,4 @@ powerbi/*
 train_arrivals/special/tweeted_metra_trains.json
 credentials/cta-utilities-410023-73a50f35625b.json
 apps/test.py
+gtfs/prepare_for_powerbi_metra.py
