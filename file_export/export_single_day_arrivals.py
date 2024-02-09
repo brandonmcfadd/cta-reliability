@@ -137,7 +137,7 @@ def parse_response_metra(data, delay):
 
 bearer_token = get_token()
 
-remaining = 45
+remaining = 2
 
 while remaining > 0:
     try:
