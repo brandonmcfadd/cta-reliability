@@ -22,7 +22,8 @@ def get_date(date_type, delay):
     elif date_type == "hour":
         date = datetime.strftime(datetime.now(), "%H")
     elif date_type == "file":
-        date = datetime.strftime(datetime.now()-relativedelta(months=delay), "%Y-%m")
+        date = datetime.strftime(
+            datetime.now()-relativedelta(months=delay), "%Y-%m")
     elif date_type == "year":
         date = datetime.strftime(datetime.now()-timedelta(days=delay), "%Y")
     elif date_type == "month":
@@ -30,9 +31,11 @@ def get_date(date_type, delay):
     elif date_type == "day":
         date = datetime.strftime(datetime.now()-timedelta(days=delay), "%d")
     elif date_type == "longmonth":
-        date = datetime.strftime(datetime.now()-relativedelta(months=delay), "%B %Y")
+        date = datetime.strftime(
+            datetime.now()-relativedelta(months=delay), "%B %Y")
     elif date_type == "file-date":
-        date = datetime.strftime(datetime.now()-relativedelta(months=delay), "%Y-%m")
+        date = datetime.strftime(
+            datetime.now()-relativedelta(months=delay), "%Y-%m")
     return date
 
 
