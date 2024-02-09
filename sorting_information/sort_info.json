@@ -25,5 +25,7 @@
       "12-02-2023": [12,"Minor","Irops-Red","CTA"],
       "12-04-2023": [13,"Minor","Normal","CTA"],
       "12-06-2023": [1,"Major","Normal","WMATA"],
-      "12-30-2023": [1,"Minor","Normal","WMATA"]
+      "12-30-2023": [1,"Minor","Normal","WMATA"],
+      "01-01-2023": [1,"Minor","Normal","Metra"],
+      "11-27-2023": [1,"Minor","Normal","Metra"]
     }
