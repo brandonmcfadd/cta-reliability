@@ -22,8 +22,10 @@ main_file_path_csv = main_file_path + "train_arrivals/csv/"
 cta_dataset_id = os.getenv('CTA_DATASET_ID')
 metra_dataset_id = os.getenv('METRA_DATASET_ID')
 
-train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route',
-                              'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Headway', 'Time_Of_Week', 'Time_Of_Day', 'Consistent_Interval', 'Scheduled_Headway', 'Scheduled_Headway_Check']
+cta_train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route',
+                                  'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Headway', 'Time_Of_Week', 'Time_Of_Day', 'Consistent_Interval', 'Scheduled_Headway', 'Scheduled_Headway_Check']
+metra_train_arrivals_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Time_Of_Week', 'Time_Of_Day', 'Vehicle_Trip_TripID', 'Run_Number', 'Vehicle_Trip_RouteID',
+                                    'Vehicle_Trip_StartTime', 'Vehicle_Trip_StartDate', 'Vehicle_Vehicle_ID', 'Destination', 'Stop_Arrival_Time', 'Scheduled_Arrival_Time', 'Stop_Sequence', 'On_Time']
 
 
 def get_date(date_type, delay):
@@ -57,13 +59,10 @@ def get_token():
 def get_report_data(dataset, delay):
     """makes api call to PBI service to extract data from dataset"""
     url = f"https://api.powerbi.com/v1.0/myorg/groups/{microsoft_workspace_id}/datasets/{dataset}/executeQueries"
-    year = get_date("year", delay)
-    month = get_date("month", delay)
-    day = get_date("day", delay)
     payload = json.dumps({
         "queries": [
             {
-                "query": f"EVALUATE FILTER(train_arrivals,train_arrivals[Arrival_Time.Date]=DATE({year},{month},{day}))"
+                "query": f"EVALUATE FILTER(train_arrivals,train_arrivals[Days Old]={delay})"
             }
         ],
         "serializerSettings": {
@@ -85,33 +84,33 @@ def get_report_data(dataset, delay):
         print("error in:", response_json)
 
 
-def make_clean_train_file(delay):
+def make_clean_train_file(delay, headers, agency):
     """Used to check if file exists"""
     shortened_date = get_date("file", delay)
-    csv_file_path = main_file_path_csv + "cta/" + shortened_date + ".csv"
+    csv_file_path = main_file_path_csv + f"{agency}/" + shortened_date + ".csv"
     print(f"Creating Empty File and Adding Headers: {csv_file_path}")
     with open(csv_file_path, 'w+', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
-            csvfile, fieldnames=train_arrivals_csv_headers)
+            csvfile, fieldnames=headers)
         writer_object.writeheader()
 
 
 def parse_response_cta(data, delay):
     """takes api response and turns it into usable data without all the extra powerbi stuff"""
-    make_clean_train_file(delay)
+    make_clean_train_file(delay, cta_train_arrivals_csv_headers, "cta")
     for item in data:
         shortened_date = get_date("file", delay)
         csv_file_path = main_file_path_csv + "cta/" + shortened_date + ".csv"
         with open(csv_file_path, 'a', newline='', encoding='utf8') as csvfile:
             writer_object = DictWriter(
-                csvfile, fieldnames=train_arrivals_csv_headers)
+                csvfile, fieldnames=cta_train_arrivals_csv_headers)
             writer_object.writerow({'Station_ID': item["train_arrivals[Station_ID]"], 'Stop_ID': item["train_arrivals[Stop_ID]"],
                                     'Station_Name': item["train_arrivals[Station_Name]"], 'Destination': item["train_arrivals[Destination]"], 'Route': item["train_arrivals[Route]"],
                                     'Run_Number': item["train_arrivals[Run_Number]"], 'Prediction_Time': item["train_arrivals[Prediction_Time]"],
-                                    'Arrival_Time': item["train_arrivals[Arrival_Time_Combined]"], 'Headway': item["train_arrivals[Headway]"], 
-                                    'Time_Of_Week': item["train_arrivals[Time of Week]"], 'Time_Of_Day': item["train_arrivals[Time Of Day]"], 
-                                    'Consistent_Interval': item["train_arrivals[Headway Consistency]"], 
-                                    'Scheduled_Headway': item["train_arrivals[Scheduled Headway]"], 
+                                    'Arrival_Time': item["train_arrivals[Arrival_Time_Combined]"], 'Headway': item["train_arrivals[Headway]"],
+                                    'Time_Of_Week': item["train_arrivals[Time of Week]"], 'Time_Of_Day': item["train_arrivals[Time Of Day]"],
+                                    'Consistent_Interval': item["train_arrivals[Headway Consistency]"],
+                                    'Scheduled_Headway': item["train_arrivals[Scheduled Headway]"],
                                     'Scheduled_Headway_Check': item["train_arrivals[Scheduled Headway Check]"]})
     data_frame = pd.read_csv(csv_file_path)
     sorted_data_frame = data_frame.sort_values(
@@ -119,16 +118,38 @@ def parse_response_cta(data, delay):
     sorted_data_frame.to_csv(csv_file_path, index=False)
 
 
+def parse_response_metra(data, delay):
+    """takes api response and turns it into usable data without all the extra powerbi stuff"""
+    make_clean_train_file(delay, metra_train_arrivals_csv_headers, "metra")
+    for item in data:
+        shortened_date = get_date("file", delay)
+        csv_file_path = main_file_path_csv + "metra/" + shortened_date + ".csv"
+        with open(csv_file_path, 'a', newline='', encoding='utf8') as csvfile:
+            writer_object = DictWriter(
+                csvfile, fieldnames=metra_train_arrivals_csv_headers)
+            writer_object.writerow({'Full_Date_Time': item["train_arrivals[Full_Date_Time]"], 'Simple_Date_Time': item["train_arrivals[Simple_Date_Time]"], 'Time_Of_Week': item["train_arrivals[Time of Week]"], 'Time_Of_Day': item["train_arrivals[Time Of Day]"], 'Vehicle_Trip_TripID': item["train_arrivals[Vehicle_Trip_TripID]"], 'Run_Number': item["train_arrivals[Run Number]"], 'Vehicle_Trip_RouteID': item["train_arrivals[Vehicle_Trip_RouteID]"],
+                                    'Vehicle_Trip_StartTime': item["train_arrivals[Vehicle_Trip_StartTime]"], 'Vehicle_Trip_StartDate': item["train_arrivals[Vehicle_Trip_StartDate]"], 'Vehicle_Vehicle_ID': item["train_arrivals[Vehicle_Vehicle_ID]"], 'Destination': item["train_arrivals[Natural Station Name]"], 'Stop_Arrival_Time': item["train_arrivals[Stop_Arrival_Time_Combined]"], 'Scheduled_Arrival_Time': item["train_arrivals[Scheduled Arrival Time]"], 'On_Time': item["train_arrivals[On-Time Check]"]})
+    data_frame = pd.read_csv(csv_file_path)
+    sorted_data_frame = data_frame.sort_values(
+        by=["Vehicle_Trip_RouteID", "Full_Date_Time"], ascending=True)
+    sorted_data_frame.to_csv(csv_file_path, index=False)
+
+
 bearer_token = get_token()
 
-remaining = 2
+remaining = 45
 
 while remaining > 0:
     try:
         parse_response_cta(get_report_data(
             cta_dataset_id, remaining), remaining)
     except:  # pylint: disable=bare-except
-        print("Failed to grab #", remaining)
+        print("Failed to grab CTA #", remaining)
+    try:
+        parse_response_metra(get_report_data(
+            metra_dataset_id, remaining), remaining)
+    except:  # pylint: disable=bare-except
+        print("Failed to grab Metra #", remaining)
+    print("total remaining:", remaining)
     remaining -= 1
-    print("total cta remaining:", remaining)
     sleep(1)

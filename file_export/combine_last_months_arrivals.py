@@ -36,10 +36,10 @@ def get_date(date_type, delay):
     return date
 
 
-def combine_days_to_month(month):
+def combine_days_to_month(month, agency, sort):
     """takes api response and turns it into usable data without all the extra powerbi stuff"""
-    day_path = main_file_path_csv_day + "cta/"
-    month_path = main_file_path_csv_month + "cta/"
+    day_path = main_file_path_csv_day + f"{agency}/"
+    month_path = main_file_path_csv_month + f"{agency}/"
 
     file_list = glob.glob(day_path + f"/{month}*.csv")
     excl_list = []
@@ -52,7 +52,7 @@ def combine_days_to_month(month):
 
     for excl_file in excl_list:
         excl_merged = pd.concat([excl_merged, excl_file], ignore_index=True)
-    excl_merged.sort_values(by='Arrival_Time')
+    excl_merged.sort_values(by=sort)
     excl_merged.to_csv(f'{month_path}/{month}.csv', index=False)
 
 
@@ -60,6 +60,7 @@ remaining = 1
 
 while remaining > 0:
     last_month = get_date("file-date", remaining)
-    combine_days_to_month(last_month)
+    combine_days_to_month(last_month, "cta", "Arrival_Time")
+    combine_days_to_month(last_month, "metra", "Full_Date_Time")
     print("exporting month:", last_month)
     remaining -= 1

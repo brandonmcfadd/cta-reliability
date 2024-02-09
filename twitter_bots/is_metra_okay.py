@@ -23,19 +23,19 @@ def get_date(date_type):
     if date_type == "short":
         date = datetime.strftime(datetime.now(), "%Y%m%d")
     elif date_type == "hour":
-        date = datetime.strftime(datetime.now()+timedelta(hours=1), "%H")
+        date = datetime.strftime(datetime.now(), "%H")
     elif date_type == "long":
-        date = datetime.strftime(datetime.now()+timedelta(hours=1), "%Y-%m-%dT%k:%M:%SZ")
+        date = datetime.strftime(datetime.now(), "%Y-%m-%dT%k:%M:%SZ")
     elif date_type == "tweet-date-today":
-        date = datetime.strftime(datetime.now()+timedelta(hours=1), '%b %-e')
+        date = datetime.strftime(datetime.now(), '%b %-e')
     elif date_type == "tweet-date-yesterday":
-        date = datetime.strftime(datetime.now()-timedelta(days=1)+timedelta(hours=1), '%b %-e')
+        date = datetime.strftime(datetime.now()-timedelta(days=1), '%b %-e')
     elif date_type == "tweet-date-today-int":
-        date = datetime.strftime(datetime.now()+timedelta(hours=1), '%e')
+        date = datetime.strftime(datetime.now(), '%e')
     elif date_type == "tweet-date-yesterday-int":
-        date = datetime.strftime(datetime.now()-timedelta(days=1)+timedelta(hours=1), '%e')
+        date = datetime.strftime(datetime.now()-timedelta(days=1), '%e')
     elif date_type == "tweet-hour":
-        date = datetime.strftime(datetime.now()-timedelta(days=1)+timedelta(hours=1), '%-l%p').lower()
+        date = datetime.strftime(datetime.now()-timedelta(days=1), '%-l%p').lower()
     return date
 
 def get_ordinal_suffix(day: int) -> str:
