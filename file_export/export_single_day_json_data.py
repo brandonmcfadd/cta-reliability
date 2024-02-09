@@ -31,7 +31,8 @@ def get_date(date_type, current_date=""):
     elif date_type == "long":
         date = datetime.strftime(datetime.now(), "%Y-%m-%dT%k:%M:%SZ")
     elif date_type == "day-of-week":
-        date = datetime.strftime(datetime.strptime(current_date, "%Y-%m-%d"), "%w")
+        date = datetime.strftime(datetime.strptime(
+            current_date, "%Y-%m-%d"), "%w")
     return date
 
 
@@ -124,8 +125,9 @@ def parse_response_cta(data, last_refresh, days_old):
         routes_information[item["date_range[Route]"]
                            ] = single_route_information
     try:
-        pre_pandemic_scheduled_change = ((system_scheduled+system_scheduled_remaining)-pre_pandemic_scheduled)/pre_pandemic_scheduled
-    except: # pylint: disable=bare-except
+        pre_pandemic_scheduled_change = (
+            (system_scheduled+system_scheduled_remaining)-pre_pandemic_scheduled)/pre_pandemic_scheduled
+    except:  # pylint: disable=bare-except
         pre_pandemic_scheduled_change = None
     json_file = main_file_path_json + "cta/" + shortened_date + ".json"
     file_data = {
@@ -280,81 +282,131 @@ def parse_response_cta(data, last_refresh, days_old):
         json.dump(file_data, f, indent=2)
 
 
-def parse_response_metra(data, days_old):
+def parse_response_metra(data, last_refresh, days_old):
     """takes the data from the API and prepares it to add to JSON output"""
+    system_total, system_scheduled, system_scheduled_remaining = 0, 0, 0
+    routes_information = {}
     for item in data:
         shortened_date = item["date_range[Dates]"][:10]
-        json_file = main_file_path_json + "metra/" + shortened_date + ".json"
-        file_data = {
-            "Data Provided By": "Brandon McFadden - http://rta-api.brandonmcfadden.com",
-            "Reports Acccessible At": "https://brandonmcfadden.com/cta-reliability",
-            "V2 API Information At": "http://rta-api.brandonmcfadden.com",
-            "Entity": "metra",
-            "Date": shortened_date,
-            "IntegrityChecksPerformed": item["date_range[Integrity - Actual]"],
-            "IntegrityPercentage": item["date_range[Integrity - Percentage]"],
-            "system": {
-                "ActualRuns": item["date_range[System - Actual]"],
-                "ScheduledRuns": item["date_range[System - Scheduled]"],
-                "PercentRun": item["date_range[System - Percentage]"]
+        integrity_actual = item["date_range[Integrity - Actual]"]
+        integrity_percent = item["date_range[Integrity - Percentage]"]
+        system_total += item["date_range[Actual Arrivals]"]
+        if item["date_range[Scheduled Arrivals]"] is not None:
+            system_scheduled += item["date_range[Scheduled Arrivals]"]
+        if item["date_range[Remaining Scheduled]"] is not None:
+            system_scheduled_remaining += item["date_range[Remaining Scheduled]"]
+        if item["date_range[Arrivals Percentage]"] is None:
+            arrival_percentage = 0
+        else:
+            arrival_percentage = item["date_range[Arrivals Percentage]"]
+        single_route_information = [item["date_range[Actual Arrivals]"], item["date_range[Scheduled Arrivals]"], arrival_percentage,
+                                    item["date_range[Remaining Scheduled]"], item["date_range[On-Time Trains]"]]
+        routes_information[item["date_range[Route]"]
+                           ] = single_route_information
+    json_file = main_file_path_json + "metra/" + shortened_date + ".json"
+    if system_scheduled == 0:
+        system_perc_run = 0
+    else:
+        system_perc_run = system_total/system_scheduled
+    file_data = {
+        "Data Provided By": "Brandon McFadden - https://brandonmcfadden.com",
+        "Reports Acccessible At": "https://brandonmcfadden.com/metra-reliability",
+        "V2 API Information At": "https://brandonmcfadden.com/api",
+        "Entity": "metra",
+        "Date": shortened_date,
+        "LastUpdated": last_refresh,
+        "IntegrityChecksPerformed": integrity_actual,
+        "IntegrityPercentage": integrity_percent,
+        "system": {
+            "ActualRuns": system_total,
+            "ScheduledRuns": system_scheduled,
+            "ScheduledRunsRemaining": system_scheduled_remaining,
+            "PercentRun": system_perc_run
+        },
+        "routes": {
+            "BNSF": {
+                "ActualRuns": routes_information["BNSF"][0],
+                "ScheduledRuns": routes_information["BNSF"][1],
+                "PercentRun": routes_information["BNSF"][2],
+                "RemainingScheduled": routes_information["BNSF"][3],
+                "Trains_On_Time": routes_information["BNSF"][4]
             },
-            "routes": {
-                "BNSF": {
-                    "ActualRuns": item["date_range[BNSF Line - Actual]"],
-                    "ScheduledRuns": item["date_range[BNSF Line - Scheduled]"],
-                    "PercentRun": item["date_range[BNSF Line - Percentage]"]
-                },
-                "HC": {
-                    "ActualRuns": item["date_range[HC Line - Actual]"],
-                    "ScheduledRuns": item["date_range[HC Line - Scheduled]"],
-                    "PercentRun": item["date_range[HC Line - Percentage]"]
-                },
-                "MN-N": {
-                    "ActualRuns": item["date_range[MD-N Line - Actual]"],
-                    "ScheduledRuns": item["date_range[MD-N Line - Scheduled]"],
-                    "PercentRun": item["date_range[MD-N Line - Percentage]"]
-                },
-                "MN-W": {
-                    "ActualRuns": item["date_range[MD-W Line - Actual]"],
-                    "ScheduledRuns": item["date_range[MD-W Line - Scheduled]"],
-                    "PercentRun": item["date_range[MD-W Line - Percentage]"]
-                },
-                "ME": {
-                    "ActualRuns": item["date_range[ME Line - Actual]"],
-                    "ScheduledRuns": item["date_range[ME Line - Scheduled]"],
-                    "PercentRun": item["date_range[ME Line - Percentage]"]
-                },
-                "NCS": {
-                    "ActualRuns": item["date_range[NCS Line - Actual]"],
-                    "ScheduledRuns": item["date_range[NCS Line - Scheduled]"],
-                    "PercentRun": item["date_range[NCS Line - Percentage]"]
-                },
-                "RI": {
-                    "ActualRuns": item["date_range[RI Line - Actual]"],
-                    "ScheduledRuns": item["date_range[RI Line - Scheduled]"],
-                    "PercentRun": item["date_range[RI Line - Percentage]"]
-                },
-                "UP-N": {
-                    "ActualRuns": item["date_range[UP-N Line - Actual]"],
-                    "ScheduledRuns": item["date_range[UP-N Line - Scheduled]"],
-                    "PercentRun": item["date_range[UP-N Line - Percentage]"]
-                },
-                "UP-NW": {
-                    "ActualRuns": item["date_range[UP-NW Line - Actual]"],
-                    "ScheduledRuns": item["date_range[UP-NW Line - Scheduled]"],
-                    "PercentRun": item["date_range[UP-NW Line - Percentage]"]
-                },
-                "UP-W": {
-                    "ActualRuns": item["date_range[UP-W Line - Actual]"],
-                    "ScheduledRuns": item["date_range[UP-W Line - Scheduled]"],
-                    "PercentRun": item["date_range[UP-W Line - Percentage]"]
-                }
-            }
+            "HC": {
+                "ActualRuns": routes_information["HC"][0],
+                "ScheduledRuns": routes_information["HC"][1],
+                "PercentRun": routes_information["HC"][2],
+                "RemainingScheduled": routes_information["HC"][3],
+                "Trains_On_Time": routes_information["HC"][4]
+            },
+            "MD-N": {
+                "ActualRuns": routes_information["MD-N"][0],
+                "ScheduledRuns": routes_information["MD-N"][1],
+                "PercentRun": routes_information["MD-N"][2],
+                "RemainingScheduled": routes_information["MD-N"][3],
+                "Trains_On_Time": routes_information["MD-N"][4]
+            },
+            "MD-W": {
+                "ActualRuns": routes_information["MD-W"][0],
+                "ScheduledRuns": routes_information["MD-W"][1],
+                "PercentRun": routes_information["MD-W"][2],
+                "RemainingScheduled": routes_information["MD-W"][3],
+                "Trains_On_Time": routes_information["MD-W"][4]
+            },
+            "ME": {
+                "ActualRuns": routes_information["ME"][0],
+                "ScheduledRuns": routes_information["ME"][1],
+                "PercentRun": routes_information["ME"][2],
+                "RemainingScheduled": routes_information["ME"][3],
+                "Trains_On_Time": routes_information["ME"][4]
+            },
+            "NCS": {
+                "ActualRuns": routes_information["NCS"][0],
+                "ScheduledRuns": routes_information["NCS"][1],
+                "PercentRun": routes_information["NCS"][2],
+                "RemainingScheduled": routes_information["NCS"][3],
+                "Trains_On_Time": routes_information["NCS"][4]
+            },
+            "RI": {
+                "ActualRuns": routes_information["RI"][0],
+                "ScheduledRuns": routes_information["RI"][1],
+                "PercentRun": routes_information["RI"][2],
+                "RemainingScheduled": routes_information["RI"][3],
+                "Trains_On_Time": routes_information["RI"][4]
+            },
+            "SWS": {
+                "ActualRuns": routes_information["SWS"][0],
+                "ScheduledRuns": routes_information["SWS"][1],
+                "PercentRun": routes_information["SWS"][2],
+                "RemainingScheduled": routes_information["SWS"][3],
+                "Trains_On_Time": routes_information["SWS"][4]
+            },
+            "UP-N": {
+                "ActualRuns": routes_information["UP-N"][0],
+                "ScheduledRuns": routes_information["UP-N"][1],
+                "PercentRun": routes_information["UP-N"][2],
+                "RemainingScheduled": routes_information["UP-N"][3],
+                "Trains_On_Time": routes_information["UP-N"][4]
+            },
+            "UP-NW": {
+                "ActualRuns": routes_information["UP-NW"][0],
+                "ScheduledRuns": routes_information["UP-NW"][1],
+                "PercentRun": routes_information["UP-NW"][2],
+                "RemainingScheduled": routes_information["UP-NW"][3],
+                "Trains_On_Time": routes_information["UP-NW"][4]
+            },
+            "UP-W": {
+                "ActualRuns": routes_information["UP-W"][0],
+                "ScheduledRuns": routes_information["UP-W"][1],
+                "PercentRun": routes_information["UP-W"][2],
+                "RemainingScheduled": routes_information["UP-W"][3],
+                "Trains_On_Time": routes_information["UP-W"][4]
+            },
         }
+    }
 
-        with open(json_file, 'w', encoding="utf-8") as f:
-            print(f"Remaining: {days_old} | Saving Data In: {json_file}")
-            json.dump(file_data, f, indent=2)
+    with open(json_file, 'w', encoding="utf-8") as f:
+        print(f"Remaining: {days_old} | Saving Data In: {json_file}")
+        json.dump(file_data, f, indent=2)
 
 
 bearer_token = get_token()
@@ -377,7 +429,7 @@ while remaining >= 0:
 
     try:
         parse_response_metra(get_report_data(
-            metra_dataset_id, remaining), remaining)
+            metra_dataset_id, remaining), last_refresh_time, remaining)
     except:  # pylint: disable=bare-except
         print("Failed to grab Metra #", remaining)
 
