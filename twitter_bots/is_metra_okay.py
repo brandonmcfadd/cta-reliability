@@ -43,7 +43,7 @@ def get_ordinal_suffix(day: int) -> str:
 
 def get_run_data_from_api(type):
     """hits the api and returns the current days data"""
-    todays_stats_api_url = f"http://api.brandonmcfadden.com/api/v2/metra/get_daily_results/{type}"
+    todays_stats_api_url = f"http://api.brandonmcfadden.com/api/transit/get_daily_results/?date={type}&agency=metra"
     my_api_call_headers = {
         'Authorization': my_api_key
     }
@@ -106,7 +106,7 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     else:
         type_of_day = f"🤬Metra Rail {text_insert} a terrible day."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.\nTo explore historical data: brandonmcfadden.com/wmata-reliability."
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.\nTo explore historical data: brandonmcfadden.com/metra-reliability."
     return text_output_part_1
 
 
@@ -131,7 +131,7 @@ def prepare_tweet_text_2(data):
         scheduled_runs_remaining_text = f"{scheduled_runs_remaining:,}"
     except: # pylint: disable=bare-except
         scheduled_runs_remaining_text = "🤷"
-    text_output_part_2 = f"System Stats {text_insert} {tweet_date}{tweet_date_ending}{tweet_hour} (actual/scheduled):\nSystem: {system_perc}% • {system_actual:,}/{system_sched:,}"
+    text_output_part_2 = f"Stats {text_insert} ({tweet_date}{tweet_date_ending}{tweet_hour}):\nSystem: {system_perc}% • {system_actual:,}/{system_sched:,}"
     for line in data["routes"]:
         actual_runs = data["routes"][line]["ActualRuns"]
         scheduled_runs = data["routes"][line]["ScheduledRuns"]
@@ -139,7 +139,7 @@ def prepare_tweet_text_2(data):
         text_output_part_2 = text_output_part_2 + \
             f"\n{line}: {percent_run}% • {actual_runs:,}/{scheduled_runs:,}"
     text_output_part_2 = text_output_part_2 + \
-        f"\nScheduled Runs Remaining: {scheduled_runs_remaining_text}"
+        f"\nRemaining: {scheduled_runs_remaining_text}"
     return text_output_part_2
 
 
@@ -168,33 +168,33 @@ def prepare_tweet_text_3(data):
             percent_on_time = 0
         text_output_part_3 = f"{text_output_part_3}\n{line}: {percent_on_time}% • {on_time_runs:,}/{data['routes'][line]['ActualRuns']:,}"
     system_perc = int(float(on_time_arrivals/system_actual) * 100)
-    text_output_part_3 = f"On-Time Performance {text_insert} {tweet_date}{tweet_date_ending}{tweet_hour} (# on-time/actual):\nSystem: {system_perc}% • {on_time_arrivals:,}/{system_actual:,}{text_output_part_3}"
+    text_output_part_3 = f"On-Time Performance {text_insert} ({tweet_date}{tweet_date_ending}{tweet_hour}):\nSystem: {system_perc}% • {on_time_arrivals:,}/{system_actual:,}{text_output_part_3}"
     return text_output_part_3
 
-# if get_date("hour") in ("0", "00"):
-#     current_data = get_run_data_from_api("yesterday")
-# else:
-#     current_data = get_run_data_from_api("today")
+if get_date("hour") in ("0", "00"):
+    current_data = get_run_data_from_api("yesterday")
+else:
+    current_data = get_run_data_from_api("today")
 
-# is_good_day = day_of_performance_stats(current_data)
-# tweet_text_1 = prepare_tweet_text_1(current_data, is_good_day)
-# tweet_text_2 = prepare_tweet_text_2(current_data)
-# tweet_text_3 = prepare_tweet_text_3(current_data)
+is_good_day = day_of_performance_stats(current_data)
+tweet_text_1 = prepare_tweet_text_1(current_data, is_good_day)
+tweet_text_2 = prepare_tweet_text_2(current_data)
+tweet_text_3 = prepare_tweet_text_3(current_data)
 
-# print(tweet_text_1)
-# print()
-# print(tweet_text_2)
-# print()
-# print(tweet_text_3)
-# print()
+print(tweet_text_1)
+print()
+print(tweet_text_2)
+print()
+print(tweet_text_3)
+print()
 
 api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
                     twitter_access_token, twitter_access_token_secret)
-status1 = api.create_tweet(text="Hello World!", )
-# first_tweet = status1.data["id"]
-# status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
-# second_tweet = status2.data["id"]
-# status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
-# third_tweet = status3.data["id"]
-# print(
-#     f"sent new tweets https://twitter.com/isMetraokay/status/{first_tweet} and https://twitter.com/isMetraokay/status/{second_tweet} and https://twitter.com/isMetraokay/status/{third_tweet}")
+status1 = api.create_tweet(text=tweet_text_1, )
+first_tweet = status1.data["id"]
+status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
+second_tweet = status2.data["id"]
+status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
+third_tweet = status3.data["id"]
+print(
+    f"sent new tweets https://twitter.com/isMetraokay/status/{first_tweet} and https://twitter.com/isMetraokay/status/{second_tweet} and https://twitter.com/isMetraokay/status/{third_tweet}")

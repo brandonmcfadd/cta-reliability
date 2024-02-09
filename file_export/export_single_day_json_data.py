@@ -331,55 +331,6 @@ def parse_response_metra(data, last_refresh, days_old):
                 "RemainingScheduled": routes_information["BNSF"][3],
                 "Trains_On_Time": routes_information["BNSF"][4]
             },
-            "HC": {
-                "ActualRuns": routes_information["HC"][0],
-                "ScheduledRuns": routes_information["HC"][1],
-                "PercentRun": routes_information["HC"][2],
-                "RemainingScheduled": routes_information["HC"][3],
-                "Trains_On_Time": routes_information["HC"][4]
-            },
-            "MD-N": {
-                "ActualRuns": routes_information["MD-N"][0],
-                "ScheduledRuns": routes_information["MD-N"][1],
-                "PercentRun": routes_information["MD-N"][2],
-                "RemainingScheduled": routes_information["MD-N"][3],
-                "Trains_On_Time": routes_information["MD-N"][4]
-            },
-            "MD-W": {
-                "ActualRuns": routes_information["MD-W"][0],
-                "ScheduledRuns": routes_information["MD-W"][1],
-                "PercentRun": routes_information["MD-W"][2],
-                "RemainingScheduled": routes_information["MD-W"][3],
-                "Trains_On_Time": routes_information["MD-W"][4]
-            },
-            "ME": {
-                "ActualRuns": routes_information["ME"][0],
-                "ScheduledRuns": routes_information["ME"][1],
-                "PercentRun": routes_information["ME"][2],
-                "RemainingScheduled": routes_information["ME"][3],
-                "Trains_On_Time": routes_information["ME"][4]
-            },
-            "NCS": {
-                "ActualRuns": routes_information["NCS"][0],
-                "ScheduledRuns": routes_information["NCS"][1],
-                "PercentRun": routes_information["NCS"][2],
-                "RemainingScheduled": routes_information["NCS"][3],
-                "Trains_On_Time": routes_information["NCS"][4]
-            },
-            "RI": {
-                "ActualRuns": routes_information["RI"][0],
-                "ScheduledRuns": routes_information["RI"][1],
-                "PercentRun": routes_information["RI"][2],
-                "RemainingScheduled": routes_information["RI"][3],
-                "Trains_On_Time": routes_information["RI"][4]
-            },
-            "SWS": {
-                "ActualRuns": routes_information["SWS"][0],
-                "ScheduledRuns": routes_information["SWS"][1],
-                "PercentRun": routes_information["SWS"][2],
-                "RemainingScheduled": routes_information["SWS"][3],
-                "Trains_On_Time": routes_information["SWS"][4]
-            },
             "UP-N": {
                 "ActualRuns": routes_information["UP-N"][0],
                 "ScheduledRuns": routes_information["UP-N"][1],
@@ -401,6 +352,55 @@ def parse_response_metra(data, last_refresh, days_old):
                 "RemainingScheduled": routes_information["UP-W"][3],
                 "Trains_On_Time": routes_information["UP-W"][4]
             },
+            "ME": {
+                "ActualRuns": routes_information["ME"][0],
+                "ScheduledRuns": routes_information["ME"][1],
+                "PercentRun": routes_information["ME"][2],
+                "RemainingScheduled": routes_information["ME"][3],
+                "Trains_On_Time": routes_information["ME"][4]
+            },
+            "RI": {
+                "ActualRuns": routes_information["RI"][0],
+                "ScheduledRuns": routes_information["RI"][1],
+                "PercentRun": routes_information["RI"][2],
+                "RemainingScheduled": routes_information["RI"][3],
+                "Trains_On_Time": routes_information["RI"][4]
+            },
+            "MD-N": {
+                "ActualRuns": routes_information["MD-N"][0],
+                "ScheduledRuns": routes_information["MD-N"][1],
+                "PercentRun": routes_information["MD-N"][2],
+                "RemainingScheduled": routes_information["MD-N"][3],
+                "Trains_On_Time": routes_information["MD-N"][4]
+            },
+            "MD-W": {
+                "ActualRuns": routes_information["MD-W"][0],
+                "ScheduledRuns": routes_information["MD-W"][1],
+                "PercentRun": routes_information["MD-W"][2],
+                "RemainingScheduled": routes_information["MD-W"][3],
+                "Trains_On_Time": routes_information["MD-W"][4]
+            },
+            "SWS": {
+                "ActualRuns": routes_information["SWS"][0],
+                "ScheduledRuns": routes_information["SWS"][1],
+                "PercentRun": routes_information["SWS"][2],
+                "RemainingScheduled": routes_information["SWS"][3],
+                "Trains_On_Time": routes_information["SWS"][4]
+            },
+            "NCS": {
+                "ActualRuns": routes_information["NCS"][0],
+                "ScheduledRuns": routes_information["NCS"][1],
+                "PercentRun": routes_information["NCS"][2],
+                "RemainingScheduled": routes_information["NCS"][3],
+                "Trains_On_Time": routes_information["NCS"][4]
+            },
+            "HC": {
+                "ActualRuns": routes_information["HC"][0],
+                "ScheduledRuns": routes_information["HC"][1],
+                "PercentRun": routes_information["HC"][2],
+                "RemainingScheduled": routes_information["HC"][3],
+                "Trains_On_Time": routes_information["HC"][4]
+            }
         }
     }
 
