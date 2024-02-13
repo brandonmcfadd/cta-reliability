@@ -21,7 +21,7 @@ def create_github_issue(title,body):
     # Issue data
     issue_data = {
         "title": title,
-        "body": body,
+        "body": f"{body}\n@brandonmcfadd",
         "assignees": [github_username],
     }
 
