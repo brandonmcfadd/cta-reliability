@@ -142,7 +142,7 @@ def prepare_tweet_text_2(data):
         text_output_part_2 = text_output_part_2 + \
             f"\n{line}: {percent_run}% • {actual_runs:,}/{scheduled_runs:,}"
     text_output_part_2 = text_output_part_2 + \
-        f"\nScheduled Runs Remaining: {scheduled_runs_remaining_text}"
+        f"\nRuns Remaining: {scheduled_runs_remaining_text}"
     return text_output_part_2
 
 
