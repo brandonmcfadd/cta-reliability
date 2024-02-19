@@ -92,21 +92,21 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     if on_time_trains > 0:
         on_time_trains_perc = int((on_time_trains/system_actual)*100)
     if is_good_day_flag == 0:
-        type_of_day = f"🤩Metra Rail {text_insert} a great day!"
+        type_of_day = f"🤩Metra {text_insert} a great day!"
         expression = "!"
     elif is_good_day_flag == 1:
-        type_of_day = f"😎Metra Rail {text_insert} a good day!"
+        type_of_day = f"😎Metra {text_insert} a good day!"
         expression = "!"
     elif is_good_day_flag == 2:
-        type_of_day = f"🤷Metra Rail {text_insert} a so-so day."
+        type_of_day = f"🤷Metra {text_insert} a so-so day."
         expression = "."
     elif is_good_day_flag == 3:
-        type_of_day = f"😡Metra Rail {text_insert} a tough day."
+        type_of_day = f"😡Metra {text_insert} a tough day."
         expression = "."
     else:
-        type_of_day = f"🤬Metra Rail {text_insert} a terrible day."
+        type_of_day = f"🤬Metra {text_insert} a terrible day."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.\nTo explore historical data: brandonmcfadden.com/metra-reliability."
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled runs completed as of {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived on-time.\nTo explore historical data: brandonmcfadden.com/metra-reliability."
     return text_output_part_1
 
 
