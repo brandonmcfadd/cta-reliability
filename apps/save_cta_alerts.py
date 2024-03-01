@@ -24,6 +24,7 @@ def process_alerts(alerts_response):
     json_file_path = main_file_path + "train_arrivals/special/cta_alerts.json"
     with open(json_file_path, "r", encoding="utf-8") as file:
         cta_alerts = json.load(file)
+        cta_alerts_original = cta_alerts
 
     for alert in alerts_response["CTAAlerts"]["Alert"]:
         alert_id = int(alert["AlertId"])
@@ -36,8 +37,9 @@ def process_alerts(alerts_response):
         else:
             cta_alerts[alert["AlertId"]] = []
             cta_alerts[alert["AlertId"]].append(alert)
-    with open(json_file_path, "w", encoding="utf-8") as file:
-        json.dump(cta_alerts, file, indent=4)
+    if cta_alerts != cta_alerts_original:
+        with open(json_file_path, "w", encoding="utf-8") as file:
+            json.dump(cta_alerts, file, indent=4)
 
 alerts_to_process = get_alerts()
 process_alerts(alerts_to_process)
