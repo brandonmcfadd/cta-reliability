@@ -8,9 +8,6 @@ import requests  # Used for API Calls
 load_dotenv()
 
 # ENV Variables
-github_pat = os.getenv('GITHUB_PAT')
-github_username = os.getenv('GITHUB_USERNAME')
-github_repo = os.getenv('GITHUB_REPO')
 main_file_path = os.getenv('FILE_PATH')
 
 def get_alerts():
@@ -27,7 +24,6 @@ def process_alerts(alerts_response):
         cta_alerts_original = cta_alerts
 
     for alert in alerts_response["CTAAlerts"]["Alert"]:
-        alert_id = int(alert["AlertId"])
         if alert["AlertId"] in cta_alerts:
             if cta_alerts[alert["AlertId"]][-1] == alert:
                 print(f"Alert {alert['AlertId']} already in file and current.")
