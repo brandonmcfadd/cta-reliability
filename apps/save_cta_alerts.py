@@ -33,9 +33,9 @@ def process_alerts(alerts_response):
         else:
             cta_alerts[alert["AlertId"]] = []
             cta_alerts[alert["AlertId"]].append(alert)
-    if cta_alerts != cta_alerts_original:
-        with open(json_file_path, "w", encoding="utf-8") as file:
-            json.dump(cta_alerts, file, indent=4)
+    # if cta_alerts != cta_alerts_original:
+    with open(json_file_path, "w", encoding="utf-8") as file:
+        json.dump(cta_alerts, file, indent=4)
 
 alerts_to_process = get_alerts()
 process_alerts(alerts_to_process)
