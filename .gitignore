@@ -199,3 +199,4 @@ gtfs/transit_stations_cta.json
 gtfs/amtrak_stops.json
 gtfs/transit_stations_amtrak_new.json
 train_arrivals/special/cta_alerts.json
+/train_arrivals
