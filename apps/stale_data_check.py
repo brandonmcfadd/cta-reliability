@@ -41,7 +41,7 @@ def get_date(date_type, date_input=""):
     elif date_type == "current-month":
         date = datetime.strftime(datetime.now(), "%b%Y")
     elif date_type == "convert":
-        date = datetime.strptime(date_input, "%Y-%m-%dT%H:%M:%S").strftime("%B %d %Y %I:%M%P")
+        date = datetime.strptime(date_input, "%Y-%m-%dT%H:%M:%S").strftime("%B %d %Y at %I:%M%P")
     return date
 
 
