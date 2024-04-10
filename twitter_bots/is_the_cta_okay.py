@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta
 from time import sleep
 import tweepy
+import json
 import requests  # Used for API Calls
 from dotenv import load_dotenv  # Used to Load Env Var
 
@@ -23,6 +24,8 @@ def get_date(date_type):
     """formatted date shortcut"""
     if date_type == "short":
         date = datetime.strftime(datetime.now(), "%Y%m%d")
+    elif date_type == "yesterday-short":
+        date = datetime.strftime(datetime.now()-timedelta(days=1), "%Y%m%d")
     elif date_type == "hour":
         date = datetime.strftime(datetime.now(), "%H")
     elif date_type == "long":
@@ -71,6 +74,18 @@ def day_of_performance_stats(data):
         type_of_day = 4
     return type_of_day
 
+def check_stale_state(stale_date):
+    """checks to see if CTA Data is stale before tweeting!"""
+    json_file_path = main_file_path + "train_arrivals/special/store.json"
+    with open(json_file_path, "r", encoding='utf-8') as file:
+        data = json.load(file)
+    if data["is_cta_data_stale"] is True:
+        response = "\n‼️ Data Is Currently Outdated ‼️"
+    elif data["last_cta_stale_date"] == stale_date:
+        response = "\n‼Some Data Unavailable Due to Tracker Outage‼️"
+    else:
+        response = ""
+    return response
 
 def prepare_tweet_text_1(data, is_good_day_flag):
     """preps the tweet text for the first tweet"""
@@ -79,11 +94,13 @@ def prepare_tweet_text_1(data, is_good_day_flag):
         tweet_date = get_date("tweet-date-yesterday")
         tweet_date_ending = get_ordinal_suffix(int(get_date("tweet-date-yesterday-int")))
         tweet_hour = ""
+        additional_text = check_stale_state(get_date("yesterday-short"))
     else:
         text_insert = "is having"
         tweet_date = get_date("tweet-date-today")
         tweet_date_ending = get_ordinal_suffix(int(get_date("tweet-date-today-int")))
         tweet_hour = f" at {get_date('tweet-hour')}"
+        additional_text = check_stale_state(get_date("short"))
     system_actual = data["system"]["ActualRuns"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     system_perc_reduced = int(
@@ -109,7 +126,7 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     else:
         type_of_day = f"🤬CTA Rail {text_insert} a terrible day even after cutting {system_perc_reduced}% of scheduled service."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.\nTo explore historical data: brandonmcfadden.com/cta-reliability."
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.{additional_text}\nTo explore historical data: brandonmcfadden.com/cta-reliability."
     return text_output_part_1
 
 

@@ -41,13 +41,13 @@ def create_github_issue(title,body):
         print(response.text)
 
 def read_last_website_hash():
-    json_file_path = main_file_path + "train_arrivals/special/gtfs_checks.json"
+    json_file_path = main_file_path + "train_arrivals/special/store.json"
     with open(json_file_path, "r") as file:
         data = json.load(file)
     return str(data["last_hash"])
 
 def update_last_hash_value(website_hash):
-    json_file_path = main_file_path + "train_arrivals/special/gtfs_checks.json"
+    json_file_path = main_file_path + "train_arrivals/special/store.json"
     with open(json_file_path, "r") as file:
         data = json.load(file)
     data["last_hash"] = website_hash
