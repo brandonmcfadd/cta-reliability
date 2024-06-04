@@ -3,17 +3,16 @@ import os  # Used to retrieve secrets in .env file
 import logging
 from logging.handlers import RotatingFileHandler
 import json  # Used for JSON Handling
-import time  # Used to Get Current Time
 # Used for converting Prediction from Current Time
-from datetime import datetime, timedelta
+from datetime import datetime
 import re
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
 import urllib3
-requests.packages.urllib3.disable_warnings()
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+urllib3.disable_warnings()
+urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 try:
-    requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+    urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
 except AttributeError:
     # no pyopenssl support used / needed / available
     pass
@@ -66,41 +65,56 @@ def train_arrival_times_map(response, line):
     northbound_destinations = ["Jefferson Park", "Rosemont", "Harlem/Lake", "Howard", "O'Hare&nbsp;<img alt='' height='13' src='/cms/images/icon_ttairport.png' width='13' style='padding-top:2px;' />", "Kimball", "Dempster", "Linden", "Howard"]
     southbound_destinations = ["Forest Park", "UIC-Halsted", "54th/Cermak", "95th/Dan Ryan", "Midway&nbsp;<img alt='' height='13' src='/images/icon_ttairport.png' width='13' style='padding-top:2px;'/>", "Cottage Grove", "Ashland/63rd"]
     for train in response['dataObject']:
+        if train["Line"] not in active_trains:
+            active_trains[train["Line"]] = {}
         for marker in train["Markers"]:
             for prediction in marker["Predictions"]:
-                if str(prediction[0]) in train_station_map_ids:
-                    eta = re.sub('[^0-9]+', '', str(prediction[2]))
-                    if marker["DestName"] == "Loop":
-                        if marker["LineName"] in ["Org", "Pnk"]:
-                            if str(prediction[2]) == "<b>Due</b>":
-                                add_train_to_json(line, "north", 0)
-                            elif int(eta) < 45:
-                                add_train_to_json(line, "north", int(eta))
-                        elif marker["LineName"] in ["Brn", "Pur"]:
-                            if str(prediction[2]) == "<b>Due</b>":
-                                add_train_to_json(line, "south", 0)
-                            elif int(eta) < 45:
-                                add_train_to_json(line, "south", int(eta))
+                if str(prediction[0]) not in active_trains[train["Line"]]:
+                    active_trains[train["Line"]][str(prediction[0])] = {"actual":{"north":[],"south":[],"south-express":[]}, "calculated":{"north":[],"south":[],"south-express":[]},"station_stats":{"north":{"min":None,"max":None,"average":None},"south":{"min":None,"max":None,"average":None},"south-express":{"min":None,"max":None,"average":None}}}
+                eta = re.sub('[^0-9]+', '', str(prediction[2]))
+                if marker["DestName"] == "Loop":
+                    if marker["LineName"] in ["Org", "Pnk"]:
+                        if str(prediction[2]) == "<b>Due</b>":
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["north"].append(0)
+                        else:
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["north"].append(int(eta))
+                    elif marker["LineName"] in ["Brn", "Pur"]:
+                        if str(prediction[2]) == "<b>Due</b>":
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south"].append(0)
+                        else:
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south"].append(int(eta))
+                else:
+                    if eta == "":
+                        continue
+                    elif str(prediction[2]) == "<b>Due</b>":
+                        if marker["DestName"] in northbound_destinations:
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["north"].append(0)
+                        elif marker["DestName"] in southbound_destinations and marker["DestName"] == "UIC-Halsted":
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south"].append(0)
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south-express"].append(0)
+                        elif marker["DestName"] in southbound_destinations:
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south"].append(0)
                     else:
-                        if eta == "":
-                            continue
-                        elif str(prediction[2]) == "<b>Due</b>":
-                            if marker["DestName"] in northbound_destinations:
-                                add_train_to_json(line, "north", 0)
-                            elif marker["DestName"] in southbound_destinations and marker["DestName"] == "UIC-Halsted":
-                                add_train_to_json(line, "south-express", 0)
-                                add_train_to_json(line, "south", 0)
-                            elif marker["DestName"] in southbound_destinations:
-                                add_train_to_json(line, "south", 0)
-                        elif int(eta) < 45:
-                            if marker["DestName"] in northbound_destinations:
-                                add_train_to_json(line, "north", int(eta))
-                            elif marker["DestName"] in southbound_destinations and marker["DestName"] == "UIC-Halsted":
-                                add_train_to_json(line, "south-express", int(eta))
-                                add_train_to_json(line, "south", int(eta))
-                            elif marker["DestName"] in southbound_destinations:
-                                add_train_to_json(line, "south", int(eta))
+                        if marker["DestName"] in northbound_destinations:
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["north"].append(int(eta))
+                        elif marker["DestName"] in southbound_destinations and marker["DestName"] == "UIC-Halsted":
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south-express"].append(int(eta))
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south"].append(int(eta))
+                        elif marker["DestName"] in southbound_destinations:
+                            active_trains[train["Line"]][str(prediction[0])]["actual"]["south"].append(int(eta))
     return True
+
+def calculate_headways(station_arrivals):
+    for line in station_arrivals:
+        for station in station_arrivals[line]:
+            for direction in station_arrivals[line][station]["actual"]:
+                station_arrivals[line][station]["actual"][direction].sort()
+                last_arrival = 0
+                for arrival in station_arrivals[line][station]["actual"][direction]:
+                    headway = arrival - last_arrival
+                    station_arrivals[line][station]["calculated"][direction].append(headway)
+                    last_arrival = headway
+    # print(station_arrivals)
 
 
 def prepare_output():
@@ -136,49 +150,50 @@ def prepare_output():
             pass
 
 
-def output_data_to_file():
+def output_data_to_file(input):
     """puts the data in a json file for the api"""
     date = datetime.strftime(datetime.utcnow(), "%Y-%m-%dT%H:%M:%SZ")
-    arrival_information["last_update"] = date
+    # arrival_information["last_update"] = date
     file_path = main_file_path + "train_arrivals/json/"
-    with open(file_path + "special-station.json", 'w', encoding='utf-8') as file1:
-        json.dump(arrival_information, file1, indent=2)
+    with open(file_path + "headways.json", 'w', encoding='utf-8') as file1:
+        json.dump(input, file1, indent=2)
     logging.info("File Outputs Complete")
 
 
 logging.info("Welcome to TrainTracker, Python Edition!")
 # Check to make sure output file exists and write headers
-while True:  # Where the magic happens
+# while True:  # Where the magic happens
 # Settings
-    file = open(file=main_file_path + 'settings.json',
-                mode='r',
-                encoding='utf-8')
-    settings = json.load(file)
+file = open(file=main_file_path + 'settings.json',
+            mode='r',
+            encoding='utf-8')
+settings = json.load(file)
 
-    # API URL's
-    train_tracker_url_map = settings["train-tracker"]["headway-map-url"]
+# API URL's
+train_tracker_url_map = settings["train-tracker"]["headway-map-url"]
 
-    # Variables for Settings information - Only make settings changes in the settings.json file
-    train_station_map_ids = settings["train-tracker"]["headway-map-station-ids"]
+# Variables for Settings information - Only make settings changes in the settings.json file
+train_station_map_ids = settings["train-tracker"]["headway-map-station-ids"]
 
-    # Setting Up Variable for Storing Station Information
-    arrival_information = json.loads('{"Data Provided By":"Brandon McFadden - http://rta-api.brandonmcfadden.com","Reports Acccessible At":"https://brandonmcfadden.com/cta-reliability","V2 API Information At":"http://rta-api.brandonmcfadden.com","Entity":"cta","last_update":"1970-01-01T00:00:00-0500","trains":{"Blu":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south-express":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Brn":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Grn":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Org":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Pnk":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Pur":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Red":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Yel":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}}}}')
+# Setting Up Variable for Storing Station Information
+arrival_information = json.loads('{"Data Provided By":"Brandon McFadden - http://rta-api.brandonmcfadden.com","Reports Acccessible At":"https://brandonmcfadden.com/cta-reliability","V2 API Information At":"http://rta-api.brandonmcfadden.com","Entity":"cta","last_update":"1970-01-01T00:00:00-0500","trains":{"Blu":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south-express":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Brn":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Grn":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Org":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Pnk":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Pur":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Red":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}},"Yel":{"north":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0},"south":{"count":0,"arrival_headways":[],"actual_headways":[],"average_headway":0}}}}')
+active_trains = {}
+current_time_console = "The Current Time is: " + \
+    datetime.strftime(datetime.now(), "%H:%M:%S")
+logging.info(current_time_console)
 
-    current_time_console = "The Current Time is: " + \
-        datetime.strftime(datetime.now(), "%H:%M:%S")
-    logging.info(current_time_console)
+# lines_to_process = {"R":"Red","P":"Pur","Y":"Yel","B":"Blu","V":"Pnk","G":"Grn","T":"Brn","O":"Org"}
+lines_to_process = {"B":"Blu"}
+# Map Portion runs if enabled and station id's exist
+for key, value in lines_to_process.items():
+    train_api_call_to_cta_map(key,value)
+calculate_headways(active_trains)
+# prepare_output()
+output_data_to_file(active_trains)
+# print(active_trains)
 
-    lines_to_process = {"R":"Red","P":"Pur","Y":"Yel","B":"Blu","V":"Pnk","G":"Grn","T":"Brn","O":"Org"}
-    # lines_to_process = {"B":"Blu"}
-    # Map Portion runs if enabled and station id's exist
-    for key, value in lines_to_process.items():
-        train_api_call_to_cta_map(key,value)
-    prepare_output()
-    output_data_to_file()
-
-
-    # Wait and do it again
-    SLEEP_AMOUNT = 30
-    SLEEP_STRING = "Sleeping " + str(SLEEP_AMOUNT) + " Seconds"
-    logging.info(SLEEP_STRING)
-    time.sleep(SLEEP_AMOUNT)
+    # # Wait and do it again
+    # SLEEP_AMOUNT = 30
+    # SLEEP_STRING = "Sleeping " + str(SLEEP_AMOUNT) + " Seconds"
+    # logging.info(SLEEP_STRING)
+    # time.sleep(SLEEP_AMOUNT)

@@ -96,6 +96,10 @@ def add_trains_to_table(train, month=""):
     """Parses API Result from Train Tracker API and adds ETA's to a list"""
     file_path = main_file_path + "train_arrivals/train_arrivals-" + \
         str(month) + ".csv"
+    if train["rn"] == "1225" and train["flags"] == "H":
+        train_type = "Holiday Train"
+    else:
+        train_type = "Pride Train"
     with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
             csvfile, fieldnames=tt_headers)
@@ -103,7 +107,7 @@ def add_trains_to_table(train, month=""):
                                 'Station_Name': train["staNm"], 'Destination': train["destNm"],
                                 'Route': train["rt"], 'Run_Number': train["rn"],
                                 'Prediction_Time': train["prdt"],
-                                'Arrival_Time': train["arrT"]})
+                                'Arrival_Time': train["arrT"], 'Flags': train_type})
 
 
 def file_validation(month, file_name, headers):

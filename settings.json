@@ -23,7 +23,7 @@
         "headway-map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line={}&MaxPredictions=100",
         "map-url-backup": "http://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=R%2CP%2CY%2CB%2CV%2CG%2CT%2CO&MaxPredictions=2",
         "little-map-url": "https://www.transitchicago.com/traintracker/PredictionMap/tmTrains.aspx?line=B&MaxPredictions=16",
-        "train-tracker-headers": ["Station_ID", "Stop_ID", "Station_Name", "Destination", "Route", "Run_Number", "Prediction_Time", "Arrival_Time"],
+        "train-tracker-headers": ["Station_ID", "Stop_ID", "Station_Name", "Destination", "Route", "Run_Number", "Prediction_Time", "Arrival_Time", "Flags"],
         "integrity-file-headers": ["Full_Date_Time", "Simple_Date_Time", "Status"]
     },
     "alerts-api": {
