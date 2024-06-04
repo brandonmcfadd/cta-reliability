@@ -113,7 +113,7 @@ def find_cta_holiday_train(response, run_number):
     output_line = ""
     for train in response['dataObject']:
         for marker in train["Markers"]:
-            if marker["RunNumber"] == run_number:
+            if marker["Flags"] == "H":
                 if marker["LineName"] == "Pur":
                     line_name = "Purple"
                     destination = marker["DestName"]
@@ -144,7 +144,7 @@ def find_cta_holiday_train(response, run_number):
                 else:
                     line_name = "Red"
                     destination = marker["DestName"]
-                output_line = f'CTA Holiday Train #{marker["RunNumber"]} is on the {line_name} Line {marker["DirMod"]} {destination}\nNext Stops:'
+                output_line = f'The CTA Pride Train #{marker["RunNumber"]} is (probably) on the {line_name} Line {marker["DirMod"]} {destination}\nNext Stops:'
                 prediction_count = 0
                 for prediction in marker["Predictions"]:
                     if str(prediction[2]) == "<b>Due</b>":
@@ -154,8 +154,8 @@ def find_cta_holiday_train(response, run_number):
                         eta = f"{minutes} minutes"
                     output_line = f'{output_line}\n• {prediction[1]} - {eta}'
                     prediction_count += 1
-                output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
-                if prediction_count > 3:
+                # output_line = f'{output_line}\nFollow live at: https://holiday.transitstat.us'
+                if prediction_count > 0:
                     print(f"Sending Tweet with contents\n{output_line}")
                     send_tweet(output_line)
     return output_line
@@ -283,7 +283,7 @@ def send_tweet(tweet_text_input):
         status1 = api.create_tweet(text=tweet_text_input)
         first_tweet = status1.data["id"]
         print(
-            f"sent new tweets https://twitter.com/ChiHolidayTrain/status/{first_tweet}")
+            f"sent new tweets https://twitter.com/ChiSpecialTrain/status/{first_tweet}")
         sleep(5)
     except:  # pylint: disable=bare-except
         print("Twitter error :(")
@@ -291,5 +291,5 @@ def send_tweet(tweet_text_input):
 
 cta_tweet_text = find_cta_holiday_train(
     train_api_call_to_cta_map(), "1225")
-metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
-bus_tweet_text = find_cta_holiday_bus(bus_api_call_to_cta())
+# metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
+# bus_tweet_text = find_cta_holiday_bus(bus_api_call_to_cta())
