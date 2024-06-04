@@ -23,7 +23,7 @@ cta_dataset_id = os.getenv('CTA_DATASET_ID')
 metra_dataset_id = os.getenv('METRA_DATASET_ID')
 
 cta_train_arrivals_csv_headers = ['Station_ID', 'Stop_ID', 'Station_Name', 'Destination', 'Route',
-                                  'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Headway', 'Time_Of_Week', 'Time_Of_Day', 'Consistent_Interval', 'Scheduled_Headway', 'Scheduled_Headway_Check']
+                                  'Run_Number', 'Prediction_Time', 'Arrival_Time', 'Headway', 'Time_Of_Week', 'Time_Of_Day', 'Consistent_Interval', 'Scheduled_Headway', 'Scheduled_Headway_Check', 'Flags']
 metra_train_arrivals_csv_headers = ['Full_Date_Time', 'Simple_Date_Time', 'Time_Of_Week', 'Time_Of_Day', 'Vehicle_Trip_TripID', 'Run_Number', 'Vehicle_Trip_RouteID',
                                     'Vehicle_Trip_StartTime', 'Vehicle_Trip_StartDate', 'Vehicle_Vehicle_ID', 'Destination', 'Stop_Arrival_Time', 'Scheduled_Arrival_Time', 'Stop_Sequence', 'On_Time']
 
@@ -111,7 +111,7 @@ def parse_response_cta(data, delay):
                                     'Time_Of_Week': item["train_arrivals[Time of Week]"], 'Time_Of_Day': item["train_arrivals[Time Of Day]"],
                                     'Consistent_Interval': item["train_arrivals[Headway Consistency]"],
                                     'Scheduled_Headway': item["train_arrivals[Scheduled Headway]"],
-                                    'Scheduled_Headway_Check': item["train_arrivals[Scheduled Headway Check]"]})
+                                    'Scheduled_Headway_Check': item["train_arrivals[Scheduled Headway Check]"], 'Flags': item["train_arrivals[Flags]"]})
     data_frame = pd.read_csv(csv_file_path)
     sorted_data_frame = data_frame.sort_values(
         by=["Route", "Stop_ID", "Arrival_Time"], ascending=True)
