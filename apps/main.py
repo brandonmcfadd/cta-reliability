@@ -100,7 +100,9 @@ def add_trains_to_table(train, month=""):
         train_type = "Holiday"
     elif train["rn"] != "1225" and train["flags"] == "H":
         train_type = "Pride"
-    else: 
+    elif train["flags"] is None: 
+        train_type = "null"
+    else:
         train_type = train["flags"]
     with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
