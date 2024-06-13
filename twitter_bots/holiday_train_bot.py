@@ -170,42 +170,43 @@ def find_metra_holiday_train(response):
         route_id = train["trip_update"]["trip"]["route_id"]
         trip_id = train["trip_update"]["trip"]["trip_id"]
         vehicle_id = train["trip_update"]["vehicle"]["id"]
-        if route_id == "ME":
+        if route_id == "ME" and vehicle_id in ["1343"]:
             route_name = "Electric"
-            if get_date("dayofweek") == "0":
-                if run_number in metra_runs["Sunday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
-                    process = True
-            elif get_date("dayofweek") == "6" and get_date("today") not in metra_runs["Saturday"]["not-on-these-days"]:
-                if run_number in metra_runs["Saturday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
-                    process = True
-            else:
-                if run_number in metra_runs["Weekday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
-                    process = True
+            process = True
+            # if get_date("dayofweek") == "0":
+            #     if run_number in metra_runs["Sunday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
+            #         process = True
+            # elif get_date("dayofweek") == "6" and get_date("today") not in metra_runs["Saturday"]["not-on-these-days"]:
+            #     if run_number in metra_runs["Saturday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
+            #         process = True
+            # else:
+            #     if run_number in metra_runs["Weekday"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
+            #         process = True
         elif route_id == "RI":
             route_name = "Rock Island"
-            if run_number in metra_runs[get_date("today")] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
-                process = True
+            # if run_number in metra_runs[get_date("today")] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
+            #     process = True
         else:
             route_name = route_id
-            if run_number in metra_runs[get_date("today")] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
-                if route_id == metra_runs[get_date("today")][run_number]:
-                    process = True
-            elif vehicle_id in metra_runs["unscheduled-trains"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "unscheduled") is False:
-                if route_id == "ME":
-                    route_name = "Electric"
-                elif route_id == "RI":
-                    route_name = "Rock Island"
-                process = True
-                unscheduled_text = " (Likely Holiday Train)"
+            # if run_number in metra_runs[get_date("today")] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "scheduled") is False:
+            #     if route_id == metra_runs[get_date("today")][run_number]:
+            #         process = True
+            # elif vehicle_id in metra_runs["unscheduled-trains"] and has_been_tweeted(run_number, vehicle_id, route_id, trip_id, "unscheduled") is False:
+            #     if route_id == "ME":
+            #         route_name = "Electric"
+            #     elif route_id == "RI":
+            #         route_name = "Rock Island"
+            #     process = True
+            #     unscheduled_text = " (Likely Holiday Train)"
         if process is True:
-            output_text = f"Metra {route_name} train # {run_number}{unscheduled_text}:"
+            output_text = f"Metra {route_name} run #{run_number} is the Pride train!\nUp Next:"
             count = 0
             if len(train["trip_update"]["stop_time_update"]) < 3:
                 stop_limit = 0
-            elif len(train["trip_update"]["stop_time_update"]) < 7:
+            elif len(train["trip_update"]["stop_time_update"]) < 6:
                 stop_limit = len(train["trip_update"]["stop_time_update"])
             else:
-                stop_limit = 8
+                stop_limit = 7
             for stop in train["trip_update"]["stop_time_update"]:
                 if count < stop_limit:
                     stop_name = metra_stops[stop["stop_id"]]["stop_name"]
@@ -291,5 +292,5 @@ def send_tweet(tweet_text_input):
 
 cta_tweet_text = find_cta_holiday_train(
     train_api_call_to_cta_map(), "1225")
-# metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
+metra_tweet_text = find_metra_holiday_train(train_api_call_to_metra())
 # bus_tweet_text = find_cta_holiday_bus(bus_api_call_to_cta())
