@@ -340,5 +340,6 @@ print(
     f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet} and https://twitter.com/isCTAokay/status/{third_tweet}")
 
 threads_post_1 = create_threads_posts(threads_text_1, threads_access_token)
-threads_post_2 = create_threads_posts(threads_text_2, threads_access_token, threads_post_1)
-print(f"Sent new threads posts with IDs: {threads_post_1} and {threads_post_2}")
+threads_post_2 = create_threads_posts(tweet_text_2, threads_access_token, threads_post_1)
+threads_post_3 = create_threads_posts(tweet_text_3, threads_access_token, threads_post_2)
+print(f"Sent new threads posts with IDs: {threads_post_1} and {threads_post_2} and {threads_post_3}")
