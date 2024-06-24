@@ -128,14 +128,14 @@ def add_trains_to_table(train, month=""):
                                 'Route': train["rt"], 'Run_Number': train["rn"],
                                 'Prediction_Time': train["prdt"],
                                 'Arrival_Time': train["arrT"], 'Flags': train_type})
-    row_to_insert = [
+    rows_to_insert.append(
                 {'Station_ID': train["staId"], 'Stop_ID': train["stpId"],
                  'Station_Name': train["staNm"], 'Destination': train["destNm"],
                  'Route': train["rt"], 'Run_Number': train["rn"],
                  'Prediction_Time': train["prdt"],
                  'Arrival_Time': train["arrT"], 'Flags': train_type}
-            ]
-    add_rows_to_bigquery(row_to_insert, train_arrivals_table)
+            )
+    
 
 
 def file_validation(month, file_name, headers):
@@ -221,6 +221,8 @@ while True:  # Always open while loop to continue checking for trains
             except:  # pylint: disable=bare-except
                 logging.critical("Ultimate Failure :(  - Map ID: %s", map_id)
 
+    if len(rows_to_insert) > 0:
+        add_rows_to_bigquery(rows_to_insert, train_arrivals_table)
     add_time_integrity_file("Success")
 
     logging.info("Sleeping 30 Seconds")  # Wait and do it again
