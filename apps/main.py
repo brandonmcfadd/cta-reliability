@@ -6,6 +6,8 @@ import json  # Used for JSON Handling
 import time  # Used to Get Current Time
 from datetime import datetime, timedelta
 from csv import DictWriter
+from google.cloud import bigquery
+from google.oauth2 import service_account
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
 import urllib3
@@ -21,6 +23,7 @@ train_api_key = os.getenv('TRAIN_API_KEY')  # API Key Provided by CTA
 main_file_path = os.getenv('FILE_PATH')  # File Path to App Directory
 train_arrivals_table = os.getenv('CTA_TRAIN_ARRIVALS_TABLE')
 integrity_check_table = os.getenv('CTA_INTEGRITY_CHECK_TABLE')
+google_credentials_file = main_file_path + os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
 LOG_FILENAME = main_file_path + 'logs/cta-reliability.log'  # Logging Information
 logging.basicConfig(level=logging.INFO)
@@ -50,6 +53,21 @@ def get_date(date_type):
     elif date_type == "current-month":
         date = datetime.strftime(datetime.now(), "%b%Y")
     return date
+
+def add_rows_to_bigquery(row, table_id):
+    """Takes a Row as Input and inserts it to the specified Google Big Query Table"""
+    credentials = service_account.Credentials.from_service_account_file(
+        google_credentials_file, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+
+    client = bigquery.Client(credentials=credentials, project=credentials.project_id,)
+
+    errors = client.insert_rows_json(table_id, row)  # Make an API request.
+    if errors:
+        logging.error("Encountered errors while inserting rows: %s", errors)
+    else:
+        logging.info(
+            "Successfully Inserted Row Into Table %s: %s", table_id, row)
 
 
 def call_to_cta_api(station_id, api_call_type, url):
@@ -110,6 +128,14 @@ def add_trains_to_table(train, month=""):
                                 'Route': train["rt"], 'Run_Number': train["rn"],
                                 'Prediction_Time': train["prdt"],
                                 'Arrival_Time': train["arrT"], 'Flags': train_type})
+    row_to_insert = [
+                {'Station_ID': train["staId"], 'Stop_ID': train["stpId"],
+                 'Station_Name': train["staNm"], 'Destination': train["destNm"],
+                 'Route': train["rt"], 'Run_Number': train["rn"],
+                 'Prediction_Time': train["prdt"],
+                 'Arrival_Time': train["arrT"], 'Flags': train_type}
+            ]
+    add_rows_to_bigquery(row_to_insert, train_arrivals_table)
 
 
 def file_validation(month, file_name, headers):
