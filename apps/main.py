@@ -166,6 +166,9 @@ def add_time_integrity_file(status):
         row_data = {'Full_Date_Time': long_time,
                     'Simple_Date_Time': simple_time, 'Status': status}
         writer_object.writerow(row_data)
+    big_query_row_data = [{'Full_Date_Time': long_time,
+                    'Simple_Date_Time': simple_time, 'Status': status}]
+    add_rows_to_bigquery(big_query_row_data, integrity_check_table)
 
 
 while True:  # Always open while loop to continue checking for trains
