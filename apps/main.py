@@ -135,7 +135,6 @@ def add_trains_to_table(train, month=""):
                  'Prediction_Time': train["prdt"],
                  'Arrival_Time': train["arrT"], 'Flags': train_type}
             )
-    
 
 
 def file_validation(month, file_name, headers):
@@ -158,17 +157,9 @@ def add_time_integrity_file(status):
     """Used to check if file exists"""
     simple_time = get_date("simple-time")
     long_time = get_date("long-time")
-    file_path = main_file_path + "train_arrivals/integrity-check-" + \
-        str(current_month) + ".csv"
-    with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
-        writer_object = DictWriter(
-            csvfile, fieldnames=integrity_headers)
-        row_data = {'Full_Date_Time': long_time,
-                    'Simple_Date_Time': simple_time, 'Status': status}
-        writer_object.writerow(row_data)
-    big_query_row_data = [{'Full_Date_Time': long_time,
+    row_data = [{'Full_Date_Time': long_time,
                     'Simple_Date_Time': simple_time, 'Status': status}]
-    add_rows_to_bigquery(big_query_row_data, integrity_check_table)
+    add_rows_to_bigquery(row_data, integrity_check_table)
 
 
 while True:  # Always open while loop to continue checking for trains
@@ -194,8 +185,7 @@ while True:  # Always open while loop to continue checking for trains
     logging.info(current_time_console)
 
     file_validation(current_month, "train_arrivals", tt_headers)
-    file_validation(current_month, "integrity-check", integrity_headers)
-
+    
     rows_to_insert = []
 
     if (current_time >= temp_tt_start_time and

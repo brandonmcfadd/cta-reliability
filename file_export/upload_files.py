@@ -29,7 +29,6 @@ logging.getLogger().addHandler(handler)
 
 # Constants
 MAIN_FILE_PATH_1 = "train_arrivals/train_arrivals-"
-MAIN_FILE_PATH_2 = "train_arrivals/integrity-check-"
 MAIN_FILE_PATH_3 = "train_arrivals/metra_train_updates-"
 MAIN_FILE_PATH_4 = "train_arrivals/metra-integrity-check-"
 
@@ -57,10 +56,6 @@ if current_day == "01" or current_day == "1":
         str(current_month) + ".csv"
     file_path_1_last_month = main_file_path + MAIN_FILE_PATH_1 + \
         str(last_month) + ".csv"
-    file_path_2 = main_file_path + MAIN_FILE_PATH_2 + \
-        str(current_month) + ".csv"
-    file_path_2_last_month = main_file_path + MAIN_FILE_PATH_2 + \
-        str(last_month) + ".csv"
     file_path_3 = main_file_path + MAIN_FILE_PATH_3 + \
         str(current_month) + ".csv"
     file_path_3_last_month = main_file_path + MAIN_FILE_PATH_3 + \
@@ -74,10 +69,6 @@ if current_day == "01" or current_day == "1":
     upload_to_blob_storage(file_path_1_last_month,
                            f'train_arrivals/train_arrivals-{last_month}.csv')
 
-    logging.info("Uploading file from path: %s", file_path_2_last_month)
-    upload_to_blob_storage(file_path_2_last_month,
-                           f'train_arrivals/integrity-check-{last_month}.csv')
-
     logging.info("Uploading file from path: %s", file_path_3_last_month)
     upload_to_blob_storage(
         file_path_3_last_month, f'train_arrivals/metra_train_updates-{last_month}.csv')
@@ -90,10 +81,6 @@ if current_day == "01" or current_day == "1":
     upload_to_blob_storage(
         file_path_1, f'train_arrivals/train_arrivals-{current_month}.csv')
 
-    logging.info("Uploading file from path: %s",file_path_2)
-    upload_to_blob_storage(
-        file_path_2, f'train_arrivals/integrity-check-{current_month}.csv')
-
     logging.info("Uploading file from path: %s",file_path_3)
     upload_to_blob_storage(
         file_path_3, f'train_arrivals/metra_train_updates-{current_month}.csv')
@@ -104,8 +91,6 @@ if current_day == "01" or current_day == "1":
 else:
     file_path_1 = main_file_path + MAIN_FILE_PATH_1 + \
         str(current_month) + ".csv"
-    file_path_2 = main_file_path + MAIN_FILE_PATH_2 + \
-        str(current_month) + ".csv"
     file_path_3 = main_file_path + MAIN_FILE_PATH_3 + \
         str(current_month) + ".csv"
     file_path_4 = main_file_path + MAIN_FILE_PATH_4 + \
@@ -113,10 +98,6 @@ else:
     logging.info("Uploading file from path: %s",file_path_1)
     upload_to_blob_storage(
         file_path_1, f'train_arrivals/train_arrivals-{current_month}.csv')
-
-    logging.info("Uploading file from path: %s",file_path_2)
-    upload_to_blob_storage(
-        file_path_2, f'train_arrivals/integrity-check-{current_month}.csv')
 
     logging.info("Uploading file from path: %s",file_path_3)
     upload_to_blob_storage(
