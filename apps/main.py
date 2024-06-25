@@ -219,4 +219,4 @@ while True:  # Always open while loop to continue checking for trains
     add_time_integrity_file("Success")
 
     logging.info("Sleeping 30 Seconds")  # Wait and do it again
-    time.sleep(30)
+    time.sleep(60)
