@@ -105,8 +105,6 @@ def parse_response_cta(data, last_refresh, days_old):
     routes_information = {}
     for item in data:
         shortened_date = item["date_range[Dates]"][:10]
-        integrity_actual = item["date_range[Integrity - Actual]"]
-        integrity_percent = item["date_range[Integrity - Percentage]"]
         system_total += item["date_range[Actual Arrivals]"]
         pre_pandemic_scheduled += item["date_range[Scheduled Arrivals - Pre-Pandemic]"]
         if item["date_range[Scheduled Arrivals]"] is not None:
@@ -137,8 +135,6 @@ def parse_response_cta(data, last_refresh, days_old):
         "Entity": "cta",
         "Date": shortened_date,
         "LastUpdated": last_refresh,
-        "IntegrityChecksPerformed": integrity_actual,
-        "IntegrityPercentage": integrity_percent,
         "system": {
             "ActualRuns": system_total,
             "ScheduledRuns": system_scheduled,

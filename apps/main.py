@@ -153,15 +153,6 @@ def file_validation(month, file_name, headers):
         logging.info("%s File Exists...Continuing...", file_name)
 
 
-def add_time_integrity_file(status):
-    """Used to check if file exists"""
-    simple_time = get_date("simple-time")
-    long_time = get_date("long-time")
-    row_data = [{'Full_Date_Time': long_time,
-                    'Simple_Date_Time': simple_time, 'Status': status}]
-    add_rows_to_bigquery(row_data, integrity_check_table)
-
-
 while True:  # Always open while loop to continue checking for trains
     current_month = get_date("current-month")
 
@@ -178,8 +169,7 @@ while True:  # Always open while loop to continue checking for trains
     temp_tt_start_time = settings["train-tracker"]["temp-map-ids-start-time"]
     temp_tt_end_time = settings["train-tracker"]["temp-map-ids-end-time"]
     tt_headers = settings["train-tracker"]["train-tracker-headers"]
-    integrity_headers = settings["train-tracker"]["integrity-file-headers"]
-
+    
     current_time = get_date("current-date-time")
     current_time_console = f"The Current Time is: {get_date('hour-minute-second')}"
     logging.info(current_time_console)
@@ -216,7 +206,6 @@ while True:  # Always open while loop to continue checking for trains
 
     if len(rows_to_insert) > 0:
         add_rows_to_bigquery(rows_to_insert, train_arrivals_table)
-    add_time_integrity_file("Success")
-
-    logging.info("Sleeping 30 Seconds")  # Wait and do it again
+    
+    logging.info("Sleeping 60 Seconds")  # Wait and do it again
     time.sleep(60)
