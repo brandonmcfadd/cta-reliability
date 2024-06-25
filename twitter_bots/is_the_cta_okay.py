@@ -5,6 +5,7 @@ from time import sleep
 import tweepy
 import json
 import requests  # Used for API Calls
+import dotenv
 from dotenv import load_dotenv  # Used to Load Env Var
 
 # Load .env variables
@@ -64,6 +65,8 @@ def refresh_threads_access_token(token):
     api_response = requests.request(
         "GET", threads_access_token_refresh_url, timeout=30)
     response_json = api_response.json()
+    os.environ["THREADS_ACCESS_TOKEN"] = response_json["access_token"]
+    dotenv.set_key(main_file_path + ".env", "THREADS_ACCESS_TOKEN", os.environ["THREADS_ACCESS_TOKEN"])
     return response_json["expires_in"]
 
 
