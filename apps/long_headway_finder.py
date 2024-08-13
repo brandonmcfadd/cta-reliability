@@ -80,7 +80,6 @@ def find_headways(response):
                     line_name = line_names[marker["LineName"]]
                     station_name = str(prediction[1])
                     station_id = int(prediction[0])
-                    station_url = f"https://www.transitchicago.com/traintracker/arrivaltimes/?sid={station_id}"
                     if line_name not in headways["Lines"]:
                         headways["Lines"] = {**headways["Lines"],**{line_name: {}}}
                     if station_name not in headways["Lines"][line_name]:
@@ -97,7 +96,7 @@ def find_headways(response):
                     else:
                         headways["Lines"][line_name][station_name][destination]["Arrivals"].append(eta)
                         headways["Lines"][line_name][station_name][destination]["Arrivals"].sort()
-                        headways["Lines"][line_name][station_name][destination]["Trains"] = {**headways["Lines"][line_name][station_name][destination]["Trains"],**{str(eta):{"TimeToArrival":eta,"Headway":None,"Line":line_name,"RunNumber":marker["RunNumber"],"Destination":destination, "StationName":station_name, "StationID":station_id, "URL":station_url}}}
+                        headways["Lines"][line_name][station_name][destination]["Trains"] = {**headways["Lines"][line_name][station_name][destination]["Trains"],**{str(eta):{"TimeToArrival":eta,"Headway":None,"Line":line_name,"RunNumber":marker["RunNumber"],"Destination":destination, "StationName":station_name, "StationID":station_id}}}
     return headways
 
 
