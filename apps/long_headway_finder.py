@@ -6,8 +6,10 @@ import requests  # Used for API Calls
 from dotenv import load_dotenv  # Used to Load Env Var
 import urllib3
 urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+urllib3.util.ssl_.DEFAULT_CIPHERS += 'DEFAULT@SECLEVEL=1'
 try:
     requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+    requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += 'DEFAULT@SECLEVEL=1'
 except AttributeError:
     pass  # no pyopenssl support used / needed / available
 
