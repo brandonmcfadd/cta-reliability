@@ -18,7 +18,7 @@ file = open(file=main_file_path + 'settings.json',
             encoding='utf-8')
 settings = json.load(file)
 
-train_tracker_url_map = settings["train-tracker"]["map-url"]
+train_tracker_url_map = settings["train-tracker"]["special-map-url"]
 metra_tracker_url = settings["metra-api"]["trips-api-url"]
 bus_tracker_url = settings["bus-tracker-api"]["api-url"]
 line_names = {"Red":"Red","Pur":"Purple","Yel":"Yellow","Blu":"Blue","Pnk":"Pink","Grn":"Green","Brn":"Brown","Org":"Orange"}
@@ -58,8 +58,8 @@ def train_api_call_to_cta_map():
 def find_headways(response):
     """takes output from the API and pulls out all the stations and headways"""
     headways = {"LastUpdated":get_date("full"),"Lines":{}}
-    for train in response['dataObject']:
-        for marker in train["Markers"]:
+    for line in response['dataObject']:
+        for marker in line["Markers"]:
             for prediction in marker["Predictions"]:
                 if str(prediction[2]) == "<b>Due</b>":
                     eta = 0
