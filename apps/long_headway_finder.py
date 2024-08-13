@@ -38,14 +38,6 @@ def get_date(date_type):
     return date
 
 
-def minutes_between(date_1):
-    """Takes the difference between two times and returns the minutes"""
-    date_1 = datetime.strptime(date_1, "%Y-%m-%dT%H:%M:%S.%fZ")
-    difference = date_1 - datetime.utcnow()
-    difference_in_minutes = int(difference / timedelta(minutes=1))
-    return difference_in_minutes
-
-
 def train_api_call_to_cta_map():
     """Gotta talk to the CTA and get Train Times!"""
     print("Making CTA Train Map API Call...")
