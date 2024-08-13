@@ -4,14 +4,6 @@ import json
 from datetime import datetime, timedelta
 import requests  # Used for API Calls
 from dotenv import load_dotenv  # Used to Load Env Var
-import urllib3
-urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-urllib3.util.ssl_.DEFAULT_CIPHERS += 'DEFAULT@SECLEVEL=1'
-try:
-    requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-    requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += 'DEFAULT@SECLEVEL=1'
-except AttributeError:
-    pass  # no pyopenssl support used / needed / available
 
 # Load .env variables
 load_dotenv()
@@ -26,7 +18,7 @@ file = open(file=main_file_path + 'settings.json',
             encoding='utf-8')
 settings = json.load(file)
 
-tt_api_url = settings["train-tracker"]["api-url"]
+tt_api_url = settings["train-tracker"]["api-url-backup"]
 train_tracker_url_map = settings["train-tracker"]["special-map-url"]
 station_ids = settings["train-tracker"]["all-station-ids"]
 metra_tracker_url = settings["metra-api"]["trips-api-url"]
