@@ -1,4 +1,4 @@
-"""This checks if CTA Holiday Train is active and tweets it!"""
+"""This checks for the longest Headway Gap in the CTA System Map"""
 import os
 import json
 import re
@@ -64,7 +64,7 @@ def train_api_call_to_cta_map():
     return api_output
 
 def find_headways(response):
-    """takes output from the API and looks for the holiday train (usually Run # 1225)"""
+    """takes output from the API and pulls out all the stations and headways"""
     headways = {"LastUpdated":get_date("full"),"Lines":{}}
     for train in response['dataObject']:
         for marker in train["Markers"]:
