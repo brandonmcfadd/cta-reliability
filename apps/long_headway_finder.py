@@ -39,6 +39,8 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S%z")
     return date
 
+current_time = get_date("full")
+headways = {"LastUpdated":current_time,"Lines":{}}
 
 def calc_tt_eta(date_1, date_2):
     """Takes the difference between two times and returns the minutes"""
@@ -59,9 +61,8 @@ def call_to_cta_api(station_id_input, url):
         print("Error in API Call to Train Tracker")
     return api_response.json()
 
-def find_headways(response, start_time):
+def find_headways(response):
     """takes output from the API and pulls out all the stations and headways"""
-    headways = {"LastUpdated":start_time,"Lines":{}}
     for train in response['ctatt']["eta"]:
         prediction = train["prdt"]
         arrival = train["arrT"]
@@ -128,11 +129,10 @@ def find_the_big_ones(headways):
     headways = {**headways,**{"BiggestGap":biggest_gap}}
     return headways
 
-current_time = get_date("full")
 for station_id in station_ids:
     api_response_value = call_to_cta_api(station_id, tt_api_url)
     if "eta" in api_response_value["ctatt"]:
-        headways_input = find_headways(api_response_value, current_time)
+        headways_input = find_headways(api_response_value)
 calculated_headways = calculate_headways(headways_input)
 headways_output = find_the_big_ones(calculated_headways)
 
