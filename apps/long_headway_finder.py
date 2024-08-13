@@ -36,7 +36,7 @@ def get_date(date_type):
     elif date_type == "dayofweek":
         date = datetime.strftime(datetime.now(), "%w")
     elif date_type == "full":
-        date = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S%z")
+        date = datetime.strftime(datetime.now(), "%B %d %Y %I:%M%P")
     return date
 
 current_time = get_date("full")
