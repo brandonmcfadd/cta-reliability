@@ -40,7 +40,7 @@ def get_date(date_type):
     return date
 
 current_time = get_date("full")
-headways = {"LastUpdated":current_time,"Lines":{}}
+output_information = {"LastUpdated":current_time,"Lines":{}}
 
 def calc_tt_eta(date_1, date_2):
     """Takes the difference between two times and returns the minutes"""
@@ -75,10 +75,10 @@ def find_headways(response):
             scheduled = True
         else:
             scheduled = False
-        if line_name not in headways["Lines"]:
-            headways["Lines"] = {**headways["Lines"],**{line_name: {}}}
-        if station_name not in headways["Lines"][line_name]:
-            headways["Lines"][line_name] = {**headways["Lines"][line_name],**{station_name: {}}}
+        if line_name not in output_information["Lines"]:
+            output_information["Lines"] = {**output_information["Lines"],**{line_name: {}}}
+        if station_name not in output_information["Lines"][line_name]:
+            output_information["Lines"][line_name] = {**output_information["Lines"][line_name],**{station_name: {}}}
         if destination.startswith(("O'Hare", "Midway")):
             if destination.startswith("O'Hare"):
                 destination = "O'Hare"
@@ -88,16 +88,16 @@ def find_headways(response):
             style = f"cta-{line_name}-line-inverted"
         else:
             style = f"cta-{line_name}-line"
-        if destination not in headways["Lines"][line_name][station_name]:
-            headways["Lines"][line_name][station_name] = {**headways["Lines"][line_name][station_name],**{destination: {"Arrivals":[],"Headways":[],"Trains":{}}}}
-            headways["Lines"][line_name][station_name][destination]["Arrivals"].append(estimated_time)
-            headways["Lines"][line_name][station_name][destination]["Arrivals"].sort()
-            headways["Lines"][line_name][station_name][destination]["Trains"] = {**headways["Lines"][line_name][station_name][destination]["Trains"],**{str(estimated_time):{"TimeToArrival":int(estimated_time),"Headway":None,"Line":line_name,"RunNumber":train["rn"],"Destination":destination, "StationName":station_name, "StationID":current_station_id, "IsScheduled":scheduled, "Style": style}}}
+        if destination not in output_information["Lines"][line_name][station_name]:
+            output_information["Lines"][line_name][station_name] = {**output_information["Lines"][line_name][station_name],**{destination: {"Arrivals":[],"Headways":[],"Trains":{}}}}
+            output_information["Lines"][line_name][station_name][destination]["Arrivals"].append(estimated_time)
+            output_information["Lines"][line_name][station_name][destination]["Arrivals"].sort()
+            output_information["Lines"][line_name][station_name][destination]["Trains"] = {**output_information["Lines"][line_name][station_name][destination]["Trains"],**{str(estimated_time):{"TimeToArrival":int(estimated_time),"Headway":None,"Line":line_name,"RunNumber":train["rn"],"Destination":destination, "StationName":station_name, "StationID":current_station_id, "IsScheduled":scheduled, "Style": style}}}
         else:
-            headways["Lines"][line_name][station_name][destination]["Arrivals"].append(estimated_time)
-            headways["Lines"][line_name][station_name][destination]["Arrivals"].sort()
-            headways["Lines"][line_name][station_name][destination]["Trains"] = {**headways["Lines"][line_name][station_name][destination]["Trains"],**{str(estimated_time):{"TimeToArrival":int(estimated_time),"Headway":None,"Line":line_name,"RunNumber":train["rn"],"Destination":destination, "StationName":station_name, "StationID":current_station_id, "IsScheduled":scheduled, "Style": style}}}
-    return headways
+            output_information["Lines"][line_name][station_name][destination]["Arrivals"].append(estimated_time)
+            output_information["Lines"][line_name][station_name][destination]["Arrivals"].sort()
+            output_information["Lines"][line_name][station_name][destination]["Trains"] = {**output_information["Lines"][line_name][station_name][destination]["Trains"],**{str(estimated_time):{"TimeToArrival":int(estimated_time),"Headway":None,"Line":line_name,"RunNumber":train["rn"],"Destination":destination, "StationName":station_name, "StationID":current_station_id, "IsScheduled":scheduled, "Style": style}}}
+    return output_information
 
 
 def calculate_headways(headways):
@@ -108,9 +108,9 @@ def calculate_headways(headways):
                 last_arrival = 0
                 for arrival in headways["Lines"][line][station][direction]["Arrivals"]:
                     headway = arrival - last_arrival
+                    last_arrival = arrival
                     headways["Lines"][line][station][direction]["Headways"].append(headway)
                     headways["Lines"][line][station][direction]["Trains"][str(arrival)]["Headway"] = headway
-                    last_arrival = headway
     return headways
 
 
