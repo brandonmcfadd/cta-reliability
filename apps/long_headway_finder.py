@@ -91,12 +91,16 @@ def find_headways(response):
                             destination = "Midway"
                     else:
                         destination = marker["DestName"]
+                    if destination in ("UIC-Halsted", "Cottage Grove"):
+                        style = f"cta-{line_name}-line-inverted"
+                    else:
+                        style = f"cta-{line_name}-line"
                     if destination not in headways["Lines"][line_name][station_name]:
                         headways["Lines"][line_name][station_name] = {**headways["Lines"][line_name][station_name],**{destination: {"Arrivals":[],"Headways":[],"Trains":{}}}}
                     else:
                         headways["Lines"][line_name][station_name][destination]["Arrivals"].append(eta)
                         headways["Lines"][line_name][station_name][destination]["Arrivals"].sort()
-                        headways["Lines"][line_name][station_name][destination]["Trains"] = {**headways["Lines"][line_name][station_name][destination]["Trains"],**{str(eta):{"TimeToArrival":eta,"Headway":None,"Line":line_name,"RunNumber":marker["RunNumber"],"Destination":destination, "StationName":station_name, "StationID":station_id}}}
+                        headways["Lines"][line_name][station_name][destination]["Trains"] = {**headways["Lines"][line_name][station_name][destination]["Trains"],**{str(eta):{"TimeToArrival":eta,"Headway":None,"Line":line_name,"RunNumber":marker["RunNumber"],"Destination":destination, "StationName":station_name, "StationID":station_id, "Style": style}}}
     return headways
 
 
