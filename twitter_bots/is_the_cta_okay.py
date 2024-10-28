@@ -139,7 +139,12 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     system_actual = data["system"]["ActualRuns"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     system_perc_reduced = int(
-        float(data["system"]["PrePandemicScheduledPercChange"]) * 100) * -1
+            float(data["system"]["PrePandemicScheduledPercChange"]) * 100)
+    if system_perc_reduced >= 0:
+        system_perc_reduced_text = "up"
+    else:
+        system_perc_reduced = system_perc_reduced * -1
+        system_perc_reduced_text = "down"
     on_time_trains = 0
 
     for line in data["routes"]:
@@ -147,21 +152,21 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     if on_time_trains > 0:
         on_time_trains_perc = int((on_time_trains/system_actual)*100)
     if is_good_day_flag == 0:
-        type_of_day = f"🤩CTA Rail {text_insert} a great day! To do this, the CTA cut {system_perc_reduced}% of scheduled service."
+        type_of_day = f"🤩CTA Rail {text_insert} a great day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "!"
     elif is_good_day_flag == 1:
-        type_of_day = f"😎CTA Rail {text_insert} a good day! To do this, the CTA cut {system_perc_reduced}% of scheduled service."
+        type_of_day = f"😎CTA Rail {text_insert} a good day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "!"
     elif is_good_day_flag == 2:
-        type_of_day = f"🤷CTA Rail {text_insert} a so-so day even with a {system_perc_reduced}% cut of scheduled service."
+        type_of_day = f"🤷CTA Rail {text_insert} a so-so day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "."
     elif is_good_day_flag == 3:
-        type_of_day = f"😡CTA Rail {text_insert} a tough day even after cutting {system_perc_reduced}% of scheduled service."
+        type_of_day = f"😡CTA Rail {text_insert} a tough day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "."
     else:
-        type_of_day = f"🤬CTA Rail {text_insert} a terrible day even after cutting {system_perc_reduced}% of scheduled service."
+        type_of_day = f"🤬CTA Rail {text_insert} a terrible day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.{additional_text}\nTo explore historical data: brandonmcfadden.com/cta-reliability."
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.{additional_text}"
     return text_output_part_1
 
 
@@ -244,7 +249,12 @@ def prepare_threads_text_1(data, is_good_day_flag):
     system_actual = data["system"]["ActualRuns"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     system_perc_reduced = int(
-        float(data["system"]["PrePandemicScheduledPercChange"]) * 100) * -1
+            float(data["system"]["PrePandemicScheduledPercChange"]) * 100)
+    if system_perc_reduced >= 0:
+        system_perc_reduced_text = "up"
+    else:
+        system_perc_reduced = system_perc_reduced * -1
+        system_perc_reduced_text = "down"
     on_time_trains = 0
 
     for line in data["routes"]:
@@ -252,21 +262,21 @@ def prepare_threads_text_1(data, is_good_day_flag):
     if on_time_trains > 0:
         on_time_trains_perc = int((on_time_trains/system_actual)*100)
     if is_good_day_flag == 0:
-        type_of_day = f"🤩CTA Rail {text_insert} a great day! To do this, the CTA cut {system_perc_reduced}% of scheduled service."
+        type_of_day = f"🤩CTA Rail {text_insert} a great day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "!"
     elif is_good_day_flag == 1:
-        type_of_day = f"😎CTA Rail {text_insert} a good day! To do this, the CTA cut {system_perc_reduced}% of scheduled service."
+        type_of_day = f"😎CTA Rail {text_insert} a good day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "!"
     elif is_good_day_flag == 2:
-        type_of_day = f"🤷CTA Rail {text_insert} a so-so day even with a {system_perc_reduced}% cut of scheduled service."
+        type_of_day = f"🤷CTA Rail {text_insert} a so-so day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "."
     elif is_good_day_flag == 3:
-        type_of_day = f"😡CTA Rail {text_insert} a tough day even after cutting {system_perc_reduced}% of scheduled service."
+        type_of_day = f"😡CTA Rail {text_insert} a tough day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "."
     else:
-        type_of_day = f"🤬CTA Rail {text_insert} a terrible day even after cutting {system_perc_reduced}% of scheduled service."
+        type_of_day = f"🤬CTA Rail {text_insert} a terrible day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.{additional_text}\nTo explore historical data: brandonmcfadden.com/cta-reliability"
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.{additional_text}"
     return text_output_part_1
 
 
@@ -313,7 +323,7 @@ def prepare_threads_text_2(data):
             percent_on_time = 0
         text_output_part_2 = f"{text_output_part_2}\n{line}: {percent_on_time}% • {on_time_runs:,}/{data['routes'][line]['ActualRuns']:,}"
     system_perc = int(float(on_time_arrivals/system_actual) * 100)
-    text_output_part_3 = f"{text_output_part_1}\n\nOn-Time Performance (# on-time/actual):\nSystem: {system_perc}% • {on_time_arrivals:,}/{system_actual:,}{text_output_part_2}"
+    text_output_part_3 = f"{text_output_part_1}\n\nOn-Time Performance (# on-time/actual):\nSystem: {system_perc}% • {on_time_arrivals:,}/{system_actual:,}{text_output_part_2}\nTo explore historical data: brandonmcfadden.com/cta-reliability"
     return text_output_part_3
 
 if get_date("hour") in ("0", "00"):
@@ -325,6 +335,7 @@ is_good_day = day_of_performance_stats(current_data)
 tweet_text_1 = prepare_tweet_text_1(current_data, is_good_day)
 tweet_text_2 = prepare_tweet_text_2(current_data)
 tweet_text_3 = prepare_tweet_text_3(current_data)
+tweet_text_4 = "To explore historical data: brandonmcfadden.com/cta-reliability"
 threads_text_1 = prepare_threads_text_1(current_data, is_good_day)
 threads_text_2 = prepare_threads_text_2(current_data)
 print("Threads Token Refresh Successful. Expires in", refresh_threads_access_token(threads_access_token), "sec")
@@ -339,10 +350,14 @@ second_tweet = status2.data["id"]
 sleep(1)
 status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
 third_tweet = status3.data["id"]
+sleep(1)
+status4 = api.create_tweet(text=tweet_text_4, in_reply_to_tweet_id=third_tweet)
+fourth_tweet = status4.data["id"]
 print(
-    f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet} and https://twitter.com/isCTAokay/status/{third_tweet}")
+    f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet} and https://twitter.com/isCTAokay/status/{third_tweet} and https://twitter.com/isCTAokay/status/{fourth_tweet}")
 
 threads_post_1 = create_threads_posts(threads_text_1, threads_access_token)
 threads_post_2 = create_threads_posts(tweet_text_2, threads_access_token, threads_post_1)
 threads_post_3 = create_threads_posts(tweet_text_3, threads_access_token, threads_post_2)
-print(f"Sent new threads posts with IDs: {threads_post_1} and {threads_post_2} and {threads_post_3}")
+threads_post_4 = create_threads_posts(tweet_text_4, threads_access_token, threads_post_3)
+print(f"Sent new threads posts with IDs: {threads_post_1} and {threads_post_2} and {threads_post_3} and {threads_post_4}")
