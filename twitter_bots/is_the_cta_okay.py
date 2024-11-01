@@ -134,17 +134,17 @@ def prepare_tweet_text_1(data, is_good_day_flag):
         text_insert = "is having"
         tweet_date = get_date("tweet-date-today")
         tweet_date_ending = get_ordinal_suffix(int(get_date("tweet-date-today-int")))
-        tweet_hour = f" at {get_date('tweet-hour')}"
+        tweet_hour = f" as of {get_date('tweet-hour')}"
         additional_text = check_stale_state(get_date("short"))
     system_actual = data["system"]["ActualRuns"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     system_perc_reduced = int(
             float(data["system"]["PrePandemicScheduledPercChange"]) * 100)
     if system_perc_reduced >= 0:
-        system_perc_reduced_text = "up"
+        system_perc_reduced_text = "increased"
     else:
         system_perc_reduced = system_perc_reduced * -1
-        system_perc_reduced_text = "down"
+        system_perc_reduced_text = "reduced"
     on_time_trains = 0
 
     for line in data["routes"]:
@@ -152,21 +152,21 @@ def prepare_tweet_text_1(data, is_good_day_flag):
     if on_time_trains > 0:
         on_time_trains_perc = int((on_time_trains/system_actual)*100)
     if is_good_day_flag == 0:
-        type_of_day = f"🤩CTA Rail {text_insert} a great day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"🤩CTA Rail {text_insert} a great day!"
         expression = "!"
     elif is_good_day_flag == 1:
-        type_of_day = f"😎CTA Rail {text_insert} a good day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"😎CTA Rail {text_insert} a good day!"
         expression = "!"
     elif is_good_day_flag == 2:
-        type_of_day = f"🤷CTA Rail {text_insert} a so-so day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"🤷CTA Rail {text_insert} a so-so day."
         expression = "."
     elif is_good_day_flag == 3:
-        type_of_day = f"😡CTA Rail {text_insert} a tough day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"😡CTA Rail {text_insert} a tough day."
         expression = "."
     else:
-        type_of_day = f"🤬CTA Rail {text_insert} a terrible day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"🤬CTA Rail {text_insert} a terrible day."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.{additional_text}"
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.\nSchedules are {system_perc_reduced_text} {system_perc_reduced}% from pre-pandemic schedules.{additional_text}"
     return text_output_part_1
 
 
@@ -244,17 +244,17 @@ def prepare_threads_text_1(data, is_good_day_flag):
         text_insert = "is having"
         tweet_date = get_date("tweet-date-today")
         tweet_date_ending = get_ordinal_suffix(int(get_date("tweet-date-today-int")))
-        tweet_hour = f" at {get_date('tweet-hour')}"
+        tweet_hour = f" as of {get_date('tweet-hour')}"
         additional_text = check_stale_state(get_date("short"))
     system_actual = data["system"]["ActualRuns"]
     system_perc = int(float(data["system"]["PercentRun"]) * 100)
     system_perc_reduced = int(
             float(data["system"]["PrePandemicScheduledPercChange"]) * 100)
     if system_perc_reduced >= 0:
-        system_perc_reduced_text = "up"
+        system_perc_reduced_text = "increased"
     else:
         system_perc_reduced = system_perc_reduced * -1
-        system_perc_reduced_text = "down"
+        system_perc_reduced_text = "reduced"
     on_time_trains = 0
 
     for line in data["routes"]:
@@ -262,21 +262,21 @@ def prepare_threads_text_1(data, is_good_day_flag):
     if on_time_trains > 0:
         on_time_trains_perc = int((on_time_trains/system_actual)*100)
     if is_good_day_flag == 0:
-        type_of_day = f"🤩CTA Rail {text_insert} a great day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"🤩CTA Rail {text_insert} a great day!"
         expression = "!"
     elif is_good_day_flag == 1:
-        type_of_day = f"😎CTA Rail {text_insert} a good day! Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"😎CTA Rail {text_insert} a good day!"
         expression = "!"
     elif is_good_day_flag == 2:
-        type_of_day = f"🤷CTA Rail {text_insert} a so-so day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"🤷CTA Rail {text_insert} a so-so day."
         expression = "."
     elif is_good_day_flag == 3:
-        type_of_day = f"😡CTA Rail {text_insert} a tough day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"😡CTA Rail {text_insert} a tough day."
         expression = "."
     else:
-        type_of_day = f"🤬CTA Rail {text_insert} a terrible day. Schedules are {system_perc_reduced_text} {system_perc_reduced}% compared to pre-pandemic schedules."
+        type_of_day = f"🤬CTA Rail {text_insert} a terrible day."
         expression = "."
-    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.{additional_text}"
+    text_output_part_1 = f"{type_of_day}\n{system_perc}% of scheduled trains operated on {tweet_date}{tweet_date_ending}{tweet_hour}{expression}\n{on_time_trains_perc}% arrived at their scheduled intervals.\nSchedules are {system_perc_reduced_text} {system_perc_reduced}% from pre-pandemic schedules.{additional_text}"
     return text_output_part_1
 
 
