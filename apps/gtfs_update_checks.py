@@ -53,7 +53,7 @@ def read_last_upload_time():
     with open(json_file_path, "r") as file:
         data = json.load(file)
         print(f"Last Upload: {str(data['last_schedule_upload_date'])}")
-    return str(data["last_hash"])
+    return str(data["last_schedule_upload_date"])
 
 def update_last_hash_value(website_hash):
     json_file_path = main_file_path + "train_arrivals/special/store.json"
@@ -116,14 +116,14 @@ url = "https://www.transitchicago.com/downloads/sch_data/"
 
 # Initial hash of the website's content
 initial_hash = read_last_website_hash()
-initial_time = read_last_website_hash
+initial_time = read_last_upload_time()
 
 current_hash = get_website_hash(url)
 current_upload_time = extract_google_transit_data(get_website_contents(url))
 if current_hash != None and current_upload_time != None:
     if current_hash != initial_hash and initial_time != current_upload_time:
         print("Website has changed!")
-        create_github_issue("The CTA Has Uploaded New GTFS Information!",get_website_contents(url))
+        create_github_issue("The CTA Has Uploaded New GTFS Information!",f"A new CTA GTFS Package was uploaded on {current_upload_time}\nIt has replaced the package uploaded on {initial_time}.\nIt is available for download at: https://www.transitchicago.com/downloads/sch_data/google_transit.zip")
         # Call the function and print the result
         update_last_hash_value(current_hash)
         update_last_upload_time(current_upload_time)
