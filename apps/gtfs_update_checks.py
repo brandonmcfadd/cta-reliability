@@ -123,7 +123,7 @@ current_upload_time = extract_google_transit_data(get_website_contents(url))
 if current_hash != None and current_upload_time != None:
     if current_hash != initial_hash and initial_time != current_upload_time:
         print("Website has changed!")
-        # create_github_issue("The CTA Has Uploaded New GTFS Information!",get_website_contents(url))
+        create_github_issue("The CTA Has Uploaded New GTFS Information!",get_website_contents(url))
         # Call the function and print the result
         update_last_hash_value(current_hash)
         update_last_upload_time(current_upload_time)
