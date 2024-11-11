@@ -346,50 +346,59 @@ threads_text_1 = prepare_threads_text_1(current_data, is_good_day)
 threads_text_2 = prepare_threads_text_2(current_data)
 print("Threads Token Refresh Successful. Expires in", refresh_threads_access_token(threads_access_token), "sec")
 
-api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
-                    twitter_access_token, twitter_access_token_secret)
-status1 = api.create_tweet(text=tweet_text_1)
-first_tweet = status1.data["id"]
-sleep(1)
-status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
-second_tweet = status2.data["id"]
-sleep(1)
-status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
-third_tweet = status3.data["id"]
-sleep(1)
-status4 = api.create_tweet(text=tweet_text_4, in_reply_to_tweet_id=third_tweet)
-fourth_tweet = status4.data["id"]
-print(
-    f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet} and https://twitter.com/isCTAokay/status/{third_tweet} and https://twitter.com/isCTAokay/status/{fourth_tweet}")
+try:
+    api = tweepy.Client(twitter_bearer_key, twitter_api_key, twitter_api_key_secret,
+                        twitter_access_token, twitter_access_token_secret)
+    status1 = api.create_tweet(text=tweet_text_1)
+    first_tweet = status1.data["id"]
+    sleep(1)
+    status2 = api.create_tweet(text=tweet_text_2, in_reply_to_tweet_id=first_tweet)
+    second_tweet = status2.data["id"]
+    sleep(1)
+    status3 = api.create_tweet(text=tweet_text_3, in_reply_to_tweet_id=second_tweet)
+    third_tweet = status3.data["id"]
+    sleep(1)
+    status4 = api.create_tweet(text=tweet_text_4, in_reply_to_tweet_id=third_tweet)
+    fourth_tweet = status4.data["id"]
+    print(
+        f"sent new tweets https://twitter.com/isCTAokay/status/{first_tweet} and https://twitter.com/isCTAokay/status/{second_tweet} and https://twitter.com/isCTAokay/status/{third_tweet} and https://twitter.com/isCTAokay/status/{fourth_tweet}")
+except: 
+    print('Not All Tweets Sent :(')
 
-threads_post_1 = create_threads_posts(threads_text_1, threads_access_token)
-threads_post_2 = create_threads_posts(tweet_text_2, threads_access_token, threads_post_1)
-threads_post_3 = create_threads_posts(tweet_text_3, threads_access_token, threads_post_2)
-threads_post_4 = create_threads_posts(tweet_text_4, threads_access_token, threads_post_3)
-print(f"Sent new threads posts with IDs: {threads_post_1} and {threads_post_2} and {threads_post_3} and {threads_post_4}")
+try:
+    threads_post_1 = create_threads_posts(threads_text_1, threads_access_token)
+    threads_post_2 = create_threads_posts(tweet_text_2, threads_access_token, threads_post_1)
+    threads_post_3 = create_threads_posts(tweet_text_3, threads_access_token, threads_post_2)
+    threads_post_4 = create_threads_posts(tweet_text_4, threads_access_token, threads_post_3)
+    print(f"Sent new threads posts with IDs: {threads_post_1} and {threads_post_2} and {threads_post_3} and {threads_post_4}")
+except: 
+    print('Not All Threads Sent :(')
 
-client = Client()
-client.login(bluesky_username, bluesky_password)
-blue_sky_post_1 = client.send_post(threads_text_1)
-root = models.create_strong_ref(blue_sky_post_1)
+try:
+    client = Client()
+    client.login(bluesky_username, bluesky_password)
+    blue_sky_post_1 = client.send_post(threads_text_1)
+    root = models.create_strong_ref(blue_sky_post_1)
 
-parent_1 = models.create_strong_ref(blue_sky_post_1)
-blue_sky_post_2 = client.send_post(text=tweet_text_2,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_1, root=root))
-parent_2 = models.create_strong_ref(blue_sky_post_2)
-blue_sky_post_3 = client.send_post(text=tweet_text_3,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_2, root=root))
-parent_3 = models.create_strong_ref(blue_sky_post_3)
+    parent_1 = models.create_strong_ref(blue_sky_post_1)
+    blue_sky_post_2 = client.send_post(text=tweet_text_2,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_1, root=root))
+    parent_2 = models.create_strong_ref(blue_sky_post_2)
+    blue_sky_post_3 = client.send_post(text=tweet_text_3,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_2, root=root))
+    parent_3 = models.create_strong_ref(blue_sky_post_3)
 
-with open(main_file_path + "twitter_bots/isCTAok.png", 'rb') as f:
-  img_data = f.read()
+    with open(main_file_path + "twitter_bots/isCTAok.png", 'rb') as f:
+    img_data = f.read()
 
-thumb = client.upload_blob(img_data)
-embed = models.AppBskyEmbedExternal.Main(
-    external=models.AppBskyEmbedExternal.External(
-        title='CTA Reliability Tracker',
-        description='Providing insight and transparency into the service levels of the Chicago Transit Authority',
-        uri='https://brandonmcfadden.com/cta-reliability',
-        thumb=thumb.blob,
+    thumb = client.upload_blob(img_data)
+    embed = models.AppBskyEmbedExternal.Main(
+        external=models.AppBskyEmbedExternal.External(
+            title='CTA Reliability Tracker',
+            description='Providing insight and transparency into the service levels of the Chicago Transit Authority',
+            uri='https://brandonmcfadden.com/cta-reliability',
+            thumb=thumb.blob,
+        )
     )
-)
-blue_sky_post_4 = client.send_post(tweet_text_4, embed=embed,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_3, root=root))
-print(f"Sent new posts on Bluesky: {blue_sky_post_1.uri}, {blue_sky_post_2.uri}, {blue_sky_post_3.uri}, {blue_sky_post_4.uri}.")
+    blue_sky_post_4 = client.send_post(tweet_text_4, embed=embed,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_3, root=root))
+    print(f"Sent new posts on Bluesky: {blue_sky_post_1.uri}, {blue_sky_post_2.uri}, {blue_sky_post_3.uri}, {blue_sky_post_4.uri}.")
+except: 
+    print('Not All Bluesky Posts Sent :(')
