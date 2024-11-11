@@ -387,7 +387,7 @@ try:
     parent_3 = models.create_strong_ref(blue_sky_post_3)
 
     with open(main_file_path + "twitter_bots/isCTAok.png", 'rb') as f:
-    img_data = f.read()
+        img_data = f.read()
 
     thumb = client.upload_blob(img_data)
     embed = models.AppBskyEmbedExternal.Main(
