@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta
 from time import sleep
 import tweepy
+from atproto import Client, models
 import json
 import requests  # Used for API Calls
 import dotenv
@@ -18,6 +19,8 @@ twitter_access_token = os.getenv('IS_CTA_OKAY_ACCESS_TOKEN')
 twitter_access_token_secret = os.getenv('IS_CTA_OKAY_ACCESS_TOKEN_SECRET')
 twitter_bearer_key = os.getenv('IS_CTA_OKAY_BEARER_TOKEN')
 threads_access_token = os.getenv('THREADS_ACCESS_TOKEN')
+bluesky_username = os.getenv('BLUESKY_USERNAME')
+bluesky_password = os.getenv('BLUESKY_PASSWORD')
 my_api_key = os.getenv('MY_API_KEY')
 main_file_path = os.getenv('FILE_PATH')
 
@@ -71,7 +74,10 @@ def refresh_threads_access_token(token):
 
 
 def create_threads_posts(text, access_token, reply_to_id=None):
-    """builds the threads post and publishes it"""
+    """builds the threads blue_sky_post_1 and publishes it"""
+    """builds the threads blue_sky_post_1 and publishes it"""
+    """builds the threads blue_sky_post_1 and publishes it"""
+    """builds the threads blue_sky_post_1 and publishes it"""
     if reply_to_id is None:
         threads_access_create_post = f"https://graph.threads.net/v1.0/25882170881398162/threads?media_type=TEXT&access_token={access_token}"
     else:
@@ -361,3 +367,29 @@ threads_post_2 = create_threads_posts(tweet_text_2, threads_access_token, thread
 threads_post_3 = create_threads_posts(tweet_text_3, threads_access_token, threads_post_2)
 threads_post_4 = create_threads_posts(tweet_text_4, threads_access_token, threads_post_3)
 print(f"Sent new threads posts with IDs: {threads_post_1} and {threads_post_2} and {threads_post_3} and {threads_post_4}")
+
+client = Client()
+client.login(bluesky_username, bluesky_password)
+blue_sky_post_1 = client.send_post(threads_text_1)
+root = models.create_strong_ref(blue_sky_post_1)
+
+parent_1 = models.create_strong_ref(blue_sky_post_1)
+blue_sky_post_2 = client.send_post(text=tweet_text_2,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_1, root=root))
+parent_2 = models.create_strong_ref(blue_sky_post_2)
+blue_sky_post_3 = client.send_post(text=tweet_text_3,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_2, root=root))
+parent_3 = models.create_strong_ref(blue_sky_post_3)
+
+with open(main_file_path + "twitter_bots/isCTAok.png", 'rb') as f:
+  img_data = f.read()
+
+thumb = client.upload_blob(img_data)
+embed = models.AppBskyEmbedExternal.Main(
+    external=models.AppBskyEmbedExternal.External(
+        title='CTA Reliability Tracker',
+        description='Providing insight and transparency into the service levels of the Chicago Transit Authority',
+        uri='https://brandonmcfadden.com/cta-reliability',
+        thumb=thumb.blob,
+    )
+)
+blue_sky_post_4 = client.send_post(tweet_text_4, embed=embed,reply_to=models.AppBskyFeedPost.ReplyRef(parent=parent_3, root=root))
+print(f"Sent new posts on Bluesky: {blue_sky_post_1.uri}, {blue_sky_post_2.uri}, {blue_sky_post_3.uri}, {blue_sky_post_4.uri}.")
