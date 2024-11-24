@@ -34,7 +34,8 @@
     "metra-api": {
         "api-enabled": "True",
         "api-url": "https://gtfsapi.metrarail.com/gtfs/positions",
-        "trips-api-url": "https://gtfsapi.metrarail.com/gtfs/tripUpdates"
+        "trips-api-url": "https://gtfsapi.metrarail.com/gtfs/tripUpdates",
+        "alerts-api-url": "https://gtfsapi.metrarail.com/gtfs/alerts"
     },
     "bus-tracker-api": {
         "api-enabled": "True",

@@ -201,3 +201,5 @@ gtfs/transit_stations_amtrak_new.json
 train_arrivals/special/cta_alerts.json
 /train_arrivals
 apps/upload_files_big_query.py
+apps/cta-reliability-report-capture.py
+screenshot.png
