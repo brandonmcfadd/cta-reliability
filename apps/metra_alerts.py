@@ -46,22 +46,22 @@ def send_bluesky_post(text):
 def process_alerts(alerts_response):
     """work through each alert and determine if it is existing or old"""
     json_file_path = main_file_path + "train_arrivals/special/metra_alerts.json"
+    new_alerts = []
     with open(json_file_path, "r", encoding="utf-8") as file_1:
         metra_alerts = json.load(file_1)
     for alert in alerts_response:
-        if get_date("today") not in metra_alerts:
-            metra_alerts = {**metra_alerts,**{get_date("today"): []}}
         alert_url = str(alert["alert"]["url"]["translation"][0]["text"])
         alert_headline = str(alert["alert"]["header_text"]["translation"][0]["text"])
         alert_text = str(alert["alert"]["description_text"]["translation"][0]["text"])
         alert_store = f"{alert_headline} - {alert_text}"
         if "Twitter=1" in alert_url and "train-lines" in alert_url:
             route_id = str(alert["alert"]["informed_entity"][0]["route_id"])
-            if alert_store in  metra_alerts[get_date("today")]:
-                print(f"Alert {alert_headline} already in file and current.")
+            if alert_store in metra_alerts:
+                print(f"Alert {alert_headline} already in file.")
+                new_alerts.append(alert_store)
             else:
-                print(f"Alert {alert_headline} has been added.")
-                metra_alerts[get_date("today")].append(alert_store)
+                print(f"Alert {alert_headline} is new.")
+                new_alerts.append(alert_store)
                 if route_id == "ME":
                     route_name = "Electric"
                     emoji = "🚊"
@@ -74,7 +74,7 @@ def process_alerts(alerts_response):
                 post_text = f"{emoji}Metra {route_name}:\n{alert_text}"
                 send_bluesky_post(post_text)
     with open(json_file_path, "w", encoding="utf-8") as file_1:
-        json.dump(metra_alerts, file_1, indent=4)
+        json.dump(new_alerts, file_1, indent=4)
 
 file = open(file=main_file_path + 'settings.json',
                 mode='r',
