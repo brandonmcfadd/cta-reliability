@@ -2,9 +2,9 @@
 from datetime import datetime
 import os  # Used to retrieve secrets in .env file
 import json  # Used for JSON Handling
+from atproto import Client
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
-from atproto import Client
 
 # Load .env variables
 load_dotenv()
@@ -34,14 +34,14 @@ def get_alerts():
             metra_tracker_url_api, auth=(metra_username, metra_password), timeout=300)
     return api_response.json()
 
-# def send_bluesky_post(text):
-#     try:
-#         client = Client()
-#         client.login(bluesky_username, bluesky_password)
-#         blue_sky_post_1 = client.send_post(text)
-#         print(f"Sent new posts on Bluesky: {blue_sky_post_1.uri}.")
-#     except: 
-#         print('Not All Bluesky Posts Sent :(')
+def send_bluesky_post(text):
+    try:
+        client = Client()
+        client.login(bluesky_username, bluesky_password)
+        blue_sky_post_1 = client.send_post(text)
+        print(f"Sent new posts on Bluesky: {blue_sky_post_1.uri}.")
+    except: 
+        print('Not All Bluesky Posts Sent :(')
 
 def process_alerts(alerts_response):
     """work through each alert and determine if it is existing or old"""
@@ -72,7 +72,7 @@ def process_alerts(alerts_response):
                     route_name = route_id
                     emoji = "🚆"
                 post_text = f"{emoji}Metra {route_name}:\n{alert_text}"
-                # send_bluesky_post(post_text)
+                send_bluesky_post(post_text)
     with open(json_file_path, "w", encoding="utf-8") as file_1:
         json.dump(new_alerts, file_1, indent=4)
 
