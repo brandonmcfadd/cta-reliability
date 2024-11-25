@@ -73,9 +73,10 @@ def process_alerts(alerts_response):
                     route_name = route_id
                     emoji = "🚆"
                 post_text = f"{emoji}Metra {route_name}:\n{alert_text}"
-                # send_bluesky_post(post_text)
+                send_bluesky_post(post_text)
     with open(json_file_path, "w", encoding="utf-8") as file_1:
         json.dump(new_alerts, file_1, indent=4)
+
 while True:  # Always open while loop to continue checking for trains
 
     file = open(file=main_file_path + 'settings.json',
