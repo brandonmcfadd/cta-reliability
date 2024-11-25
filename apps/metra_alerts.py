@@ -1,7 +1,8 @@
 """cta-reliability by Brandon McFadden - Github: https://github.com/brandonmcfadd/cta-reliability"""
 from datetime import datetime
 import os  # Used to retrieve secrets in .env file
-import json  # Used for JSON Handling
+import json
+import time  # Used for JSON Handling
 from atproto import Client
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
@@ -72,17 +73,20 @@ def process_alerts(alerts_response):
                     route_name = route_id
                     emoji = "🚆"
                 post_text = f"{emoji}Metra {route_name}:\n{alert_text}"
-                send_bluesky_post(post_text)
+                # send_bluesky_post(post_text)
     with open(json_file_path, "w", encoding="utf-8") as file_1:
         json.dump(new_alerts, file_1, indent=4)
+while True:  # Always open while loop to continue checking for trains
 
-file = open(file=main_file_path + 'settings.json',
-                mode='r',
-                encoding='utf-8')
-settings = json.load(file)
+    file = open(file=main_file_path + 'settings.json',
+                    mode='r',
+                    encoding='utf-8')
+    settings = json.load(file)
 
-# API URL's
-metra_tracker_url_api = settings["metra-api"]["alerts-api-url"]
+    # API URL's
+    metra_tracker_url_api = settings["metra-api"]["alerts-api-url"]
 
-alerts_to_process = get_alerts()
-process_alerts(alerts_to_process)
+    alerts_to_process = get_alerts()
+    process_alerts(alerts_to_process)
+    print("Sleeping 60 Seconds")
+    time.sleep(60)
