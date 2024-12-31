@@ -3,7 +3,7 @@ from datetime import datetime
 import os  # Used to retrieve secrets in .env file
 import json
 import time  # Used for JSON Handling
-from atproto import Client
+from atproto import Client, models
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
 
@@ -27,6 +27,8 @@ def get_date(date_type):
         date = datetime.strftime(datetime.now(), "%Y-%m-%dT%H")
     elif date_type == "dayofweek":
         date = datetime.strftime(datetime.now(), "%w")
+    else:
+        date = None
     return date
 
 def get_alerts():
@@ -36,12 +38,26 @@ def get_alerts():
     return api_response.json()
 
 def send_bluesky_post(text):
+    """reach Bluesky API and send the posts"""
     try:
         client = Client()
         client.login(bluesky_username, bluesky_password)
-        blue_sky_post_1 = client.send_post(text)
-        print(f"Sent new posts on Bluesky: {blue_sky_post_1.uri}.")
-    except: 
+        metra_track_link = "MetraTracker.com"
+        if metra_track_link in text or metra_track_link.lower() in text:
+            text = str(text).replace(metra_track_link, "Metra Train Tracker").replace(metra_track_link.lower(), "Metra Train Tracker").strip()
+            embed = models.AppBskyEmbedExternal.Main(
+                external=models.AppBskyEmbedExternal.External(
+                    title='Metra Train Tracker',
+                    description="Metra Train Tracker provides real time information about your train's location and predicted time of departure at your stop.",
+                    uri='https://metratracker.com/home',
+                )
+            )
+            blue_sky_post_1 = client.send_post(text, embed=embed)
+            print(f"Sent new posts on Bluesky: {blue_sky_post_1.uri}.")
+        else:
+            blue_sky_post_2 = client.send_post(text)
+            print(f"Sent new posts on Bluesky: {blue_sky_post_2.uri}.")
+    except: # pylint: disable=bare-except
         print('Not All Bluesky Posts Sent :(')
 
 def process_alerts(alerts_response):
