@@ -11,11 +11,11 @@ from google.oauth2 import service_account
 from dotenv import load_dotenv  # Used to Load Env Var
 import requests  # Used for API Calls
 import urllib3
-urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-try:
-    requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
-except AttributeError:
-    pass  # no pyopenssl support used / needed / available
+# urllib3.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+# try:
+#     requests.packages.urllib3.contrib.pyopenssl.util.ssl_.DEFAULT_CIPHERS += ':HIGH:!DH:!aNULL'
+# except AttributeError:
+#     pass  # no pyopenssl support used / needed / available
 
 load_dotenv()  # Load .env variables
 
