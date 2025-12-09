@@ -423,11 +423,11 @@ while remaining >= 0:
     except:  # pylint: disable=bare-except
         print("Failed to grab CTA #", remaining)
 
-    try:
-        parse_response_metra(get_report_data(
-            metra_dataset_id, remaining), last_refresh_time, remaining)
-    except:  # pylint: disable=bare-except
-        print("Failed to grab Metra #", remaining)
+    # try:
+    #     parse_response_metra(get_report_data(
+    #         metra_dataset_id, remaining), last_refresh_time, remaining)
+    # except:  # pylint: disable=bare-except
+    #     print("Failed to grab Metra #", remaining)
 
     remaining -= 1
     sleep(1)
