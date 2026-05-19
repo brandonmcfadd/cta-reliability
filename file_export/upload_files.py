@@ -29,8 +29,8 @@ logging.getLogger().addHandler(handler)
 
 # Constants
 MAIN_FILE_PATH_1 = "train_arrivals/train_arrivals-"
-MAIN_FILE_PATH_3 = "train_arrivals/metra_train_updates-"
-MAIN_FILE_PATH_4 = "train_arrivals/metra-integrity-check-"
+# MAIN_FILE_PATH_3 = "train_arrivals/metra_train_updates-"
+# MAIN_FILE_PATH_4 = "train_arrivals/metra-integrity-check-"
 
 # Dates
 current_day = datetime.strftime(datetime.now(), "%d")
@@ -69,25 +69,25 @@ if current_day == "01" or current_day == "1":
     upload_to_blob_storage(file_path_1_last_month,
                            f'train_arrivals/train_arrivals-{last_month}.csv')
 
-    logging.info("Uploading file from path: %s", file_path_3_last_month)
-    upload_to_blob_storage(
-        file_path_3_last_month, f'train_arrivals/metra_train_updates-{last_month}.csv')
+    # logging.info("Uploading file from path: %s", file_path_3_last_month)
+    # upload_to_blob_storage(
+    #     file_path_3_last_month, f'train_arrivals/metra_train_updates-{last_month}.csv')
 
-    logging.info("Uploading file from path: %s", file_path_4_last_month)
-    upload_to_blob_storage(
-        file_path_4_last_month, f'train_arrivals/metra-integrity-check-{last_month}.csv')
+    # logging.info("Uploading file from path: %s", file_path_4_last_month)
+    # upload_to_blob_storage(
+    #     file_path_4_last_month, f'train_arrivals/metra-integrity-check-{last_month}.csv')
 
     logging.info("Uploading file from path: %s",file_path_1)
     upload_to_blob_storage(
         file_path_1, f'train_arrivals/train_arrivals-{current_month}.csv')
 
-    logging.info("Uploading file from path: %s",file_path_3)
-    upload_to_blob_storage(
-        file_path_3, f'train_arrivals/metra_train_updates-{current_month}.csv')
+    # logging.info("Uploading file from path: %s",file_path_3)
+    # upload_to_blob_storage(
+    #     file_path_3, f'train_arrivals/metra_train_updates-{current_month}.csv')
 
-    logging.info("Uploading file from path: %s",file_path_4)
-    upload_to_blob_storage(
-        file_path_4, f'train_arrivals/metra-integrity-check-{current_month}.csv')
+    # logging.info("Uploading file from path: %s",file_path_4)
+    # upload_to_blob_storage(
+    #     file_path_4, f'train_arrivals/metra-integrity-check-{current_month}.csv')
 else:
     file_path_1 = main_file_path + MAIN_FILE_PATH_1 + \
         str(current_month) + ".csv"
@@ -99,10 +99,10 @@ else:
     upload_to_blob_storage(
         file_path_1, f'train_arrivals/train_arrivals-{current_month}.csv')
 
-    logging.info("Uploading file from path: %s",file_path_3)
-    upload_to_blob_storage(
-        file_path_3, f'train_arrivals/metra_train_updates-{current_month}.csv')
+    # logging.info("Uploading file from path: %s",file_path_3)
+    # upload_to_blob_storage(
+    #     file_path_3, f'train_arrivals/metra_train_updates-{current_month}.csv')
 
-    logging.info("Uploading file from path: %s",file_path_4)
-    upload_to_blob_storage(
-        file_path_4, f'train_arrivals/metra-integrity-check-{current_month}.csv')
+    # logging.info("Uploading file from path: %s",file_path_4)
+    # upload_to_blob_storage(
+    #     file_path_4, f'train_arrivals/metra-integrity-check-{current_month}.csv')
