@@ -120,17 +120,23 @@ def add_trains_to_table(train, month=""):
         train_type = "Pride"
     else:
         train_type = train["flags"]
+    if train["destNm"] == "Loop, Midway":
+        destination = "Loop/Midway"
+    elif train["destNm"] == "Downtown, Kimball":
+        destination = "Loop/Kimball"
+    else:
+        destination = train["destNm"]
     with open(file_path, 'a', newline='', encoding='utf8') as csvfile:
         writer_object = DictWriter(
             csvfile, fieldnames=tt_headers)
         writer_object.writerow({'Station_ID': train["staId"], 'Stop_ID': train["stpId"],
-                                'Station_Name': train["staNm"], 'Destination': train["destNm"],
+                                'Station_Name': train["staNm"], 'Destination': destination,
                                 'Route': train["rt"], 'Run_Number': train["rn"],
                                 'Prediction_Time': train["prdt"],
                                 'Arrival_Time': train["arrT"], 'Flags': train_type})
     rows_to_insert.append(
                 {'Station_ID': train["staId"], 'Stop_ID': train["stpId"],
-                 'Station_Name': train["staNm"], 'Destination': train["destNm"],
+                 'Station_Name': train["staNm"], 'Destination': destination,
                  'Route': train["rt"], 'Run_Number': train["rn"],
                  'Prediction_Time': train["prdt"],
                  'Arrival_Time': train["arrT"], 'Flags': train_type}
