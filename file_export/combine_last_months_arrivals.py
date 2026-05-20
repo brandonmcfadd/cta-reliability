@@ -64,6 +64,6 @@ remaining = 1
 while remaining > 0:
     last_month = get_date("file-date", remaining)
     combine_days_to_month(last_month, "cta", "Arrival_Time")
-    combine_days_to_month(last_month, "metra", "Full_Date_Time")
+    # combine_days_to_month(last_month, "metra", "Full_Date_Time")
     print("exporting month:", last_month)
     remaining -= 1

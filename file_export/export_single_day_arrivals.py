@@ -118,17 +118,25 @@ def make_clean_train_file(delay, headers, agency):
 
 def parse_response_cta(data, delay):
     """takes api response and turns it into usable data without all the extra powerbi stuff"""
-    cta_rows_to_upload = []
+    make_clean_train_file(delay, cta_train_arrivals_csv_headers, "cta")
     for item in data:
-        cta_rows_to_upload.append({'Station_ID': item["train_arrivals[Station_ID]"], 'Stop_ID': item["train_arrivals[Stop_ID]"],
-                                   'Station_Name': item["train_arrivals[Station_Name]"], 'Destination': item["train_arrivals[Destination]"], 'Route': item["train_arrivals[Route]"],
-                                   'Run_Number': item["train_arrivals[Run_Number]"], 'Prediction_Time': item["train_arrivals[Prediction_Time]"],
-                                   'Arrival_Time': item["train_arrivals[Arrival_Time_Combined]"], 'Headway': item["train_arrivals[Headway]"],
-                                   'Time_Of_Week': item["train_arrivals[Time of Week]"], 'Time_Of_Day': item["train_arrivals[Time Of Day]"],
-                                   'Consistent_Interval': item["train_arrivals[Headway Consistency]"],
-                                   'Scheduled_Headway': item["train_arrivals[Scheduled Headway]"],
-                                   'Scheduled_Headway_Check': item["train_arrivals[Scheduled Headway Check]"], 'Flags': item["train_arrivals[Flags]"]})
-    add_rows_to_bigquery(cta_rows_to_upload, train_arrivals_table, delay)
+        shortened_date = get_date("file", delay)
+        csv_file_path = main_file_path_csv + "cta/" + shortened_date + ".csv"
+        with open(csv_file_path, 'a', newline='', encoding='utf8') as csvfile:
+            writer_object = DictWriter(
+                csvfile, fieldnames=cta_train_arrivals_csv_headers)
+            writer_object.writerow({'Station_ID': item["train_arrivals[Station_ID]"], 'Stop_ID': item["train_arrivals[Stop_ID]"],
+                                    'Station_Name': item["train_arrivals[Station_Name]"], 'Destination': item["train_arrivals[Destination]"], 'Route': item["train_arrivals[Route]"],
+                                    'Run_Number': item["train_arrivals[Run_Number]"], 'Prediction_Time': item["train_arrivals[Prediction_Time]"],
+                                    'Arrival_Time': item["train_arrivals[Arrival_Time_Combined]"], 'Headway': item["train_arrivals[Headway]"],
+                                    'Time_Of_Week': item["train_arrivals[Time of Week]"], 'Time_Of_Day': item["train_arrivals[Time Of Day]"],
+                                    'Consistent_Interval': item["train_arrivals[Headway Consistency]"],
+                                    'Scheduled_Headway': item["train_arrivals[Scheduled Headway]"],
+                                    'Scheduled_Headway_Check': item["train_arrivals[Scheduled Headway Check]"], 'Flags': item["train_arrivals[Flags]"]})
+    data_frame = pd.read_csv(csv_file_path)
+    sorted_data_frame = data_frame.sort_values(
+        by=["Route", "Stop_ID", "Arrival_Time"], ascending=True)
+    sorted_data_frame.to_csv(csv_file_path, index=False)
 
 
 def parse_response_metra(data, delay):
@@ -150,16 +158,18 @@ def parse_response_metra(data, delay):
 
 bearer_token = get_token()
 
-DAYS_OLD = 1
+DAYS_OLD = 1440
 
-try:
-    parse_response_cta(get_report_data(
-        cta_dataset_id, DAYS_OLD), DAYS_OLD)
-except:  # pylint: disable=bare-except
-    print(
-        f"Failed to grab {get_date('file', DAYS_OLD)}, ({DAYS_OLD} days old)")
-try:
-    parse_response_metra(get_report_data(
-        metra_dataset_id, DAYS_OLD), DAYS_OLD)
-except:  # pylint: disable=bare-except
-    print("Failed to grab Metra #", DAYS_OLD)
+while DAYS_OLD >= 0:
+    try:
+        parse_response_cta(get_report_data(
+            cta_dataset_id, DAYS_OLD), DAYS_OLD)
+    except:  # pylint: disable=bare-except
+        print(
+            f"Failed to grab {get_date('file', DAYS_OLD)}, ({DAYS_OLD} days old)")
+    DAYS_OLD -= 1
+# try:
+#     parse_response_metra(get_report_data(
+#         metra_dataset_id, DAYS_OLD), DAYS_OLD)
+# except:  # pylint: disable=bare-except
+#     print("Failed to grab Metra #", DAYS_OLD)
