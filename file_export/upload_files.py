@@ -56,14 +56,14 @@ if current_day == "01" or current_day == "1":
         str(current_month) + ".csv"
     file_path_1_last_month = main_file_path + MAIN_FILE_PATH_1 + \
         str(last_month) + ".csv"
-    file_path_3 = main_file_path + MAIN_FILE_PATH_3 + \
-        str(current_month) + ".csv"
-    file_path_3_last_month = main_file_path + MAIN_FILE_PATH_3 + \
-        str(last_month) + ".csv"
-    file_path_4 = main_file_path + MAIN_FILE_PATH_4 + \
-        str(current_month) + ".csv"
-    file_path_4_last_month = main_file_path + MAIN_FILE_PATH_4 + \
-        str(last_month) + ".csv"
+    # file_path_3 = main_file_path + MAIN_FILE_PATH_3 + \
+    #     str(current_month) + ".csv"
+    # file_path_3_last_month = main_file_path + MAIN_FILE_PATH_3 + \
+    #     str(last_month) + ".csv"
+    # file_path_4 = main_file_path + MAIN_FILE_PATH_4 + \
+    #     str(current_month) + ".csv"
+    # file_path_4_last_month = main_file_path + MAIN_FILE_PATH_4 + \
+    #     str(last_month) + ".csv"
 
     logging.info("Uploading file from path: %s", file_path_1_last_month)
     upload_to_blob_storage(file_path_1_last_month,
@@ -91,10 +91,10 @@ if current_day == "01" or current_day == "1":
 else:
     file_path_1 = main_file_path + MAIN_FILE_PATH_1 + \
         str(current_month) + ".csv"
-    file_path_3 = main_file_path + MAIN_FILE_PATH_3 + \
-        str(current_month) + ".csv"
-    file_path_4 = main_file_path + MAIN_FILE_PATH_4 + \
-        str(current_month) + ".csv"
+    # file_path_3 = main_file_path + MAIN_FILE_PATH_3 + \
+    #     str(current_month) + ".csv"
+    # file_path_4 = main_file_path + MAIN_FILE_PATH_4 + \
+    #     str(current_month) + ".csv"
     logging.info("Uploading file from path: %s",file_path_1)
     upload_to_blob_storage(
         file_path_1, f'train_arrivals/train_arrivals-{current_month}.csv')
